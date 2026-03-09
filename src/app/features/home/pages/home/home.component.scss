@@ -1,0 +1,15 @@
+.main-content {
+  margin-top: var(--header-height);
+  padding: var(--spacing-12) 0;
+  min-height: calc(100vh - var(--header-height));
+
+  h1 {
+    margin-bottom: var(--spacing-4);
+  }
+
+  p {
+    color: var(--color-gray-600);
+    font-size: var(--font-size-lg);
+    margin-bottom: 0;
+  }
+}

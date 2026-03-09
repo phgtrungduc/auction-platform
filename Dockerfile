@@ -1,0 +1,28 @@
+## Builder Image
+FROM node:22.6.0 AS builder
+
+WORKDIR /build
+
+RUN npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+RUN npm config set "//npm.fontawesome.com/:_authToken" 7452C063-2F46-41F6-B739-EC1A1CBE0F92
+
+COPY package*.json ./
+ARG env=prod
+ARG KENDO_UI_LICENSE=eyJhbGciOiJSUzI1NiIsInR5cCI6IkxJQyJ9.eyJwcm9kdWN0cyI6W3sidHJpYWwiOmZhbHNlLCJjb2RlIjoiS0VORE9VSVJFQUNUIiwibGljZW5zZUV4cGlyYXRpb25EYXRlIjoxNzY3MzA1NDA5fSx7InRyaWFsIjpmYWxzZSwiY29kZSI6IktFTkRPVUlDT01QTEVURSIsImxpY2Vuc2VFeHBpcmF0aW9uRGF0ZSI6MTc2NzMwNTQwOX0seyJ0cmlhbCI6ZmFsc2UsImNvZGUiOiJLRU5ET1VJVlVFIiwibGljZW5zZUV4cGlyYXRpb25EYXRlIjoxNzY3MzA1NDA5fSx7InRyaWFsIjpmYWxzZSwiY29kZSI6IktFTkRPVUlBTkdVTEFSIiwibGljZW5zZUV4cGlyYXRpb25EYXRlIjoxNzY3MzA1NDA5fV0sImludGVncml0eSI6Im4xcll0MnFIQkl1bDBjaEY2aWtoUWdDRVZrWT0iLCJsaWNlbnNlSG9sZGVyIjoiZGV2ZWxvcGVyQGNpdGlnby5uZXQiLCJpYXQiOjE3MzU4MDkyNjgsImF1ZCI6ImRldmVsb3BlckBjaXRpZ28ubmV0IiwidXNlcklkIjoiMTZmNDRkODYtMGFhNy00OTVkLTg4NTItYjgwYmQ2YzBhMTg0In0.dB-yOrXVPcSrEVesOif5MdZMTWZ1MdLerwnlcezFY7jebAF268OEsNpnBGMJfRDWeP68lulpnj8KOjhwj16urS0CShr9IYheWN8_u-3kwAxLIjmFjPWUQbk-edIFudfMSPu_rWego3ciVr97NW_U8b4qEy_TlW05qK413ovKi1PQMNgtsBwDugJ36uM-bF5IQlBLwULCc8NoRO2ixUxZM2v_-d1IistpjJ2KCEDB-M1q3Su9VA2wDGQLIfuFkPfZ3KBOrVAWJID-16zdUof6TOXsKXTo14y49P1dwfcCSKOrzn96ZhA1righolRfqdesMTj6SN6GfWEyKYJya8Hkog
+
+RUN npx kendo-ui-license activate
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build:${env};
+
+## Runner Image
+FROM nginx:latest
+
+COPY auction-platform.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /build/dist/auction-platform/browser /usr/share/nginx/html
+
+EXPOSE 80
+
