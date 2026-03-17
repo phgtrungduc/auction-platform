@@ -55,6 +55,16 @@ export class HomepageComponent extends BaseComponent {
       owner: 'Lạc Việt',
       image: 'assets/images/product-sample-1.jpg',
       status: 'Mở đăng ký'
+    },
+    {
+      id: 4,
+      title: 'Đất Thanh Oai 500m²',
+      type: 'Quyền sử dụng đất',
+      location: 'Hà Nội',
+      price: 11.5,
+      owner: 'Lạc Việt',
+      image: 'assets/images/product-sample-1.jpg',
+      status: 'Mở đăng ký'
     }
   ];
 

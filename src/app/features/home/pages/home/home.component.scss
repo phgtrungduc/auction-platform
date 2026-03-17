@@ -5,10 +5,10 @@
 
   /*
    * Prevent layouts from stretching too wide on large monitors.
-   * Keep a centered, readable max-width (matches Figma's 1240px content width).
+   * Keep a centered max-width (matches Figma's 1420px content width).
    */
   width: 100%;
-  max-width: 1240px;
+  max-width: 1420px;
   padding-left: var(--spacing-6);
   padding-right: var(--spacing-6);
 

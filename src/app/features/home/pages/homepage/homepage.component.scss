@@ -6,10 +6,11 @@
 
 /*
  * Large screens (24"+) were stretching content too wide and breaking cards/grids.
- * Constrain main content to a centered max width (Figma: 1240px).
+ * Constrain main content to a centered max width (Figma: 1420px content).
  */
 :host {
-  --homepage-max-width: 1240px;
+  --homepage-max-width: 1420px;
+  --homepage-gap: 20px;
 }
 
 /* Meta bar above hero */
@@ -107,7 +108,7 @@
 .homepage__banners-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--spacing-3);
+  gap: var(--homepage-gap);
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -388,8 +389,20 @@
 
 .auction-grid{
   display:grid;
-  grid-template-columns: repeat(3,1fr);
-  gap:24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--homepage-gap);
+}
+
+@media (max-width: 1200px) {
+  .auction-grid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .auction-grid{
+    grid-template-columns: 1fr;
+  }
 }
 
 /* CARD */
@@ -633,13 +646,14 @@
 .category-grid{
   display:grid;
   grid-template-columns: repeat(3,1fr);
-  gap:16px;
+  gap: var(--homepage-gap);
 }
 
 .category-card{
   background:#fff;
   border-radius:12px;
-  padding:40px;
+  min-height: 128px;
+  padding: 12px 24px;
 
   display:flex;
   align-items:center;
@@ -709,8 +723,17 @@
 
 .company-grid{
   display:grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
-  gap:24px;
+  grid-template-columns: 340px minmax(0, 700px) 340px;
+  gap: var(--homepage-gap);
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+@media (max-width: 1200px) {
+  .company-grid{
+    grid-template-columns: 1fr;
+    justify-content: initial;
+  }
 }
 
 .company-card{
