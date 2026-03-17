@@ -100,8 +100,8 @@
 .homepage__banners {
   max-width: var(--homepage-max-width);
   margin: 0 auto;
-  padding-left: var(--spacing-6);
-  padding-right: var(--spacing-6);
+  //padding-left: var(--spacing-6);
+  //padding-right: var(--spacing-6);
 }
 
 .homepage__banners-grid {
@@ -263,7 +263,7 @@
 .homepage__sections {
   max-width: var(--homepage-max-width);
   margin: 0 auto;
-  padding: 0 var(--spacing-6) var(--spacing-12);
+  //padding: 0 var(--spacing-6) var(--spacing-12);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-10);
@@ -276,8 +276,8 @@
   max-width: var(--homepage-max-width);
   margin-left: auto;
   margin-right: auto;
-  padding-left: var(--spacing-6);
-  padding-right: var(--spacing-6);
+  //padding-left: var(--spacing-6);
+  //padding-right: var(--spacing-6);
 }
 
 .homepage-section__header {
@@ -579,9 +579,10 @@
   position:relative;
   border-radius:16px;
   overflow:hidden;
-  height:220px;
+  //height:220px;
   transition: transform 0.25s ease;
-
+  aspect-ratio: 1 / 0.6;
+  width: 100%;
 }
 
 .area-card:hover{
