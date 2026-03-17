@@ -3,7 +3,14 @@
   padding: var(--spacing-6) 0;
   min-height: calc(100vh - var(--header-height));
 
-  width: 90%;        /* hoặc 88% */
+  /*
+   * Prevent layouts from stretching too wide on large monitors.
+   * Keep a centered, readable max-width (matches Figma's 1240px content width).
+   */
+  width: 100%;
+  max-width: 1240px;
+  padding-left: var(--spacing-6);
+  padding-right: var(--spacing-6);
 
   h1 {
     margin-bottom: var(--spacing-4);
