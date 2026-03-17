@@ -222,7 +222,6 @@ export class HomepageComponent extends BaseComponent {
   onMouseUp() {
     this.isDragging = false;
   }
-
 }
 interface AuctionItem {
   id: number;

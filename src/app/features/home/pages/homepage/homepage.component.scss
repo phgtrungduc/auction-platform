@@ -175,7 +175,7 @@
 
 .hero__field {
   display: flex;
-  flex-direction: column;
+  //flex-direction: column;
   gap: var(--spacing-2);
 
   &--keyword {
@@ -1221,4 +1221,146 @@
 
 .items-center{
   align-items: center;
+}
+
+.hero__input--select{
+  position:relative;
+  display:flex;
+  align-items:center;
+
+  background:#fff;
+  border-radius:12px;
+  padding:12px;
+  color: #5F788B;
+}
+
+.hero__icon{
+  margin-right:8px;
+  flex-shrink:0;
+}
+
+.hero__input select{
+  appearance:none;
+  -webkit-appearance:none;
+
+  border:none;
+  outline:none;
+  background:transparent;
+
+  width:100%;
+  font-size:14px;
+  cursor:pointer;
+
+  padding-right:20px;
+  color: #5F788B;
+}
+
+.hero__caret{
+  position:absolute;
+  right:10px;
+  width:6px;
+  height:6px;
+
+  border-right:2px solid #367639;
+  border-bottom:2px solid #367639;
+
+  transform:rotate(45deg);
+  pointer-events:none;
+}
+
+.hero__caret{
+  position:absolute;
+  right:10px;
+  width:6px;
+  height:6px;
+
+  border-right:2px solid #367639;
+  border-bottom:2px solid #367639;
+
+  transform:rotate(45deg);
+  pointer-events:none;
+}
+
+.custom-select{
+  position: relative;
+  width: 100%; /* QUAN TRỌNG */
+}
+
+.custom-select select{
+  width: 100%; /* select full div */
+  padding: 12px 40px 10px 12px; /* chừa chỗ cho arrow */
+
+  border-radius: 10px;
+  border: none;
+  outline: none;
+
+  background: #f5f5f5;
+  appearance: none;
+  color: #5F788B;
+}
+
+/* Arrow */
+.select-arrow{
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color:#2e7d32;
+}
+
+.custom-select select:hover{
+  border-color:#2e7d32;
+}
+
+.custom-select select:focus{
+  outline:none;
+  border-color:#2e7d32;
+  box-shadow:0 0 0 2px rgba(46,125,50,0.2);
+}
+
+.custom-select{
+  position: relative;
+  width: 100%;
+}
+
+/* icon trái */
+.select-icon{
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #367639;
+  pointer-events: none;
+}
+
+/* select */
+.custom-select select{
+  width: 100%;
+  padding: 12px 40px 12px 36px; /* chừa icon + arrow */
+
+  border-radius: 12px;
+  border: none;
+  outline: none;
+
+  background: #f1f3f1;
+  font-size: 14px;
+
+  appearance: none;
+  cursor: pointer;
+}
+
+/* arrow */
+.select-arrow{
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #367639;
+}
+
+/* hover giống design */
+.custom-select select:hover{
+  background: #e9f3ea;
 }
