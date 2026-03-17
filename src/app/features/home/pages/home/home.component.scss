@@ -1,7 +1,9 @@
 .main-content {
-  margin-top: var(--header-height);
-  padding: var(--spacing-12) 0;
+  margin: var(--header-height) auto 0;
+  padding: var(--spacing-6) 0;
   min-height: calc(100vh - var(--header-height));
+
+  width: 90%;        /* hoặc 88% */
 
   h1 {
     margin-bottom: var(--spacing-4);
