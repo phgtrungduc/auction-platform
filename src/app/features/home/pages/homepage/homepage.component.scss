@@ -383,7 +383,7 @@
 .homepage-section__title{
   color:#367639;
   font-weight:590;
-  font-size: 48px;
+  font-size: 32px;
   width: 100%;
 }
 
@@ -562,14 +562,14 @@
 
 .homepage-section__desc{
   font-size:16px;
-  text-transform:uppercase;
+  //text-transform:uppercase;
   color:#151515;
   font-weight: 500;
 }
 
 .section-title{
   text-align:center;
-  font-size:48px;
+  font-size:32px;
   font-weight:590;
   color:#3f6b2a;
 }
@@ -594,7 +594,7 @@
   overflow:hidden;
   //height:220px;
   transition: transform 0.25s ease;
-  aspect-ratio: 1 / 0.6;
+  aspect-ratio: 1 / 0.45;
   width: 100%;
 }
 
@@ -652,8 +652,8 @@
 .category-card{
   background:#fff;
   border-radius:12px;
-  min-height: 128px;
-  padding: 12px 24px;
+  min-height: 100px;
+  padding: 0 24px;
 
   display:flex;
   align-items:center;
@@ -739,7 +739,7 @@
 .company-card{
   background:#fff;
   border-radius:16px;
-  padding:40px 20px;
+  padding:20px 20px;
 
   display:flex;
   flex-direction:column;
@@ -750,14 +750,14 @@
 }
 
 .company-card img{
-  max-width:200px;
+  max-width:240px;
   height:auto;
   object-fit:contain;
   margin-bottom:12px;
 }
 
 .company-card--highlight img{
-  max-width:300px;
+  max-width:340px;
 }
 
 .tool-grid{
@@ -767,7 +767,7 @@
 }
 
 .btn-more{
-  margin-top:10px;
+  //margin-top:10px;
   background:#2e7d32;
   color:#fff;
   border:none;
@@ -837,9 +837,9 @@
 }
 
 .ended-auction__card{
-  flex: 0 0 calc((100% - 40px) / 3);
+  flex: 0 0 calc((100% - 60px) / 4);
   /* 3 card + 2 gap (20px) */
-  max-width: calc((100% - 40px) / 3);
+  max-width: calc((100% - 60px) / 4);
   scroll-snap-align:start;
   background:#fff;
   border-radius:16px;
@@ -919,22 +919,22 @@
 }
 
 .tool-card__image img{
-
-  width:350px;          /* ảnh lớn hơn */
-  height:auto;
+  //width:180px;          /* ảnh lớn hơn */
+  //height:auto;
 
   filter: grayscale(100%);
   opacity:0.65;        /* làm mờ */
 
   pointer-events:none;
   overflow: hidden;
+  max-height: 200px;
 }
 
 .tool-card__content{
   position:relative;
   z-index:2;
-  max-width:60%;
-  padding: 24px 0 24px 22px;
+  max-width:65%;
+  padding: 12px 0 12px 22px;
 }
 
 .tool-card__image{
@@ -1135,7 +1135,7 @@
   position:relative;
   border-radius:20px;
   overflow:hidden;
-  padding:40px;
+  padding:30px;
 
   display:flex;
   justify-content:space-between;
