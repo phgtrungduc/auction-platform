@@ -1,18 +1,24 @@
+:host {
+  --footer-max-width: 1420px;
+  --footer-gap: 20px;
+}
 .footer{
   align-items: center;
   justify-content: center;
   background-color: rgb(240 240 241);
+  margin: 32px auto var(--header-height) auto;
   //e9ecef82
   // padding:24px;
 
   // background:linear-gradient(135deg, #2e7d32, #1b5e20);
   // border-radius:20px;
   // color:#fff;
+  max-width: 1420px;
 }
 
 .footer-content{
-  padding:16px 24px;
-  width: 90%;
+  padding:6px 30px;
+  width: 100%;
   background:linear-gradient(135deg, #2e7d32, #1b5e20);
   border-radius:20px;
   color:#fff;

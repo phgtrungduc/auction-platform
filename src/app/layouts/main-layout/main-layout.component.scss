@@ -1,0 +1,25 @@
+.main-content {
+    margin: var(--header-height) auto 0;
+    padding: var(--spacing-6) 0;
+    min-height: calc(100vh - var(--header-height));
+  
+    /*
+     * Prevent layouts from stretching too wide on large monitors.
+     * Keep a centered max-width (matches Figma's 1420px content width).
+     */
+    width: 100%;
+    max-width: 1420px;
+    padding-left: var(--spacing-6);
+    padding-right: var(--spacing-6);
+  
+    h1 {
+      margin-bottom: var(--spacing-4);
+    }
+  
+    p {
+      color: var(--color-gray-600);
+      font-size: var(--font-size-lg);
+      margin-bottom: 0;
+    }
+  }
+  

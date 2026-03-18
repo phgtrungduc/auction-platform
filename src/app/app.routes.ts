@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,7 @@ export const routes: Routes = [
   // },
   {
     path: '',
+    component: MainLayoutComponent,
     loadChildren: () =>
       import('./features/home/home.routes').then(m => m.HOME_ROUTES),
   },

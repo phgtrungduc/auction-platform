@@ -1,0 +1,124 @@
+<div class="filter">
+
+    <!-- Loại tài sản -->
+    <div class="filter-card">
+        <div class="filter__section">
+            <div class="filter__title ml-1">Loại tài sản</div>
+
+            <ng-container *ngTemplateOutlet="tree; context: { items: assetTypes, level: 0 }"></ng-container>
+        </div>
+    </div>
+
+    <!-- Trạng thái -->
+    <div class="filter-card">
+        <div class="filter__section">
+            <div class="filter__title">Trạng thái</div>
+
+            <label class="radio active">
+                <input type="radio" name="status" checked />
+                Tất cả
+            </label>
+
+            <label class="radio">
+                <input type="radio" name="status" />
+                Mở đăng ký
+            </label>
+
+            <label class="radio">
+                <input type="radio" name="status" />
+                Sắp diễn ra
+            </label>
+
+            <label class="radio">
+                <input type="radio" name="status" />
+                Đang diễn ra
+            </label>
+
+            <label class="radio">
+                <input type="radio" name="status" />
+                Đã kết thúc
+            </label>
+        </div>
+    </div>
+
+
+
+    <!-- Giá -->
+    <div class="filter-card">
+        <div class="filter__section">
+            <div class="filter__title">Giá khởi điểm</div>
+
+            <label class="radio active">
+                <input type="radio" name="price" checked />
+                Tất cả mức giá
+            </label>
+
+            <label class="radio">
+                <input type="radio" name="price" />
+                Dưới 1 tỷ
+            </label>
+
+            <label class="radio">
+                <input type="radio" name="price" />
+                1 - 5 tỷ
+            </label>
+
+            <label class="radio">
+                <input type="radio" name="price" />
+                5 - 10 tỷ
+            </label>
+
+            <label class="radio">
+                <input type="radio" name="price" />
+                Trên 10 tỷ
+            </label>
+        </div>
+    </div>
+
+
+    <!-- Tỉnh -->
+    <div class="filter-card">
+        <div class="filter__section">
+            <div class="filter__title">Tỉnh/Thành phố</div>
+
+            <div class="filter__item" [class.active]="selectedCity === city" (click)="selectedCity = city"
+                *ngFor="let city of cities">
+                {{ city }}
+            </div>
+
+            <div class="more">Xem thêm</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="filter-footer">
+        <!-- Action -->
+        <button class="clear-btn">
+            ✕ Xóa bộ lọc
+        </button>
+    </div>
+
+</div>
+
+<!-- TEMPLATE RECURSIVE -->
+<ng-template #tree let-items="items" let-level="level">
+    <div *ngFor="let item of items">
+
+        <div class="filter__item" [class.active]="isActive(item)" [style.paddingLeft.px]="12 + level * 16"
+            (click)="onSelect(item, $event)">
+            <span>{{ item.label }}</span>
+
+            <span *ngIf="item.children" class="arrow" (click)="toggle(item, $event)">
+                {{ item.expanded ? '▾' : '▸' }}
+            </span>
+        </div>
+
+        <!-- children -->
+        <div class="submenu"    
+        [class.open]="item.expanded">
+            <ng-container *ngTemplateOutlet="tree; context: { items: item.children, level: level + 1 }">
+            </ng-container>
+        </div>
+
+    </div>
+</ng-template>
