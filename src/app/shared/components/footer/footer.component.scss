@@ -1,57 +1,125 @@
-.site-footer {
-  background-color: var(--color-gray-900);
-  color: var(--color-gray-300);
-  font-size: var(--font-size-sm);
+.footer{
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(240 240 241);
+  //e9ecef82
+  // padding:24px;
 
-  .footer-top {
-    padding: 2.5rem 0;
-    border-bottom: 1px solid var(--color-gray-800);
+  // background:linear-gradient(135deg, #2e7d32, #1b5e20);
+  // border-radius:20px;
+  // color:#fff;
+}
 
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-    }
+.footer-content{
+  padding:16px 24px;
+  width: 90%;
+  background:linear-gradient(135deg, #2e7d32, #1b5e20);
+  border-radius:20px;
+  color:#fff;
+  margin: auto;
+  background-color: var(--color-gray-50);
+}
 
-    .footer-column {
-      h4 {
-        margin-bottom: 1rem;
-        font-size: var(--font-size-base);
-        color: var(--color-white);
-        font-weight: 600;
-      }
+.footer-container{
+  display:grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap:40px;
+  margin-top:40px;
+}
 
-      ul {
-        li {
-          margin-bottom: 0.625rem;
+.footer-logo{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:600;
+  margin-bottom:10px;
+}
 
-          a {
-            color: var(--color-gray-400);
-            transition: var(--transition-fast);
+.footer-logo img{
+  width:32px;
+}
 
-            &:hover {
-              color: var(--color-primary-light);
-              text-decoration: none;
-            }
-          }
-        }
-      }
+.footer-desc{
+  font-size:14px;
+  opacity:0.9;
+  margin-bottom:12px;
+}
 
-      p {
-        color: var(--color-gray-400);
-        margin-bottom: 0.5rem;
-      }
-    }
+.footer-social i{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:#fff;
+  color:#e53935; /* youtube đỏ */
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-right:8px;
+  cursor:pointer;
+}
+
+/* facebook màu xanh */
+.footer-social i.fa-facebook{
+  color:#1877f2;
+}
+
+.footer-col h4{
+  margin-bottom:10px;
+  font-size:16px;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.footer-col ul{
+  list-style:none;
+  padding:0;
+}
+
+.footer-col li{
+  font-size:14px;
+  margin-bottom:6px;
+  opacity:0.9;
+  cursor:pointer;
+}
+
+.footer-col li:hover{
+  text-decoration:underline;
+}
+
+.footer-bottom{
+  margin-top:20px;
+  padding-top:12px;
+
+  border-top:1px solid rgba(255,255,255,0.2);
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+
+  font-size:13px;
+}
+
+.footer-contact{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.footer{
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px){
+  .footer-container{
+    grid-template-columns:1fr 1fr;
   }
 
-  .footer-bottom {
-    background-color: var(--color-black);
-    padding: 1.25rem 0;
-    text-align: center;
-
-    p {
-      margin: 0;
-      color: var(--color-gray-500);
-    }
+  .footer-bottom{
+    flex-direction:column;
+    gap:10px;
+    align-items:flex-start;
   }
 }
