@@ -1,13 +1,383 @@
 .page {
-    display: flex;
-    gap: 20px;
-  
-    &__sidebar {
-      width: 280px;
-      flex-shrink: 0;
-    }
-  
-    &__content {
-      flex: 1;
+  display: flex;
+  gap: 20px;
+
+  &__sidebar {
+    width: 280px;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    flex: 1;
+  }
+}
+
+.page {
+  display: flex;
+  gap: 24px;
+}
+
+/* LEFT */
+.page__sidebar {
+  width: 280px;
+}
+
+.page__title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--Green, #367639);
+}
+
+.page__subtitle {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 12px;
+  color: #5f788b;
+}
+
+/* RIGHT */
+.page__content {
+  flex: 1;
+}
+
+/* Header */
+.content__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+  margin-top: 72px;
+}
+
+.search {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.search {
+  &--select {
+    cursor: pointer;
+  }
+
+  &--text {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-gray-200);
+    background-color: var(--color-white);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-900);
+    outline: none;
+    transition:
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
+
+    &:focus {
+      border-color: #367639;
+      box-shadow: 0 0 0 1px var(--color-primary-100);
     }
   }
+}
+
+.sort {
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* CARD */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #eee;
+
+  &__image {
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      //background: #3b6e2f;
+      color: #fff;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 400;
+    }
+  }
+
+  &__body {
+    padding: 12px;
+
+    h4 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .meta {
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-weight: 590;
+      color: #2e7d32;
+      margin-bottom: 4px;
+
+      .sub {
+        font-size: 12px;
+        color: #999;
+        //margin-left: 4px;
+        font-weight: 400;
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 6px;
+      border-top: solid 1px #edf1f4;
+
+      .org {
+        font-size: 12px;
+        color: #555;
+      }
+
+      .btn {
+        background: #3b6e2f;
+        color: #fff;
+        border: none;
+        padding: 4px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 400;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+/* ADS */
+.ad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  color: #888;
+  font-size: 14px;
+  height: 100%;
+  min-height: 220px;
+  border: 1px dashed #ccc;
+}
+
+.ml-4 {
+  margin-left: 16px;
+}
+
+.card:hover {
+  //transform:translateY(-4px);
+  background: #f5f7f6; /* đậm nhẹ hơn */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.auction-card__owner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #3b5ccc;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: #fff;
+}
+
+/* ✅ màu theo status */
+
+.badge--green {
+  background: #3b6e2f;
+}
+
+.badge--blue {
+  background: #458ed3;
+}
+
+.badge--yellow {
+  background: #ffb54e;
+}
+
+.badge--gray {
+  background: #5f788b;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  
+  gap: 6px;
+  flex-wrap: wrap;
+  position: relative;
+  font-weight: 600;
+  min-height: 60px;
+
+  .sub {
+    font-size: 12px;
+    color: #999;
+    font-weight: normal;
+  }
+}
+
+/* SUCCESS */
+.price--success {
+  color: #2e7d32;
+}
+
+/* % tăng */
+.increase {
+  color: #2e7d32;
+  font-size: 12px;
+}
+
+.price--fail {
+  color: #e53935;
+}
+
+.sub-starting {
+  font-size: 12px;
+  color: #999;
+  font-weight: normal;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.price__bottom {
+  margin-top: auto;
+}
+
+.card__image img{
+  padding: 3px;
+  border-radius: 12px;
+}
+
+.custom-select{
+  position:relative;
+}
+
+.custom-select select{
+  appearance:none;
+  -webkit-appearance:none;
+
+  padding:8px 36px 8px 12px;
+  border-radius:8px;
+  border:1px solid #cfd8dc;
+
+  background:#fff;
+  font-size:14px;
+  cursor:pointer;
+  color: #367639;
+}
+
+.custom-select select:hover{
+  border-color:#2e7d32;
+}
+
+.custom-select select:focus{
+  outline:none;
+  border-color:#2e7d32;
+  box-shadow:0 0 0 2px rgba(46,125,50,0.2);
+}
+/* arrow custom */
+.select-arrow{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  pointer-events:none;
+  color:#2e7d32;
+}
+
+.recommend-login {
+  width: 100%;
+  margin: 32px 0 0 0;
+  padding: 48px 24px;
+  background-color: #f4f7f9;
+  border: 1px solid #cbd4db;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+
+  &__icon {
+    color: #6a8093;
+    margin-bottom: -4px;
+  }
+
+  &__text {
+    font-size: 14px;
+    color: #5f788b;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #3b6e2f;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #2e5824;
+    }
+    
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}

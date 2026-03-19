@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseComponent } from '../../../../core/base/base.component';
+import { Router } from '@angular/router';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-homepage',
@@ -13,6 +15,14 @@ import { BaseComponent } from '../../../../core/base/base.component';
 export class HomepageComponent extends BaseComponent {
   constructor() {
     super();
+  }
+
+  private router = inject(Router);
+
+  navToDetail(id: string | undefined) {
+    if (id) {
+      this.router.navigate(['/product-detail', id]);
+    }
   }
 
   @ViewChild('auctionScroll', { static: false })
@@ -27,7 +37,7 @@ export class HomepageComponent extends BaseComponent {
 
   auctionList: AuctionItem[] = [
     {
-      id: 1,
+      id: 'dgts_moj',
       title: 'Đất Thanh Oai 500m²',
       type: 'Quyền sử dụng đất',
       location: 'Hà Nội',
@@ -37,7 +47,7 @@ export class HomepageComponent extends BaseComponent {
       status: 'Mở đăng ký'
     },
     {
-      id: 2,
+      id: 'dgts_moj1',
       title: 'Đất Thanh Oai 500m²',
       type: 'Quyền sử dụng đất',
       location: 'Hà Nội',
@@ -47,7 +57,7 @@ export class HomepageComponent extends BaseComponent {
       status: 'Mở đăng ký'
     },
     {
-      id: 3,
+      id: 'dgts_moj2',
       title: 'Đất Thanh Oai 500m²',
       type: 'Quyền sử dụng đất',
       location: 'Hà Nội',
@@ -57,7 +67,7 @@ export class HomepageComponent extends BaseComponent {
       status: 'Mở đăng ký'
     },
     {
-      id: 4,
+      id: 'dgts_moj3',
       title: 'Đất Thanh Oai 500m²',
       type: 'Quyền sử dụng đất',
       location: 'Hà Nội',
@@ -106,6 +116,7 @@ export class HomepageComponent extends BaseComponent {
 
   endedAuctions = [
     {
+      id: 'dgts_moj8',
       title: 'Đất Thanh Oai 500m²',
       location: 'Hà Nội',
       price: '11.50 tỷ',
@@ -116,6 +127,7 @@ export class HomepageComponent extends BaseComponent {
       status: 'Đã kết thúc'
     },
     {
+      id: 'dgts_moj7',
       title: 'Đất Thanh Oai 500m²',
       location: 'Hà Nội',
       price: '11.50 tỷ',
@@ -126,6 +138,7 @@ export class HomepageComponent extends BaseComponent {
       status: 'Đã kết thúc'
     },
     {
+      id: 'dgts_moj6',
       title: 'Đất Thanh Oai 500m²',
       location: 'Hà Nội',
       price: '11.50 tỷ',
@@ -136,6 +149,7 @@ export class HomepageComponent extends BaseComponent {
       status: 'Đã kết thúc'
     },
     {
+      id: 'dgts_moj5',
       title: 'Đất Thanh Oai 500m²',
       location: 'Hà Nội',
       price: '11.50 tỷ',
@@ -146,6 +160,7 @@ export class HomepageComponent extends BaseComponent {
       status: 'Đã kết thúc'
     },
     {
+      id: 'dgts_moj4',
       title: 'Đất Thanh Oai 500m²',
       location: 'Hà Nội',
       price: '11.50 tỷ',
@@ -212,6 +227,7 @@ export class HomepageComponent extends BaseComponent {
       city: this.selectedCity,
       category: this.selectedCategory,
     });
+    this.router.navigate(['/products-listing']);
   }
 
   onMouseDown(e: MouseEvent) {
@@ -234,7 +250,7 @@ export class HomepageComponent extends BaseComponent {
   }
 }
 interface AuctionItem {
-  id: number;
+  id: string;
   title: string;
   type: string;
   location: string;
