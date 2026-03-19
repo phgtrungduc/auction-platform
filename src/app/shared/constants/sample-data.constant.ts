@@ -67,6 +67,24 @@ export const SampleAuctionProducts: AuctionV1Model[] = [
                 property_type_id: '173',
                 property_type_name: "Quyền sử dụng đất"
             },
+            {
+                source_asset_id: "7734663",
+                title: "Tài sản 03: Quyền sử hữu căn hộ chung cư",
+                description: "Tài sản trên hai thửa đất có một số cây lâu năm",
+                asset_type: "REAL_ESTATE",
+                asset_sub_type: "RE_DAT_O",
+                legal_category: "ENFORCEMENT",
+                starting_price: 352199300,
+                deposit_amount: 110000000,
+                winning_price: 0,
+                asset_location: "Xã Hoà Khánh, TP Buôn Ma Thuột...",
+                province_code: "66",
+                district_code: '',
+                land_area: 7653.8,
+                land_purpose: "Đất trồng cây lâu năm",
+                property_type_id: '173',
+                property_type_name: "Quyền sử dụng đất"
+            },
         ],
         crawl_page: 1234
     },
