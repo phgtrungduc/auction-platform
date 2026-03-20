@@ -296,41 +296,50 @@
   border-radius: 12px;
 }
 
-.custom-select{
-  position:relative;
+/* --- Custom Select Styles (Clean, Soft & Professional) --- */
+.custom-select {
+  position: relative;
+  width: 200px; /* Fixed width to prevent squishing search bar */
+  flex-shrink: 0;
 }
 
-.custom-select select{
-  appearance:none;
-  -webkit-appearance:none;
-
-  padding:8px 36px 8px 12px;
-  border-radius:8px;
-  border:1px solid #cfd8dc;
-
-  background:#fff;
-  font-size:14px;
-  cursor:pointer;
-  color: #367639;
+.custom-select select {
+  width: 100%;
+  padding: 10px 40px 10px 16px;
+  border-radius: 12px;
+  border: 1px solid #e0e6e2;
+  outline: none;
+  background: #fdfdfd;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 }
 
-.custom-select select:hover{
-  border-color:#2e7d32;
+.custom-select select:hover {
+  background: #f4f7f5;
+  border-color: #cdd6cf;
 }
 
-.custom-select select:focus{
-  outline:none;
-  border-color:#2e7d32;
-  box-shadow:0 0 0 2px rgba(46,125,50,0.2);
+.custom-select select:focus {
+  border-color: #3b6e2f;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 110, 47, 0.15);
 }
-/* arrow custom */
-.select-arrow{
-  position:absolute;
-  right:10px;
-  top:50%;
-  transform:translateY(-50%);
-  pointer-events:none;
-  color:#2e7d32;
+
+/* Arrow layout for right side */
+.custom-select .select-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #3b6e2f;
+  display: flex;
+  align-items: center;
 }
 
 .recommend-login {

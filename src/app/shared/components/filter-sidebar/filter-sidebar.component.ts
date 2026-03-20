@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,7 +8,25 @@ import { CommonModule } from '@angular/common';
   templateUrl: './filter-sidebar.component.html',
   styleUrl: './filter-sidebar.component.scss'
 })
-export class FilterSidebarComponent {
+export class FilterSidebarComponent implements OnChanges {
+  @Input() activeCategory: string | null = null;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['activeCategory'] && this.activeCategory) {
+      this.selectedValue = this.activeCategory;
+      this.expandParentOf(this.activeCategory);
+    }
+  }
+
+  expandParentOf(category: string) {
+    for (const item of this.assetTypes) {
+      if (item.children) {
+        if (item.children.some(child => child.label === category || child.value === category)) {
+          item.expanded = true;
+        }
+      }
+    }
+  }
 
   assetTypes: FilterItem[] = [
     { label: 'Tất cả', value: 'all' },

@@ -52,17 +52,52 @@
 
     <div class="header-actions">
 
-      <!-- Select -->
-      <div class="custom-select">
-        <select>
-          <option>Category</option>
-          <option>Bất động sản</option>
-          <option>Xe cộ</option>
-          <option>Tài sản khác</option>
-        </select>
-        <span class="select-arrow">
-          <i class="fa fa-chevron-down"></i>
-        </span>
+      <!-- Category Dropdown -->
+      <div class="category-dropdown" (mouseenter)="isMenuOpen = true" (mouseleave)="isMenuOpen = false" (click)="isMenuOpen = !isMenuOpen">
+        <div class="category-toggle">
+          <span>Danh mục</span>
+          <span class="select-arrow">
+            <i class="fa fa-chevron-down"></i>
+          </span>
+        </div>
+
+        <div class="dropdown-menu" [class.show]="isMenuOpen">
+          <div class="filter__section">
+            @for (item of categories; track item.label) {
+              <div>
+                <div class="filter__item" (click)="toggle(item, $event)">
+                  <span>{{ item.label }}</span>
+                  @if (item.children) {
+                    <span class="arrow">
+                      @if (item.expanded) {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M12.6673 6L8.00065 10L3.33398 6" stroke="#151515" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      } @else {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M6 3.33301L10 7.99967L6 12.6663" stroke="#151515" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      }
+                    </span>
+                  }
+                </div>
+                
+                @if (item.children) {
+                  <div class="submenu" [class.open]="item.expanded">
+                    @for (child of item.children; track child.label) {
+                      <div class="filter__item submenu-item" (click)="selectCategory(child); $event.stopPropagation()">
+                        <span>{{ child.label }}</span>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="dropdown-footer">
+            <span class="more-link">Xem thêm</span>
+          </div>
+        </div>
       </div>
     
       <!-- Login button -->

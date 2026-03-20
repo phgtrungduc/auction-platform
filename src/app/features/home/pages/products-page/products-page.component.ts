@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FilterSidebarComponent } from '@shared/components/filter-sidebar/filter-sidebar.component';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { inject } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-products-page',
   standalone: true,
@@ -10,8 +10,17 @@ import { inject } from '@angular/core';
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.scss'
 })
-export class ProductsPageComponent {
+export class ProductsPageComponent implements OnInit {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  selectedCategory: string | null = null;
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.selectedCategory = params['category'] || null;
+    });
+  }
 
   navToDetail(id: string | undefined) {
     if (id) {
