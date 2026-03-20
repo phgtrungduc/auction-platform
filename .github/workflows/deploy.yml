@@ -1,0 +1,67 @@
+name: 🚀 Deploy Angular to GitHub Pages
+
+on:
+  push:
+    branches:
+      - prod
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: 🏗️ Build Angular App
+    runs-on: ubuntu-latest
+
+    outputs:
+      artifact-name: angular-build
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: ⚙️ Build Angular
+        run: |
+          npm run build -- --configuration production
+
+      # - name: 🔧 Fix SPA routing (404 → index)
+      #   run: |
+      #     cp dist/auction-platform/index.html dist/auction-platform/404.html
+
+      - name: 📤 Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: angular-build
+          path: dist/auction-platform/browser
+
+  # ======================
+  # 2. DEPLOY JOB
+  # ======================
+  deploy:
+    name: 🌍 Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo loz
+        uses: actions/checkout@v4
+
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: angular-build
+          path: dist/auction-platform/browser
+
+      - name: 🚀 Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist/auction-platform/browser
