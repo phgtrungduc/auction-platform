@@ -444,3 +444,142 @@
   color: #718096;
   gap: 12px;
 }
+
+/* --- Similar Assets Section --- */
+.similar-section {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.similar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 20px;
+}
+
+.similar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Similar Card */
+.similar-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #edf1f4;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, transform 0.2s;
+  
+  &:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
+  }
+}
+
+.similar-card__image {
+  position: relative;
+  height: 180px;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 3px;
+    border-radius: 12px;
+  }
+}
+
+.similar-card__badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 12px;
+
+  &.badge--green { background: #3b6e2f; }
+  &.badge--blue { background: #458ed3; }
+  &.badge--yellow { background: #ffb54e; }
+  &.badge--gray { background: #5f788b; }
+}
+
+.similar-card__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.similar-card__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 6px;
+}
+
+.similar-card__meta {
+  font-size: 12px;
+  color: #718096;
+  margin-bottom: 24px;
+}
+
+.similar-card__price {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+
+  &.price--green { color: #3b6e2f; }
+  &.price--blue { color: #458ed3; }
+}
+
+.similar-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #edf1f4;
+  padding-top: 12px;
+  margin-top: auto;
+}
+
+.similar-card__owner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1a202c;
+  font-weight: 500;
+}
+
+.similar-card__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #3b5ccc;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.similar-card__btn {
+  background: #3b6e2f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #2e5824;
+  }
+}

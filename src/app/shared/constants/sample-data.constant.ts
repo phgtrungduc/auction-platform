@@ -120,7 +120,7 @@ export const SampleAuctionProducts: AuctionV1Model[] = [
         assets: [
             {
                 source_asset_id: "7734662",
-                title: "Tài sản 01: Quyền sử dụng đất ...",
+                title: "Tài sản 01: Quyền sử dụng nhà riêng lẻ",
                 description: "Tài sản trên hai thửa đất có một số cây...",
                 asset_type: "REAL_ESTATE",
                 asset_sub_type: "RE_DAT_O",
@@ -171,7 +171,7 @@ export const SampleAuctionProducts: AuctionV1Model[] = [
         assets: [
             {
                 source_asset_id: "7734663",
-                title: "Tài sản 01: Quyền sử dụng đất ...",
+                title: "Tài sản 01: Quyền sử dụng công trình xây dựng",
                 description: "Tài sản trên hai thửa đất có một số cây...",
                 asset_type: "REAL_ESTATE",
                 asset_sub_type: "RE_DAT_O",
@@ -222,7 +222,7 @@ export const SampleAuctionProducts: AuctionV1Model[] = [
         assets: [
             {
                 source_asset_id: "7734664",
-                title: "Tài sản 01: Quyền sử dụng đất ...",
+                title: "Tài sản 01: Quyền sử dụng nhà cấp II",
                 description: "Tài sản trên hai thửa đất có một số cây...",
                 asset_type: "REAL_ESTATE",
                 asset_sub_type: "RE_DAT_O",
@@ -273,7 +273,7 @@ export const SampleAuctionProducts: AuctionV1Model[] = [
         assets: [
             {
                 source_asset_id: "7734665",
-                title: "Tài sản 01: Quyền sử dụng đất ...",
+                title: "Tài sản 01: Quyền sử dụng đất ở đô thị ODT",
                 description: "Tài sản trên hai thửa đất có một số cây...",
                 asset_type: "REAL_ESTATE",
                 asset_sub_type: "RE_DAT_O",
@@ -324,7 +324,7 @@ export const SampleAuctionProducts: AuctionV1Model[] = [
         assets: [
             {
                 source_asset_id: "7734666",
-                title: "Tài sản 01: Quyền sử dụng đất ...",
+                title: "Tài sản 01: Quyền sử dụng đất trồng lúa LUA",
                 description: "Tài sản trên hai thửa đất có một số cây...",
                 asset_type: "REAL_ESTATE",
                 asset_sub_type: "RE_DAT_O",
@@ -375,7 +375,7 @@ export const SampleAuctionProducts: AuctionV1Model[] = [
         assets: [
             {
                 source_asset_id: "7734667",
-                title: "Tài sản 01: Quyền sử dụng đất ...",
+                title: "Tài sản 01: Quyền sử dụng đất ở nông thôn ONT",
                 description: "Tài sản trên hai thửa đất có một số cây...",
                 asset_type: "REAL_ESTATE",
                 asset_sub_type: "RE_DAT_O",
@@ -426,7 +426,7 @@ export const SampleAuctionProducts: AuctionV1Model[] = [
         assets: [
             {
                 source_asset_id: "7734668",
-                title: "Tài sản 01: Quyền sử dụng đất ...",
+                title: "Tài sản 01: Quyền sử dụng đất và tài sản gắn liền với đất",
                 description: "Tài sản trên hai thửa đất có một số cây...",
                 asset_type: "REAL_ESTATE",
                 asset_sub_type: "RE_DAT_O",
@@ -477,7 +477,7 @@ export const SampleAuctionProducts: AuctionV1Model[] = [
         assets: [
             {
                 source_asset_id: "7734669",
-                title: "Tài sản 01: Quyền sử dụng đất ...",
+                title: "Tài sản 01: Quyền sử dụng tài sản nhà chung cư",
                 description: "Tài sản trên hai thửa đất có một số cây...",
                 asset_type: "REAL_ESTATE",
                 asset_sub_type: "RE_DAT_O",

@@ -15,11 +15,14 @@
         <div class="asset-item" *ngFor="let asset of product.assets; let i = index; let last = last">
           <div class="asset-header" (click)="toggleAsset(i)">
             <h3 class="section-title">{{ asset.title || product.title }}</h3>
-            
-            <svg *ngIf="expandedAssets[i]" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+            <svg *ngIf="expandedAssets[i]" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="18 15 12 9 6 15"></polyline>
             </svg>
-            <svg *ngIf="!expandedAssets[i]" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg *ngIf="!expandedAssets[i]" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </div>
@@ -31,54 +34,55 @@
           <div class="asset-details-wrapper" [class.expanded]="expandedAssets[i]">
             <div class="asset-details">
               <div class="meta-row">
-              <div class="meta-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                </svg>
-                Số lượng: <strong>1</strong>
+                <div class="meta-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                  </svg>
+                  Số lượng: <strong>1</strong>
+                </div>
+                <div class="meta-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                  </svg>
+                  {{ asset.property_type_name }} - {{ asset.asset_sub_type === 'RE_DAT_O' ? 'Đất ở' :
+                  asset.asset_sub_type }}
+                </div>
               </div>
-              <div class="meta-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="3" y1="9" x2="21" y2="9"></line>
-                  <line x1="9" y1="21" x2="9" y2="9"></line>
-                </svg>
-                {{ asset.property_type_name }} - {{ asset.asset_sub_type === 'RE_DAT_O' ? 'Đất ở' : asset.asset_sub_type }}
-              </div>
-            </div>
 
-            <div class="info-row">
-              <span class="label">Nơi có tài sản:</span> {{ asset.asset_location || 'Đang cập nhật' }}
-            </div>
-            <div class="info-row">
-              <span class="label">Ghi chú:</span> -
-            </div>
+              <div class="info-row">
+                <span class="label">Nơi có tài sản:</span> {{ asset.asset_location || 'Đang cập nhật' }}
+              </div>
+              <div class="info-row">
+                <span class="label">Ghi chú:</span> -
+              </div>
 
-            <div class="price-boxes">
-              <div class="price-box">
-                <div class="p-label">Hồ sơ</div>
-                <div class="p-val text-green">600.000đ</div>
+              <div class="price-boxes">
+                <div class="price-box">
+                  <div class="p-label">Hồ sơ</div>
+                  <div class="p-val text-green">600.000đ</div>
+                </div>
+                <div class="price-box">
+                  <div class="p-label">Khởi điểm</div>
+                  <div class="p-val text-green">{{ formatCurrency(asset.starting_price) }}đ</div>
+                </div>
+                <div class="price-box">
+                  <div class="p-label">Đặt trước</div>
+                  <div class="p-val text-green">{{ formatCurrency(asset.deposit_amount) }}đ</div>
+                </div>
+                <div class="price-box">
+                  <div class="p-label">Bước giá</div>
+                  <div class="p-val text-green">1.000.000đ</div>
+                </div>
+                <div class="price-box">
+                  <div class="p-label">Giá trúng</div>
+                  <div class="p-val text-green">-</div>
+                </div>
               </div>
-              <div class="price-box">
-                <div class="p-label">Khởi điểm</div>
-                <div class="p-val text-green">{{ formatCurrency(asset.starting_price) }}đ</div>
-              </div>
-              <div class="price-box">
-                <div class="p-label">Đặt trước</div>
-                <div class="p-val text-green">{{ formatCurrency(asset.deposit_amount) }}đ</div>
-              </div>
-              <div class="price-box">
-                <div class="p-label">Bước giá</div>
-                <div class="p-val text-green">1.000.000đ</div>
-              </div>
-              <div class="price-box">
-                <div class="p-label">Giá trúng</div>
-                <div class="p-val text-green">-</div>
-              </div>
-            </div>
             </div>
           </div>
 
@@ -259,6 +263,32 @@
           <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
         </svg>
         <span>Quảng cáo</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Similar Assets Section -->
+  <div class="similar-section">
+    <h2 class="similar-title">Tài sản tương tự</h2>
+    <div class="similar-grid">
+      <div class="similar-card" *ngFor="let item of similarProducts">
+        <div class="similar-card__image">
+          <img [src]="item.image" alt="Product Image">
+          <span class="similar-card__badge" [ngClass]="getStatusClass(item.status)">{{ item.status }}</span>
+        </div>
+        <div class="similar-card__body">
+          <h3 class="similar-card__title">{{ item.title }}</h3>
+          <p class="similar-card__meta">{{ item.desc }}</p>
+          <div class="similar-card__price" [ngClass]="getPriceClass(item.status)">{{ item.price }}</div>
+
+          <div class="similar-card__footer">
+            <div class="similar-card__owner">
+              <span class="similar-card__avatar">LV</span>
+              Lạc Việt
+            </div>
+            <button class="similar-card__btn" (click)="navToDetail(item.id)">Chi tiết &rarr;</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
