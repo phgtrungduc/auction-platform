@@ -109,13 +109,24 @@
             <span>{{ item.label }}</span>
 
             <span *ngIf="item.children" class="arrow" (click)="toggle(item, $event)">
-                {{ item.expanded ? '▾' : '▸' }}
+                <div *ngIf="item.expanded">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M12.6673 6L8.00065 10L3.33398 6" stroke="#151515" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div *ngIf="!item.expanded">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6 3.33301L10 7.99967L6 12.6663" stroke="#151515" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <!-- {{ item.expanded ? '﹀' : '>' }} -->
             </span>
         </div>
 
         <!-- children -->
-        <div class="submenu"    
-        [class.open]="item.expanded">
+        <div class="submenu" [class.open]="item.expanded">
             <ng-container *ngTemplateOutlet="tree; context: { items: item.children, level: level + 1 }">
             </ng-container>
         </div>

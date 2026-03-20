@@ -15,19 +15,46 @@ export class FilterSidebarComponent {
     {
       label: 'Bất động sản',
       children: [
-        { label: 'Nhà ở' },
-        { label: 'Đất nền' },
-        { label: 'Căn hộ' }
+        { label: 'Đất ở' },
+        { label: 'Đất nông nghiệp' },
+        { label: 'Nhà phố' },
+        { label: 'Căn hộ' },
+        { label: 'Nhà xưởng' },
+        { label: 'Shophouse' },
       ]
     },
     {
       label: 'Xe cộ',
       children: [
         { label: 'Ô tô' },
+        { label: 'Xe tải' },
         { label: 'Xe máy' }
       ]
     },
-    { label: 'Máy móc' }
+    {
+      label: 'Máy móc',
+      children: [
+        { label: 'Máy công trình' },
+        { label: 'Máy nông nghiệp' },
+        { label: 'Dây chuyền' },
+      ]
+    },
+    {
+      label: 'Hàng hóa',
+      children: [
+        { label: 'Gạch/vật liệu' },
+        { label: 'Sắt thép' },
+        { label: 'Hàng tồn kho' },
+      ]
+    },
+    {
+      label: 'Đồ dùng',
+      children: [
+        { label: 'Nội thất' },
+        { label: 'Thiết bị' },
+        { label: 'Công vụ' },
+      ]
+    }
   ];
 
   cities = ['Tất cả', 'Hà Nội', 'Hồ Chí Minh', 'Bắc Ninh'];
