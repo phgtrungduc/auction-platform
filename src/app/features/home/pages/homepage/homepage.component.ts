@@ -106,12 +106,13 @@ export class HomepageComponent extends BaseComponent {
   ];
 
   categories = [
-    { icon: 'fa-landmark', name: 'Quyền sử dụng đất' },
-    { icon: 'fa-house', name: 'Nhà riêng lẻ' },
-    { icon: 'fa-building', name: 'Căn hộ' },
-    { icon: 'fa-map', name: 'Đất dự án' },
-    { icon: 'fa-city', name: 'Tài sản công' },
-    { icon: 'fa-scale-balanced', name: 'Thi hành án' }
+    { icon: 'fa-landmark', name: 'Bất động sản', image: 'assets/images/menu-images/menu-bds.png' },
+    { icon: 'fa-house', name: 'Đất ở', image: 'assets/images/menu-images/menu-dat-o.png' },
+    { icon: 'fa-building', name: 'Đất nông nghiệp', image: 'assets/images/menu-images/menu-dnn.png' },
+    { icon: 'fa-map', name: 'Nhà phố', image: 'assets/images/menu-images/menu-nha.png' },
+    { icon: 'fa-city', name: 'Căn hộ', image: 'assets/images/menu-images/menu-can-ho.png' },
+    { icon: 'fa-scale-balanced', name: 'Nhà xưởng', image: 'assets/images/menu-images/menu-xuong.png' },
+    { icon: 'fa-scale-balanced', name: 'Shophouse', image: 'assets/images/menu-images/menu-shophouse.png' }
   ];
 
   endedAuctions = [

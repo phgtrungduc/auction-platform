@@ -20,5 +20,15 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/home/home.routes').then(m => m.HOME_ROUTES),
   },
-  { path: '**', redirectTo: '' },
+  {
+    path: '**',
+    component: MainLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/home/pages/not-found/not-found.component').then(m => m.NotFoundComponent),
+      }
+    ]
+  }
 ];
