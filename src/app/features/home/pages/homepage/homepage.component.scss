@@ -651,33 +651,90 @@
 
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--homepage-gap);
+  gap: 12px;
+  margin-bottom: 12px;
+  height: 144px;
+
+  &--row1 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &--row2 {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .category-card {
-  background: #fff;
+  position: relative;
   border-radius: 12px;
-  min-height: 100px;
-  padding: 0 24px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  background-size: cover;
+  background-position: center;
+  background-color: #e8f0e9;
+  height: 100%;
+  width: 100%;
+
+  // Row 1 taller, row 2 shorter
+  .category-grid--row1 & {
+    aspect-ratio: 16 / 7;
+  }
+
+  .category-grid--row2 & {
+    aspect-ratio: 16 / 9;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  }
+}
+
+// Lớp gradient làm mờ từ trái (trắng) → phải (trong suốt)
+.category-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0.88) 0%,
+      rgba(255, 255, 255, 0.45) 45%,
+      rgba(255, 255, 255, 0) 60%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+// Icon + text nằm góc trên trái, không có hộp nền
+.category-card__info {
+  position: absolute;
+  top: 55px;
+  left: 16px;
+  z-index: 1;
+  font-weight: 500;
 
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
 
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  transition: transform 0.25s ease;
+  // SVG render qua [innerHTML] không có _ngcontent attr → cần ::ng-deep để bypass encapsulation
+  ::ng-deep svg path {
+    stroke: #151515 !important;
+  }
+
+  i {
+    font-size: 18px;
+    color: #151515;
+  }
+
+  span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a2e14;
+    white-space: nowrap;
+  }
 }
 
-.category-card:hover {
-  transform: translateY(-4px);
-}
-
-.category-card i {
-  font-size: 18px;
-  color: #3f6b2a;
-}
 
 .company-card {
   background: #fff;
