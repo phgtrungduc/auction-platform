@@ -32,9 +32,6 @@ export class HomepageComponent extends BaseComponent {
     }
   }
 
-  @ViewChild('auctionScroll', { static: false })
-  auctionScroll!: ElementRef;
-
   selectedCity = 'Hà Nội';
   selectedCategory = 'Loại BĐS';
   keyword = '';
@@ -293,23 +290,27 @@ export class HomepageComponent extends BaseComponent {
     this.router.navigate(['/products-listing']);
   }
 
+  draggedElement: HTMLElement | null = null;
+
   onMouseDown(e: MouseEvent) {
     this.isDragging = true;
     this.startX = e.pageX;
-    this.scrollLeft = this.auctionScroll.nativeElement.scrollLeft;
+    this.draggedElement = e.currentTarget as HTMLElement;
+    this.scrollLeft = this.draggedElement.scrollLeft;
   }
 
   onMouseMove(e: MouseEvent) {
-    if (!this.isDragging) return;
+    if (!this.isDragging || !this.draggedElement) return;
 
     const x = e.pageX;
     const walk = x - this.startX;
 
-    this.auctionScroll.nativeElement.scrollLeft = this.scrollLeft - walk;
+    this.draggedElement.scrollLeft = this.scrollLeft - walk;
   }
 
   onMouseUp() {
     this.isDragging = false;
+    this.draggedElement = null;
   }
 }
 interface AuctionItem {
