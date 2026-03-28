@@ -102,7 +102,22 @@
 
 @media (max-width: 768px) {
   .not-found-page .not-found-content .text-wrapper .title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+  }
+  .not-found-page .not-found-content .text-wrapper .subtitle {
+    font-size: 1rem;
+  }
+  .not-found-page {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .not-found-page .not-found-content .text-wrapper .title {
+    font-size: 1.5rem;
+  }
+  .not-found-page .not-found-content .text-wrapper .subtitle {
+    font-size: 0.9rem;
   }
 }
 

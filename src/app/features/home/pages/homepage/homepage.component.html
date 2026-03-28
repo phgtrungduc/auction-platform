@@ -133,7 +133,7 @@
   </section>
 
   <!-- Main sections -->
-  <section class="homepage__sections mar-top">
+  <!-- <section class="homepage__sections mar-top">
     <div class="homepage-section">
       <div class="homepage-section__header">
 
@@ -166,6 +166,77 @@
             </span>
           </div>
 
+          <div class="auction-card__content">
+
+            <h3 class="auction-card__title">
+              {{item.title}}
+            </h3>
+
+            <div class="auction-card__meta">
+              {{item.type}} · {{item.location}}
+            </div>
+
+            <div class="auction-card__price">
+              <span class="price">{{item.price}} tỷ</span>
+              <span class="label">Khởi điểm</span>
+            </div>
+
+            <div class="auction-card__footer">
+
+              <div class="auction-card__owner">
+                <span class="avatar">LV</span>
+                {{item.owner}}
+              </div>
+
+              <button class="auction-card__btn" (click)="navToDetail(item.id)">
+                Chi tiết →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <section class="ended-auction mar-top">
+
+    <div class="homepage-section__header">
+
+      <h2 class="homepage-section__title">
+        PHIÊN ĐẤU GIÁ SẮP DIỄN RA
+      </h2>
+
+      <div class="homepage-section__subheader">
+
+        <p class="homepage-section__desc">
+          CÁC BẤT ĐỘNG SẢN ĐANG MỞ ĐĂNG KÝ VỚI GIÁ TỐT NHẤT
+        </p>
+
+        <button class="homepage-section__link">
+          Xem tất cả
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+      </div>
+    </div>
+
+    <div class="ended-auction__wrapper">
+      <div class="ended-auction__scroll" #auctionScroll (mousedown)="onMouseDown($event)"
+        (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()" (mouseleave)="onMouseUp()">
+        <div class="ended-auction__card" *ngFor="let item of auctionList">
+
+          <div class="auction-card__image">
+            <img [src]="item.image" />
+
+            <span class="endedauction-card__status">
+              {{item.status}}
+            </span>
+          </div>
+          <!-- <img class="ended-auction__image" [src]="item.image">
+
+          <span class="auction-card__status">
+            {{item.status}}
+          </span> -->
           <div class="auction-card__content">
 
             <h3 class="auction-card__title">
@@ -250,9 +321,8 @@
 
     <!-- Hàng 1: 3 card lớn -->
     <div class="category-grid category-grid--row1">
-      <div class="category-card"
-           *ngFor="let item of categories.slice(0, 3)"
-           [style.backgroundImage]="'url(' + item.image + ')'">
+      <div class="category-card" *ngFor="let item of categories.slice(0, 3)"
+        [style.backgroundImage]="'url(' + item.image + ')'">
         <div class="category-card__overlay"></div>
         <div class="category-card__info">
           <span [innerHTML]="item.svgIcon"></span>
@@ -263,9 +333,8 @@
 
     <!-- Hàng 2: 4 card nhỏ hơn -->
     <div class="category-grid category-grid--row2">
-      <div class="category-card"
-           *ngFor="let item of categories.slice(3)"
-           [style.backgroundImage]="'url(' + item.image + ')'">
+      <div class="category-card" *ngFor="let item of categories.slice(3)"
+        [style.backgroundImage]="'url(' + item.image + ')'">
         <div class="category-card__overlay"></div>
         <div class="category-card__info">
           <span [innerHTML]="item.svgIcon"></span>

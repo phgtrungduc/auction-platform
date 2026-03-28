@@ -1414,3 +1414,132 @@
   display: flex;
   align-items: center;
 }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .hero {
+    padding: 0 16px 32px;
+  }
+  .hero__meta-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 16px 16px 0;
+    text-align: center;
+  }
+  .hero__overlay {
+    padding: 24px 16px;
+  }
+  .hero__content {
+    width: 100%;
+  }
+  .hero__title {
+    font-size: 1.75rem;
+  }
+  /* Bọc form tìm kiếm trên mobile */
+  .hero__search.row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0;
+  }
+  .hero__field {
+    width: 100%;
+    padding: 0;
+  }
+  /* Nút tìm kiếm chuyển xuống dưới, full width */
+  .hero__search-button {
+    position: relative;
+    top: auto;
+    transform: none;
+    width: 100%;
+    margin-top: 12px;
+    justify-content: center;
+    padding: 12px 16px;
+  }
+  .hero__input--text {
+    padding-right: 16px;
+  }
+
+  .homepage-section__subheader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .section-title {
+    font-size: 24px;
+  }
+  .section-subtitle {
+    margin-bottom: 20px;
+  }
+
+  /* Lưới 1 cột */
+  .area-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Danh mục đấu giá - 2 cột trên tablet/mobile lớn */
+  .category-grid--row1, .category-grid--row2 {
+    grid-template-columns: repeat(2, 1fr);
+    height: auto;
+  }
+  .category-grid--row1 .category-card, .category-grid--row2 .category-card {
+    aspect-ratio: auto;
+    min-height: 140px;
+  }
+  .category-card__info {
+    top: 20px;
+  }
+
+  /* Công cụ hỗ trợ - 1 cột */
+  .tool-grid {
+    grid-template-columns: 1fr;
+  }
+  .tool-card {
+    flex-direction: column-reverse;
+    align-items: center;
+    padding: 0;
+  }
+  .tool-card__content {
+    max-width: 100%;
+    padding: 20px;
+    width: 100%;
+  }
+  .tool-card__image {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: static;
+  }
+  .tool-card__image img {
+    mask-image: none;
+    -webkit-mask-image: none;
+    max-height: 150px;
+  }
+
+  /* Card phiến kết thúc responsive scroll */
+  .ended-auction__card {
+    flex: 0 0 calc((100% - 20px) / 1.2);
+    max-width: calc((100% - 20px) / 1.2);
+  }
+
+  /* Đối tác / partner */
+  .partner-stats__list {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .stat-card {
+    flex: 1 1 calc(50% - 16px);
+    padding: 20px;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Danh mục đấu giá - 1 cột trên màn nhỏ hẳn */
+  .category-grid--row1, .category-grid--row2 {
+    grid-template-columns: 1fr;
+  }
+  .stat-card {
+    flex: 1 1 100%;
+  }
+}
