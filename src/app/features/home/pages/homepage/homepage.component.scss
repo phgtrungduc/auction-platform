@@ -743,11 +743,14 @@
   text-align: center;
 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease;
+  //transition: transform 0.25s ease;
+  transition: all 0.25s ease;
 }
 
 .company-card:hover {
-  transform: translateY(-4px);
+  // transform: translateY(-4px);
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .company-name {
@@ -787,7 +790,8 @@
 
 .company-grid {
   display: grid;
-  grid-template-columns: 340px minmax(0, 700px) 340px;
+  //grid-template-columns: 340px 340px 340px;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--homepage-gap);
   justify-content: space-between;
   align-items: stretch;
@@ -1420,21 +1424,26 @@
   .hero {
     padding: 0 16px 32px;
   }
+
   .hero__meta-bar {
     flex-wrap: wrap;
     justify-content: center;
     padding: 16px 16px 0;
     text-align: center;
   }
+
   .hero__overlay {
     padding: 24px 16px;
   }
+
   .hero__content {
     width: 100%;
   }
+
   .hero__title {
     font-size: 1.75rem;
   }
+
   /* Bọc form tìm kiếm trên mobile */
   .hero__search.row {
     display: flex;
@@ -1442,10 +1451,12 @@
     gap: 16px;
     margin: 0;
   }
+
   .hero__field {
     width: 100%;
     padding: 0;
   }
+
   /* Nút tìm kiếm chuyển xuống dưới, full width */
   .hero__search-button {
     position: relative;
@@ -1456,6 +1467,7 @@
     justify-content: center;
     padding: 12px 16px;
   }
+
   .hero__input--text {
     padding-right: 16px;
   }
@@ -1465,9 +1477,11 @@
     align-items: flex-start;
     gap: 12px;
   }
+
   .section-title {
     font-size: 24px;
   }
+
   .section-subtitle {
     margin-bottom: 20px;
   }
@@ -1478,14 +1492,18 @@
   }
 
   /* Danh mục đấu giá - 2 cột trên tablet/mobile lớn */
-  .category-grid--row1, .category-grid--row2 {
+  .category-grid--row1,
+  .category-grid--row2 {
     grid-template-columns: repeat(2, 1fr);
     height: auto;
   }
-  .category-grid--row1 .category-card, .category-grid--row2 .category-card {
+
+  .category-grid--row1 .category-card,
+  .category-grid--row2 .category-card {
     aspect-ratio: auto;
     min-height: 140px;
   }
+
   .category-card__info {
     top: 20px;
   }
@@ -1494,22 +1512,26 @@
   .tool-grid {
     grid-template-columns: 1fr;
   }
+
   .tool-card {
     flex-direction: column-reverse;
     align-items: center;
     padding: 0;
   }
+
   .tool-card__content {
     max-width: 100%;
     padding: 20px;
     width: 100%;
   }
+
   .tool-card__image {
     width: 100%;
     display: flex;
     justify-content: center;
     position: static;
   }
+
   .tool-card__image img {
     mask-image: none;
     -webkit-mask-image: none;
@@ -1527,6 +1549,7 @@
     flex-wrap: wrap;
     justify-content: center;
   }
+
   .stat-card {
     flex: 1 1 calc(50% - 16px);
     padding: 20px;
@@ -1535,10 +1558,13 @@
 }
 
 @media (max-width: 480px) {
+
   /* Danh mục đấu giá - 1 cột trên màn nhỏ hẳn */
-  .category-grid--row1, .category-grid--row2 {
+  .category-grid--row1,
+  .category-grid--row2 {
     grid-template-columns: 1fr;
   }
+
   .stat-card {
     flex: 1 1 100%;
   }
