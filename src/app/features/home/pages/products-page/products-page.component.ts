@@ -50,6 +50,16 @@ export class ProductsPageComponent implements OnInit {
 
   selectedFromDate: Date | null = null;
 
+  isAdvancedFilterOpen = false;
+
+  toggleAdvancedFilter() {
+    this.isAdvancedFilterOpen = !this.isAdvancedFilterOpen;
+  }
+
+  closeAdvancedFilter() {
+    this.isAdvancedFilterOpen = false;
+  }
+
   onChangeStatus(value: any) {
     console.log('Selected:', value);
   }

@@ -540,3 +540,378 @@
     width: 100%;
   }
 }
+
+/* --- Advanced Filter Offcanvas --- */
+.adv-filter-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.adv-filter-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  //width: 520px;
+  max-width: 90vw;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 16px;
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -45%) scale(1);
+  }
+}
+
+.adv-filter-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #edf1f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
+  }
+
+  .btn-close-panel {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+    display: flex;
+    padding: 4px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #000;
+    }
+  }
+}
+
+.adv-filter-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 24px;
+}
+
+.filter-group {
+  padding: 24px 0;
+  border-bottom: 1px solid #edf1f4;
+
+  &.no-border-bottom {
+    border-bottom: none;
+  }
+
+  .filter-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    color: #222;
+  }
+
+  .filter-subtitle {
+    font-size: 13px;
+    color: #5f788b;
+    margin: -8px 0 12px 0;
+  }
+}
+
+.asset-type-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #444;
+    transition: background 0.2s;
+
+    &.active {
+      background: #3b6e2f;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    &:not(.active):hover {
+      background: #f5f7f6;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+.pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .btn-pill {
+    border: 1px solid #cdd6cf;
+    background: #fff;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #5f788b;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: #5f788b;
+      color: #3b6e2f;
+    }
+
+    &.active {
+      border-color: #3b6e2f;
+      background: rgba(59, 110, 47, 0.05);
+      color: #3b6e2f;
+      font-weight: 500;
+    }
+  }
+}
+
+.custom-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  color: #333;
+  user-select: none;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  .radio-mark {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid #9aa5b1;
+    display: inline-block;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  input:checked+.radio-mark {
+    border-color: #3b6e2f;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 8px;
+      height: 8px;
+      background: #3b6e2f;
+      border-radius: 50%;
+    }
+  }
+
+  input:checked~span {
+    color: #2e7d32;
+    font-weight: 500;
+  }
+}
+
+.price-slider {
+  margin-top: 24px;
+
+  .slider-track {
+    height: 4px;
+    background: #e0e6e2;
+    border-radius: 2px;
+    position: relative;
+    margin: 0 8px;
+  }
+
+  .slider-range {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #5f788b;
+    border-radius: 2px;
+  }
+
+  .slider-thumb {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #3b6e2f;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: -6px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    &.left {
+      left: 0;
+      transform: translateX(-50%);
+    }
+
+    &.right {
+      right: 0;
+      transform: translateX(50%);
+    }
+  }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #9aa5b1;
+    margin-top: 12px;
+  }
+
+  .slider-inputs {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+
+    .input-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      border: 1px solid #edf1f4;
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #fdfdfd;
+      transition: border-color 0.2s;
+
+      &:focus-within {
+        border-color: #3b6e2f;
+      }
+
+      input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 13px;
+        color: #4A5568;
+        background: transparent;
+      }
+
+      .unit {
+        font-size: 13px;
+        color: #9aa5b1;
+        margin-left: 8px;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+.date-range-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .date-input-adv {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .date-arrow {
+    color: #9aa5b1;
+    flex-shrink: 0;
+  }
+}
+
+::ng-deep .date-input-adv app-date-picker {
+  display: block;
+  width: 100%;
+
+  .date-input {
+    width: 100%;
+    box-sizing: border-box;
+
+    input {
+      width: 100%;
+    }
+  }
+}
+
+.adv-filter-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #edf1f4;
+  display: flex;
+  gap: 16px;
+  background: #fff;
+
+  .btn-apply-filter {
+    flex: 1;
+    background: #3b6e2f;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #2e5824;
+    }
+  }
+
+  .btn-clear-filter {
+    flex: 1;
+    background: #fdfdfd;
+    color: #5f788b;
+    border: 1px solid #cdd6cf;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f4f7f5;
+      border-color: #5f788b;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}

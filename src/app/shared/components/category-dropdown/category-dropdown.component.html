@@ -17,10 +17,10 @@
     <div class="filter__section">
       @for (item of categories; track item.label) {
       <div>
-        <div class="filter__item" (click)="toggleCategory(item, $event)">
+        <div class="filter__item" (click)="selectCategory(item); $event.stopPropagation()">
           <span>{{ item.label }}</span>
           @if (item.children) {
-          <span class="arrow">
+          <span class="arrow" (click)="toggleCategory(item, $event)">
             @if (item.expanded) {
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M12.6673 6L8.00065 10L3.33398 6" stroke="#151515" stroke-width="1.5"
