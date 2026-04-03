@@ -5,11 +5,15 @@
     color: #4a5568;
 }
 
+.clear-icon {
+    display: none;
+}
+
 .input-box {
     display: flex;
     align-items: center;
     border: 1px solid #ddd;
-    border-radius: 12px;
+    border-radius: 10px;
     padding: 10px 10px;
     cursor: pointer;
     background: #fff;
@@ -17,6 +21,10 @@
     &:hover {
         background: #f4f7f5;
         border-color: #cdd6cf;
+
+        .clear-icon {
+            display: block;
+        }
     }
 
     &:focus {

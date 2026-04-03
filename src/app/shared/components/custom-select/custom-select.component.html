@@ -11,7 +11,7 @@
 
         <span class="select-arrow" [class.open]="isOpen"><i class="fa fa-angle-down"></i></span>
         <!-- Clear icon -->
-        <span class="clear-icon" (click)="clearValue($event)">
+        <span *ngIf="selectedLabel" class="clear-icon" (click)="clearValue($event)">
             <i class="fa-regular fa-circle-xmark"></i>
         </span>
     </div>

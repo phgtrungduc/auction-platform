@@ -116,9 +116,9 @@
 }
 
 .custom-select:hover {
-    .select-arrow {
-        display: none;
-    }
+    // .select-arrow {
+    //     display: none;
+    // }
 
     .clear-icon {
         display: block;
@@ -171,4 +171,6 @@
 .placeholder-select {
     width: 100%;
     text-align: left;
+    color: gray;
+    font-weight: 400;
 }

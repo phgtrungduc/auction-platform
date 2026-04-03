@@ -4,7 +4,14 @@
     @if (iconClass) {
     <i [class]="iconClass + ' category-toggle__icon-prefix'"></i>
     }
-    <span class="category-toggle__label">{{ value || placeholder }}</span>
+    <!-- <span class="category-toggle__label">{{ value || placeholder }}</span> -->
+    <span class="category-toggle__label" *ngIf="value; else placeholderTpl">
+      {{ value }}
+    </span>
+
+    <ng-template #placeholderTpl>
+      <span class="category-toggle__label placeholder-select">{{ placeholder }}</span>
+    </ng-template>
     <span class="select-arrow">
       <i class="fa fa-angle-down category-toggle__icon"></i>
     </span>
@@ -23,8 +30,8 @@
           <span class="arrow" (click)="toggleCategory(item, $event)">
             @if (item.expanded) {
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M12.6673 6L8.00065 10L3.33398 6" stroke="#151515" stroke-width="1.5"
-                stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M12.6673 6L8.00065 10L3.33398 6" stroke="#151515" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
             </svg>
             } @else {
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">

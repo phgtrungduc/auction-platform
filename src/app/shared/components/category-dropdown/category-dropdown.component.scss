@@ -128,8 +128,10 @@
         opacity: 0.6;
         display: flex;
         align-items: center;
-        padding: 4px; /* Increase click area */
-        margin: -4px; /* Compensate padding */
+        padding: 4px;
+        /* Increase click area */
+        margin: -4px;
+        /* Compensate padding */
       }
     }
 
@@ -166,4 +168,11 @@
 
 .select-arrow {
   display: block;
+}
+
+.placeholder-select {
+  width: 100%;
+  text-align: left;
+  color: gray;
+  font-weight: 400;
 }

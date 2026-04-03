@@ -84,9 +84,11 @@
     transition: border-color 0.2s, box-shadow 0.2s;
 
     &:focus {
-      border-color: #3b6e2f;
-      box-shadow: 0 0 0 3px rgba(59, 110, 47, 0.12);
-      background: #fff;
+      //border-color: #3b6e2f;
+      //box-shadow: 0 0 0 3px rgba(59, 110, 47, 0.12);
+      // background: #fff;
+      background: #f4f7f5;
+      border-color: #cdd6cf;
     }
   }
 }
