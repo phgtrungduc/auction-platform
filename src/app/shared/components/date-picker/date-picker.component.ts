@@ -18,6 +18,7 @@ import {
 })
 export class DatePickerComponent {
   @Input() value: Date | null = null;
+  @Input() placeholder: string = 'Chọn ngày';
   @Output() valueChange = new EventEmitter<Date | null>();
 
   @ViewChild('container') container!: ElementRef;

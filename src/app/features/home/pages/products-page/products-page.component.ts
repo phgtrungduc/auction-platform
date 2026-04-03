@@ -46,7 +46,9 @@ export class ProductsPageComponent implements OnInit {
 
   selectedOrderValue: number | null = null;
 
-  selectedDate: Date | null = null;
+  selectedToDate: Date | null = null;
+
+  selectedFromDate: Date | null = null;
 
   onChangeStatus(value: any) {
     console.log('Selected:', value);
@@ -57,6 +59,14 @@ export class ProductsPageComponent implements OnInit {
   }
 
   onChangeOrder(value: any) {
+    console.log('Selected:', value);
+  }
+
+  onChangeToDate(value: any) {
+    console.log('Selected:', value);
+  }
+
+  onChangeFromDate(value: any) {
     console.log('Selected:', value);
   }
 

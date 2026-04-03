@@ -87,12 +87,11 @@
 
         <!-- Date Range -->
         <div class="date-range">
-          <div class="date-input">
-            <i class="fa-regular fa-calendar"></i>
-            <input type="text" placeholder="Từ ngày" />
-          </div>
+          <app-date-picker class="date-picker" [(value)]="selectedFromDate" [placeholder]="'Từ ngày'"
+            (valueChange)="onChangeFromDate($event)"></app-date-picker>
           <span class="date-arrow">→</span>
-          <app-date-picker [(value)]="selectedDate"></app-date-picker>
+          <app-date-picker class="date-picker" [(value)]="selectedToDate" [placeholder]="'Đến ngày'"
+            (valueChange)="onChangeToDate($event)"></app-date-picker>
         </div>
 
         <!-- Sort -->
