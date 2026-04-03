@@ -1,0 +1,37 @@
+<div class="date-input-wrapper" #container>
+
+    <!-- INPUT -->
+    <div class="input-box" (click)="toggle()">
+        <i class="fa-regular fa-calendar"></i>
+
+        <input type="text" [value]="formatDate(value)" placeholder="Chọn ngày" readonly />
+
+        <!-- clear -->
+        <span class="clear" *ngIf="value" (click)="clear($event)">
+            ✕
+        </span>
+    </div>
+
+    <!-- POPUP -->
+    <div class="popup" *ngIf="isOpen">
+
+        <div class="header">
+            <button (click)="prevMonth()">←</button>
+            <div>{{ getMonthYear() }}</div>
+            <button (click)="nextMonth()">→</button>
+        </div>
+
+        <div class="weekdays">
+            <div *ngFor="let d of weekDays">{{ d }}</div>
+        </div>
+
+        <div class="days">
+            <div *ngFor="let d of days" class="day" [class.empty]="!d.day" [class.selected]="isSelected(d)"
+                (click)="selectDate(d)">
+                {{ d.day }}
+            </div>
+        </div>
+
+    </div>
+
+</div>

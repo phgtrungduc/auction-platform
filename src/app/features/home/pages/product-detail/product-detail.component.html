@@ -195,6 +195,11 @@
           </div>
         </div>
       </div>
+
+      <!-- Nguồn -->
+      <div class="source">
+        Nguồn: <a [href]="product.source_url" target="_blank">{{ product.source_url }}</a>
+      </div>
     </div>
 
     <!-- Right Sidebar -->
@@ -270,7 +275,8 @@
   <!-- Similar Assets Section -->
   <div class="similar-section">
     <h2 class="similar-title">Tài sản tương tự</h2>
-    <div class="similar-grid">
+    <div class="similar-grid" #similarScroll (mousedown)="onMouseDown($event)"
+      (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()" (mouseleave)="onMouseUp()">
       <div class="similar-card" *ngFor="let item of similarProducts">
         <div class="similar-card__image">
           <img [src]="item.image" alt="Product Image">

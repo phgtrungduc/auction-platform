@@ -27,7 +27,7 @@ export class ProductDetailComponent implements OnInit {
         } else {
           this.expandedAssets = [];
         }
-        
+
         // Cuộn lên đầu trang mượt mà khi load item mới
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -79,6 +79,14 @@ export class ProductDetailComponent implements OnInit {
       price: '9.00 - 11.50 tỷ',
       status: 'Sắp diễn ra',
       image: 'assets/images/product-sample-1.jpg'
+    },
+    {
+      id: 'dgts_moj4',
+      title: 'Đất Thanh Oai 500m²',
+      desc: 'Trả giá lên • Hà Nội • 3 tài sản',
+      price: '9.00 - 11.50 tỷ',
+      status: 'Sắp diễn ra',
+      image: 'assets/images/product-sample-1.jpg'
     }
   ];
 
@@ -100,5 +108,31 @@ export class ProductDetailComponent implements OnInit {
     if (id) {
       this.router.navigate(['/product-detail', id]);
     }
+  }
+
+  isDragging = false;
+  startX = 0;
+  scrollLeft = 0;
+  draggedElement: HTMLElement | null = null;
+
+  onMouseDown(e: MouseEvent) {
+    this.isDragging = true;
+    this.startX = e.pageX;
+    this.draggedElement = e.currentTarget as HTMLElement;
+    this.scrollLeft = this.draggedElement.scrollLeft;
+  }
+
+  onMouseMove(e: MouseEvent) {
+    if (!this.isDragging || !this.draggedElement) return;
+
+    const x = e.pageX;
+    const walk = x - this.startX;
+
+    this.draggedElement.scrollLeft = this.scrollLeft - walk;
+  }
+
+  onMouseUp() {
+    this.isDragging = false;
+    this.draggedElement = null;
   }
 }

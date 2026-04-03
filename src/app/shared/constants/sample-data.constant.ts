@@ -496,4 +496,55 @@ export const SampleAuctionProducts: AuctionV1Model[] = [
         ],
         crawl_page: 1234
     },
+    {
+        source_id: "dgts_moj9",
+        source_notice_id: "5425699",
+        source_url: "https://dgts.moj.gov.vn/chi-tiet-viec-dau-gia/542569",
+        title: "Thông báo việc đấu giá đối với danh mục tài sản: ...",
+        auction_org_name: "Trung tâm DV đấu giá tỉnh Đắk Lắk",
+        auction_org_address: "...",
+        asset_owner_name: "Thi hành án dân sự tỉnh ...",
+        asset_owner_address: "...",
+        doc_sale_start: new Date("2026-03-17T00:30:00Z"),
+        doc_sale_end: new Date("2026-03-30T10:00:00Z"),
+        viewing_start: '',
+        viewing_end: '',
+        auction_datetime: new Date("2026-04-02T07:30:00Z"),
+        publish_date: new Date("2026-03-17T01:30:57Z"),
+        auction_location: "Trụ sở Trung tâm DV đấu giá ...",
+        status: "UPCOMING",
+        auction_method: '',
+        contact_phone: "0262...",
+        contact_email: "...",
+        fingerprint: "sha256(auction_org_name|asset_owner_name|auction_datetime)",
+        image_main: "assets/images/product-sample-1.jpg",
+        attachments: [
+            {
+                file_name: "Thong_bao_dau_gia.pdf",
+                file_url: "https://dgts.moj.gov.vn/common/download?...",
+                file_type: "application/pdf"
+            }
+        ],
+        assets: [
+            {
+                source_asset_id: "7734669",
+                title: "Tài sản 01: Quyền sử dụng tài sản nhà chung cư",
+                description: "Tài sản trên hai thửa đất có một số cây...",
+                asset_type: "REAL_ESTATE",
+                asset_sub_type: "RE_DAT_O",
+                legal_category: "ENFORCEMENT",
+                starting_price: 752199300,
+                deposit_amount: 150000000,
+                winning_price: 0,
+                asset_location: "Xã Hoà Khánh, TP Buôn Ma Thuột...",
+                province_code: "66",
+                district_code: '',
+                land_area: 7653.8,
+                land_purpose: "Đất trồng cây lâu năm",
+                property_type_id: '173',
+                property_type_name: "Quyền sử dụng đất"
+            },
+        ],
+        crawl_page: 1234
+    },
 ];

@@ -1,0 +1,71 @@
+.date-input-wrapper {
+    position: relative;
+    width: 220px;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    background: #fff;
+
+    input {
+        border: none;
+        outline: none;
+        flex: 1;
+        margin-left: 6px;
+        cursor: pointer;
+    }
+
+    .clear {
+        cursor: pointer;
+        color: #999;
+    }
+}
+
+.popup {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 260px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.weekdays,
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.day {
+    text-align: center;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+        background: #eee;
+    }
+
+    &.selected {
+        background: #4caf50;
+        color: white;
+    }
+
+    &.empty {
+        visibility: hidden;
+    }
+}
