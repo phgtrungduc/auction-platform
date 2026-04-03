@@ -5,11 +5,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CategoryItem } from '@shared/components/header/header.component';
 import { CustomSelectComponent } from '@shared/components/custom-select/custom-select.component';
 import { DatePickerComponent } from '@shared/components/date-picker/date-picker.component';
+import { CategoryDropdownComponent } from '@shared/components/category-dropdown/category-dropdown.component';
 
 @Component({
   selector: 'app-products-page',
   standalone: true,
-  imports: [CommonModule, FilterSidebarComponent, CustomSelectComponent, DatePickerComponent],
+  imports: [CommonModule, CustomSelectComponent, DatePickerComponent, CategoryDropdownComponent],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.scss'
 })
@@ -17,8 +18,7 @@ export class ProductsPageComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  selectedCategory: string | null = 'Loại tài sản';
-  isCategoryMenuOpen = false;
+  selectedCategory: string | null = null;
 
   optionsStatus = [
     { label: 'Mở đăng ký', value: 1 },
@@ -116,15 +116,6 @@ export class ProductsPageComponent implements OnInit {
     }
   ];
 
-  toggleCategory(item: CategoryItem, event: Event) {
-    event.stopPropagation();
-    item.expanded = !item.expanded;
-  }
-
-  selectCategory(category: CategoryItem) {
-    this.selectedCategory = category.label;
-    this.isCategoryMenuOpen = false;
-  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -253,9 +244,4 @@ export class ProductsPageComponent implements OnInit {
     }
   }
 
-  clearCategory(event: Event) {
-    event.stopPropagation();
-    this.selectedCategory = null;
-    this.isCategoryMenuOpen = false;
-  }
 }

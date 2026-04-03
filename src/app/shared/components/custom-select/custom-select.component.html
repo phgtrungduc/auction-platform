@@ -1,6 +1,7 @@
 <div class="custom-select" [class.has-value]="selectedLabel">
     <div class="select-box" (click)="toggleDropdown()">
-        <span *ngIf="selectedLabel; else placeholderTpl">
+        <i [ngClass]="icon"></i>
+        <span class="label-select" *ngIf="selectedLabel; else placeholderTpl">
             {{ selectedLabel }}
         </span>
 

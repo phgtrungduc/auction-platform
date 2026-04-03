@@ -5,15 +5,78 @@ import { BaseComponent } from '../../../../core/base/base.component';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { CustomSelectComponent } from '@shared/components/custom-select/custom-select.component';
+import { CategoryDropdownComponent } from '@shared/components/category-dropdown/category-dropdown.component';
+import { CategoryItem } from '@shared/components/header/header.component';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CustomSelectComponent, CategoryDropdownComponent],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss',
 })
 export class HomepageComponent extends BaseComponent {
+
+  selectedLocationValue: number | null = null;
+  optionsLocation = [
+    { label: 'Hà Nội', value: 1 },
+    { label: 'Hồ Chí Minh', value: 2 },
+    { label: 'Đà Nẵng', value: 3 },
+    { label: 'Hải Phòng', value: 4 }
+  ];
+
+  selectedCategory: string | null = null;
+  listCategories: CategoryItem[] = [
+    {
+      label: 'Bất động sản',
+      children: [
+        { label: 'Đất ở' },
+        { label: 'Đất nông nghiệp' },
+        { label: 'Nhà phố' },
+        { label: 'Căn hộ' },
+        { label: 'Nhà xưởng' },
+        { label: 'Shophouse' },
+      ]
+    },
+    {
+      label: 'Xe cộ',
+      children: [
+        { label: 'Ô tô' },
+        { label: 'Xe tải' },
+        { label: 'Xe máy' }
+      ]
+    },
+    {
+      label: 'Máy móc',
+      children: [
+        { label: 'Máy công trình' },
+        { label: 'Máy nông nghiệp' },
+        { label: 'Dây chuyền' },
+      ]
+    },
+    {
+      label: 'Hàng hóa',
+      children: [
+        { label: 'Gạch/vật liệu' },
+        { label: 'Sắt thép' },
+        { label: 'Hàng tồn kho' },
+      ]
+    },
+    {
+      label: 'Đồ dùng',
+      children: [
+        { label: 'Nội thất' },
+        { label: 'Thiết bị' },
+        { label: 'Công vụ' },
+      ]
+    }
+  ];
+
+
+  onChangeLocation(value: any) {
+    console.log('Selected:', value);
+  }
   private sanitizer = inject(DomSanitizer);
 
   private svg(raw: string): SafeHtml {
@@ -32,8 +95,6 @@ export class HomepageComponent extends BaseComponent {
     }
   }
 
-  selectedCity = 'Hà Nội';
-  selectedCategory = 'Loại BĐS';
   keyword = '';
   isDragging = false;
   startX = 0;
@@ -284,7 +345,7 @@ export class HomepageComponent extends BaseComponent {
     // TODO: hook vào router / service tìm kiếm tài sản đấu giá
     console.log({
       keyword: this.keyword,
-      city: this.selectedCity,
+      city: this.selectedLocationValue,
       category: this.selectedCategory,
     });
     this.router.navigate(['/products-listing']);

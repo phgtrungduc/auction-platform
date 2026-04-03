@@ -60,7 +60,7 @@
 
     .select-box {
         width: 100%;
-        padding: 10px 36px 10px 14px;
+        padding: 10px 36px 10px 8px;
         border-radius: 10px;
         border: 1px solid #e0e6e2;
         outline: none;
@@ -150,4 +150,25 @@
     .clear-icon {
         display: block;
     }
+}
+
+.select-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.select-box i {
+    color: #367639;
+    font-size: 14px;
+}
+
+.label-select {
+    width: 100%;
+    text-align: left;
+}
+
+.placeholder-select {
+    width: 100%;
+    text-align: left;
 }

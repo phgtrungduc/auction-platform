@@ -17,6 +17,8 @@ export class CustomSelectComponent {
   @Input() options: SelectOption[] = [];
   @Input() placeholder: string = 'Chọn';
   @Input() value: any;
+  @Input() icon: string | null = null;
+
 
   @Output() valueChange = new EventEmitter<any>();
 
