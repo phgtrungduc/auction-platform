@@ -17,8 +17,36 @@
     </div>
 
     <div class="dropdown" *ngIf="isOpen">
-        <div class="option" *ngFor="let option of options" (click)="selectOption(option)">
+        <!-- Ô tìm kiếm – chỉ hiển thị khi searchable = true -->
+        <div class="search-box" *ngIf="searchable" (click)="$event.stopPropagation()">
+            <i class="fa-solid fa-magnifying-glass search-box__icon"></i>
+            <input
+                class="search-box__input"
+                type="text"
+                [(ngModel)]="searchQuery"
+                placeholder="Tìm kiếm..."
+                autofocus
+            />
+            <button
+                *ngIf="searchQuery"
+                class="search-box__clear"
+                (click)="searchQuery = ''"
+                tabindex="-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Danh sách options đã lọc -->
+        <div class="option"
+             *ngFor="let option of filteredOptions"
+             (click)="selectOption(option)">
             {{ option.label }}
         </div>
+
+        <!-- Không tìm thấy -->
+        <div class="option option--empty" *ngIf="filteredOptions.length === 0">
+            Không tìm thấy kết quả
+        </div>
     </div>
+
 </div>

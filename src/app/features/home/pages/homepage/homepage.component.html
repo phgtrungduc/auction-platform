@@ -60,7 +60,7 @@
                 </span> -->
                 <app-custom-select [options]="optionsLocation" [placeholder]="'Địa điểm'"
                   icon="fa-solid fa-location-dot" [(value)]="selectedLocationValue"
-                  (valueChange)="onChangeLocation($event)">
+                  (valueChange)="onChangeLocation($event)" [searchable]="true">
                 </app-custom-select>
               </div>
             </div>
@@ -90,21 +90,36 @@
     </div>
   </section>
 
-  <!-- Banners under hero -->
-  <section class="homepage__banners mt-2" aria-label="Banners">
-    <div class="homepage__banners-grid">
-      <div class="homepage__banner">
-        <img src="assets/images/banner1.jpg" alt="Banner 1" />
+  <!-- Banners Slideshow -->
+  <section class="banner-slider mt-2" aria-label="Banners">
+    <div class="banner-slider__track-wrapper">
+      <div class="banner-slider__track"
+        [style.transform]="'translateX(' + (-currentBannerIndex * (100 / bannersPerView)) + '%)'">
+        <div class="banner-slider__slide" *ngFor="let banner of banners">
+          <div class="banner-slider__card">
+            <div class="banner-slider__img-wrap">
+              <img [src]="banner.src" [alt]="banner.alt" />
+            </div>
+            <span class="banner-slider__name">{{ banner.alt }}</span>
+          </div>
+        </div>
       </div>
-      <div class="homepage__banner">
-        <img src="assets/images/banner2.jpg" alt="Banner 2" />
-      </div>
-      <div class="homepage__banner">
-        <img src="assets/images/banner3.jpg" alt="Banner 3" />
-      </div>
-      <div class="homepage__banner">
-        <img src="assets/images/banner4.jpg" alt="Banner 4" />
-      </div>
+    </div>
+
+    <!-- Prev / Next arrows -->
+    <button class="banner-slider__arrow banner-slider__arrow--prev" (click)="prevBanner()" aria-label="Previous banner">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <button class="banner-slider__arrow banner-slider__arrow--next" (click)="nextBanner()" aria-label="Next banner">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+    <!-- Dot indicators (maxBannerIndex + 1 dots = banners.length - bannersPerView + 1) -->
+    <div class="banner-slider__dots">
+      <button *ngFor="let i of dotIndices" class="banner-slider__dot"
+        [class.banner-slider__dot--active]="i === currentBannerIndex" (click)="goToBanner(i)"
+        [attr.aria-label]="'Go to banner ' + (i + 1)">
+      </button>
     </div>
   </section>
 

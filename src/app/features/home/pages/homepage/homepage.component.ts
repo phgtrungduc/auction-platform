@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseComponent } from '../../../../core/base/base.component';
 import { Router } from '@angular/router';
@@ -16,7 +16,77 @@ import { CategoryItem } from '@shared/components/header/header.component';
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss',
 })
-export class HomepageComponent extends BaseComponent {
+export class HomepageComponent extends BaseComponent implements OnInit {
+
+  // ── Banner Slideshow ──────────────────────────────────────────────────────
+  readonly bannersPerView = 4;          // số banner hiển thị cùng lúc
+  banners = [
+    { src: 'assets/images/banner/banner_bds.png',      alt: 'Bất động sản' },
+    { src: 'assets/images/banner/banner_xe_co.png',    alt: 'Xe cộ' },
+    { src: 'assets/images/banner/banner_may_moc.png',  alt: 'Máy móc' },
+    { src: 'assets/images/banner/banner_hang_hoa.png', alt: 'Hàng hoá' },
+    { src: 'assets/images/banner/banner_do_dung.png',  alt: 'Đồ dùng' },
+    { src: 'assets/images/banner/banner_khac.png',     alt: 'Khác' },
+  ];
+
+  currentBannerIndex = 0;
+  private bannerInterval: ReturnType<typeof setInterval> | null = null;
+  private readonly BANNER_INTERVAL_MS = 4000;
+
+  private get maxBannerIndex() {
+    return this.banners.length - this.bannersPerView;  // 6 - 4 = 2
+  }
+
+  /** Array [0, 1, ..., maxBannerIndex] used to render dots */
+  get dotIndices(): number[] {
+    return Array.from({ length: this.maxBannerIndex + 1 }, (_, i) => i);
+  }
+
+  ngOnInit() {
+    this.startBannerAutoPlay();
+  }
+
+  override ngOnDestroy() {
+    this.stopBannerAutoPlay();
+    super.ngOnDestroy();
+  }
+
+  private startBannerAutoPlay() {
+    this.bannerInterval = setInterval(() => {
+      this.currentBannerIndex =
+        this.currentBannerIndex < this.maxBannerIndex
+          ? this.currentBannerIndex + 1
+          : 0;                          // quay về đầu khi hết
+    }, this.BANNER_INTERVAL_MS);
+  }
+
+  private stopBannerAutoPlay() {
+    if (this.bannerInterval !== null) {
+      clearInterval(this.bannerInterval);
+      this.bannerInterval = null;
+    }
+  }
+
+  prevBanner() {
+    this.stopBannerAutoPlay();
+    this.currentBannerIndex =
+      this.currentBannerIndex > 0 ? this.currentBannerIndex - 1 : this.maxBannerIndex;
+    this.startBannerAutoPlay();
+  }
+
+  nextBanner() {
+    this.stopBannerAutoPlay();
+    this.currentBannerIndex =
+      this.currentBannerIndex < this.maxBannerIndex ? this.currentBannerIndex + 1 : 0;
+    this.startBannerAutoPlay();
+  }
+
+  goToBanner(index: number) {
+    this.stopBannerAutoPlay();
+    this.currentBannerIndex = Math.min(index, this.maxBannerIndex);
+    this.startBannerAutoPlay();
+  }
+  // ─────────────────────────────────────────────────────────────────────────
 
   selectedLocationValue: number | null = null;
   optionsLocation = [
