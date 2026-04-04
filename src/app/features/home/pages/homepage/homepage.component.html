@@ -35,7 +35,7 @@
         <div class="hero__search-card">
           <div class="hero__search row">
 
-            <div class="hero__field col-md-2">
+            <div class="hero__field col-md-3">
               <div class="custom-select has-icon">
                 <!-- icon bên trái -->
                 <!-- <span class="select-icon">
@@ -66,13 +66,13 @@
             </div>
 
 
-            <div class="hero__field col-md-2">
+            <div class="hero__field col-md-3">
               <app-category-dropdown class="dropdown-category" [categories]="listCategories"
                 [(value)]="selectedCategory" iconClass="fa-solid fa-city">
               </app-category-dropdown>
             </div>
 
-            <div class="hero__field hero__field--keyword col-md-8">
+            <div class="hero__field hero__field--keyword col-md-6">
               <div class="hero__input-wrapper">
                 <input class="hero__input hero__input--text" type="text" [(ngModel)]="keyword"
                   placeholder="Nhập từ khoá cần tìm" />

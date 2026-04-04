@@ -33,7 +33,7 @@
         <!-- Location -->
         <div class="location-select">
           <app-custom-select [options]="optionsLocation" [placeholder]="'Địa điểm đấu giá'"
-            [(value)]="selectedLocationValue" (valueChange)="onChangeLocation($event)">
+            [(value)]="selectedLocationValue" (valueChange)="onChangeLocation($event)" [searchable]="true">
           </app-custom-select>
         </div>
 
@@ -335,7 +335,8 @@
   <div class="adv-filter-footer">
     <button class="btn-apply-filter" (click)="closeAdvancedFilter()">Áp dụng</button>
     <button class="btn-clear-filter" (click)="closeAdvancedFilter()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="15" y1="9" x2="9" y2="15"></line>
         <line x1="9" y1="9" x2="15" y2="15"></line>

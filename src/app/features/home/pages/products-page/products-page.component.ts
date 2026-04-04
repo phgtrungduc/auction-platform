@@ -28,10 +28,10 @@ export class ProductsPageComponent implements OnInit {
   ];
 
   optionsLocation = [
-    { label: 'Hà Nội', value: 1 },
-    { label: 'Hồ Chí Minh', value: 2 },
-    { label: 'Đà Nẵng', value: 3 },
-    { label: 'Hải Phòng', value: 4 }
+    { label: 'Thành phố Hà Nội', value: 1 },
+    { label: 'Thành phố Hồ Chí Minh', value: 2 },
+    { label: 'Thành phố Đà Nẵng', value: 3 },
+    { label: 'Thành phố Hải Phòng', value: 4 }
   ];
 
   optionsOrder = [

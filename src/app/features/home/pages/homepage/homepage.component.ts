@@ -21,12 +21,12 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   // ── Banner Slideshow ──────────────────────────────────────────────────────
   readonly bannersPerView = 4;          // số banner hiển thị cùng lúc
   banners = [
-    { src: 'assets/images/banner/banner_bds.png',      alt: 'Bất động sản' },
-    { src: 'assets/images/banner/banner_xe_co.png',    alt: 'Xe cộ' },
-    { src: 'assets/images/banner/banner_may_moc.png',  alt: 'Máy móc' },
+    { src: 'assets/images/banner/banner_bds.png', alt: 'Bất động sản' },
+    { src: 'assets/images/banner/banner_xe_co.png', alt: 'Xe cộ' },
+    { src: 'assets/images/banner/banner_may_moc.png', alt: 'Máy móc' },
     { src: 'assets/images/banner/banner_hang_hoa.png', alt: 'Hàng hoá' },
-    { src: 'assets/images/banner/banner_do_dung.png',  alt: 'Đồ dùng' },
-    { src: 'assets/images/banner/banner_khac.png',     alt: 'Khác' },
+    { src: 'assets/images/banner/banner_do_dung.png', alt: 'Đồ dùng' },
+    { src: 'assets/images/banner/banner_khac.png', alt: 'Khác' },
   ];
 
   currentBannerIndex = 0;
@@ -90,10 +90,10 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   selectedLocationValue: number | null = null;
   optionsLocation = [
-    { label: 'Hà Nội', value: 1 },
-    { label: 'Hồ Chí Minh', value: 2 },
-    { label: 'Đà Nẵng', value: 3 },
-    { label: 'Hải Phòng', value: 4 }
+    { label: 'Thành phố Hà Nội', value: 1 },
+    { label: 'Thành phố Hồ Chí Minh', value: 2 },
+    { label: 'Thành phố Đà Nẵng', value: 3 },
+    { label: 'Thành phố Hải Phòng', value: 4 }
   ];
 
   selectedCategory: string | null = null;

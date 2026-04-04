@@ -150,15 +150,13 @@
     }
 
     .select-arrow {
+        color: #5f788b;
         position: absolute;
         right: 12px;
         top: 50%;
         transform: translateY(-50%);
-        pointer-events: none;
-        color: #5f788b;
         font-size: 12px;
-        display: flex;
-        align-items: center;
+        cursor: pointer;
     }
 }
 
