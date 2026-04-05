@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseComponent } from '../../../../core/base/base.component';
+import { DvhcStore } from '../../../../store/dvhc/dvhc.store';
+import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -44,6 +46,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     this.startBannerAutoPlay();
+    this.dvhcStore.getProvinces$();
   }
 
   override ngOnDestroy() {
@@ -88,13 +91,10 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   }
   // ─────────────────────────────────────────────────────────────────────────
 
-  selectedLocationValue: number | null = null;
-  optionsLocation = [
-    { label: 'Thành phố Hà Nội', value: 1 },
-    { label: 'Thành phố Hồ Chí Minh', value: 2 },
-    { label: 'Thành phố Đà Nẵng', value: 3 },
-    { label: 'Thành phố Hải Phòng', value: 4 }
-  ];
+  private dvhcStore = inject(DvhcStore);
+
+  selectedLocationValue: any = null;
+  optionsLocation: { label: string, value: any }[] = [];
 
   selectedCategory: string | null = null;
   listCategories: CategoryItem[] = [
@@ -147,6 +147,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   onChangeLocation(value: any) {
     console.log('Selected:', value);
   }
+
   private sanitizer = inject(DomSanitizer);
 
   private svg(raw: string): SafeHtml {
@@ -155,6 +156,14 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   constructor() {
     super();
+    this.dvhcStore.listProvinces$.pipe(takeUntil(this.destroy$)).subscribe(data => {
+      if (data) {
+        this.optionsLocation = data.map(item => ({
+          label: item.nameWithType,
+          value: item.code
+        }));
+      }
+    });
   }
 
   private router = inject(Router);
