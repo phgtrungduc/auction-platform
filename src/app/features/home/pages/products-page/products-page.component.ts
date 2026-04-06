@@ -6,11 +6,12 @@ import { CategoryItem } from '@shared/components/header/header.component';
 import { CustomSelectComponent } from '@shared/components/custom-select/custom-select.component';
 import { DatePickerComponent } from '@shared/components/date-picker/date-picker.component';
 import { CategoryDropdownComponent } from '@shared/components/category-dropdown/category-dropdown.component';
+import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-products-page',
   standalone: true,
-  imports: [CommonModule, CustomSelectComponent, DatePickerComponent, CategoryDropdownComponent],
+  imports: [CommonModule, CustomSelectComponent, DatePickerComponent, CategoryDropdownComponent, PaginationComponent],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.scss'
 })
@@ -50,7 +51,12 @@ export class ProductsPageComponent implements OnInit {
 
   selectedFromDate: Date | null = null;
 
+  currentPage: number = 1;
+  totalPages: number = 100;
+
   isAdvancedFilterOpen = false;
+
+  hasLoggedIn = true;
 
   toggleAdvancedFilter() {
     this.isAdvancedFilterOpen = !this.isAdvancedFilterOpen;
@@ -58,6 +64,13 @@ export class ProductsPageComponent implements OnInit {
 
   closeAdvancedFilter() {
     this.isAdvancedFilterOpen = false;
+  }
+
+  onPageChange(page: number) {
+    console.log('Page changed to:', page);
+    this.currentPage = page;
+    this.products = [];
+    // Call API here to fetch new page data if needed
   }
 
   onChangeStatus(value: any) {
