@@ -61,6 +61,61 @@
     z-index: 1000;
 }
 
+/* Inline / filter row — cùng token với box label: #FAFEFF, #EDF1F4 */
+.date-input-wrapper--inline {
+    .input-box {
+        min-height: 48px;
+        box-sizing: border-box;
+        padding: 8px 10px;
+        gap: 8px;
+        border-radius: 8px;
+        border: 1px solid #edf1f4;
+        background: #fafeff;
+        box-shadow: none;
+
+        &:hover {
+            background: #f4f8fa;
+            border-color: #dde5eb;
+        }
+
+        &:focus-within {
+            border-color: #367639;
+            background: #fafeff;
+            box-shadow: 0 0 0 2px rgba(54, 118, 57, 0.1);
+        }
+
+        svg {
+            flex-shrink: 0;
+            align-self: center;
+        }
+    }
+
+    input {
+        font-size: 14px;
+        line-height: 1.35;
+        color: #151515;
+        margin-left: 0;
+        align-self: center;
+
+        &::placeholder {
+            color: #5f788b;
+        }
+    }
+
+    .popup {
+        z-index: 1102;
+        border: 1px solid #edf1f4;
+        box-shadow:
+            0 3px 6px rgba(0, 0, 0, 0.02),
+            0 11px 11px rgba(0, 0, 0, 0.02),
+            0 24px 14px rgba(0, 0, 0, 0.01);
+    }
+
+    .day.selected {
+        background: #367639;
+    }
+}
+
 .header {
     display: flex;
     justify-content: space-between;

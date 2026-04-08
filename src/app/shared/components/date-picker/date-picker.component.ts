@@ -5,7 +5,9 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 
@@ -16,9 +18,11 @@ import {
   templateUrl: './date-picker.component.html',
   styleUrl: './date-picker.component.scss'
 })
-export class DatePickerComponent {
+export class DatePickerComponent implements OnChanges {
   @Input() value: Date | null = null;
   @Input() placeholder: string = 'Chọn ngày';
+  /** Compact row style for advanced filters (Figma inline date fields). */
+  @Input() inline = false;
   @Output() valueChange = new EventEmitter<Date | null>();
 
   @ViewChild('container') container!: ElementRef;
@@ -39,15 +43,21 @@ export class DatePickerComponent {
     this.generateCalendar();
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes['value']) {
+      return;
+    }
     if (this.value) {
       this.selectedDate = new Date(this.value);
       this.currentDate = new Date(this.value);
-      this.generateCalendar();
+    } else {
+      this.selectedDate = null;
     }
+    this.generateCalendar();
   }
 
-  toggle() {
+  toggle(event?: MouseEvent) {
+    event?.stopPropagation();
     this.isOpen = !this.isOpen;
   }
 

@@ -1,7 +1,7 @@
-<div class="date-input-wrapper" #container>
+<div class="date-input-wrapper" [class.date-input-wrapper--inline]="inline" #container>
 
     <!-- INPUT -->
-    <div class="input-box" (click)="toggle()">
+    <div class="input-box" (click)="toggle($event)">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path
                 d="M1.33398 8.00033C1.33398 5.48633 1.33398 4.22899 2.11532 3.44833C2.89665 2.66766 4.15332 2.66699 6.66732 2.66699H9.33398C11.848 2.66699 13.1053 2.66699 13.886 3.44833C14.6666 4.22966 14.6673 5.48633 14.6673 8.00033V9.33366C14.6673 11.8477 14.6673 13.105 13.886 13.8857C13.1046 14.6663 11.848 14.667 9.33398 14.667H6.66732C4.15332 14.667 2.89598 14.667 2.11532 13.8857C1.33465 13.1043 1.33398 11.8477 1.33398 9.33366V8.00033Z"
@@ -22,7 +22,7 @@
     </div>
 
     <!-- POPUP -->
-    <div class="popup" *ngIf="isOpen">
+    <div class="popup" *ngIf="isOpen" (click)="$event.stopPropagation()">
 
         <div class="header">
             <button (click)="prevMonth()">←</button>

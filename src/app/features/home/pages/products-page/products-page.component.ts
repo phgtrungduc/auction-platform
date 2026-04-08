@@ -21,6 +21,22 @@ export class ProductsPageComponent implements OnInit {
 
   selectedCategory: string | null = null;
 
+  timeFilter = {
+    DOC_SALE: { enabled: false, from: null as Date | null, to: null as Date | null },
+    ASSET_VIEW: { enabled: false, from: null as Date | null, to: null as Date | null },
+    AUCTION_TIME: { enabled: false, from: null as Date | null, to: null as Date | null },
+    RESULT_TIME: { enabled: false, from: null as Date | null, to: null as Date | null },
+  };
+
+  toggleTimeKey(key: keyof typeof this.timeFilter) {
+    const nextEnabled = !this.timeFilter[key].enabled;
+    this.timeFilter[key].enabled = nextEnabled;
+    if (!nextEnabled) {
+      this.timeFilter[key].from = null;
+      this.timeFilter[key].to = null;
+    }
+  }
+
   optionsStatus = [
     { label: 'Mở đăng ký', value: 1 },
     { label: 'Đang diễn ra', value: 2 },

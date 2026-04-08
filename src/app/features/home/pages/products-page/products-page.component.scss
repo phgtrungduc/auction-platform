@@ -748,6 +748,207 @@
   }
 }
 
+/* Thời điểm: chưa tick = box tên full width; đã tick = 2 cột. Desktop + subgrid: cột tên chung cho mọi hàng tick → không lệch kích thước giữa các dòng */
+.time-filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 148 + 148 picker + 6 gap + mũi tên/padding ≈ 324px */
+$time-filter-dates-min: 324px;
+
+.time-filter-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax($time-filter-dates-min, max-content);
+  column-gap: 16px;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.time-filter-row:not(.time-filter-row--expanded) .time-filter-row__cell-trailing {
+  display: none;
+}
+
+.time-filter-row:not(.time-filter-row--expanded) .time-filter-row__box--label {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 640px) {
+  @supports (grid-template-columns: subgrid) {
+    .time-filter-list {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax($time-filter-dates-min, max-content);
+      row-gap: 12px;
+    }
+
+    .time-filter-row {
+      grid-template-columns: subgrid;
+      grid-column: 1 / -1;
+    }
+
+    .time-filter-row--expanded .time-filter-row__box--label {
+      grid-column: 1;
+    }
+
+    .time-filter-row--expanded .time-filter-row__cell-trailing {
+      grid-column: 2;
+    }
+  }
+}
+
+@media (max-width: 639px) {
+  .time-filter-row {
+    grid-template-columns: 1fr;
+  }
+
+  .time-filter-row--expanded .time-filter-row__box--label {
+    grid-column: 1;
+  }
+
+  .time-filter-row__cell-trailing {
+    grid-column: 1;
+    width: 100%;
+  }
+}
+
+.time-filter-row__cell-trailing {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.time-filter-row__box--label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 16px 8px 8px;
+  min-height: 48px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  background: #fafeff;
+  border: 1px solid #edf1f4;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #151515;
+  line-height: 1.35;
+  user-select: none;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.02),
+    0 11px 11px rgba(0, 0, 0, 0.02);
+}
+
+.time-filter-row__box--label input[type='checkbox'] {
+  display: none;
+}
+
+.time-filter-row__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.time-filter-row__check-svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.time-filter-row__check-svg--on {
+  display: none;
+}
+
+.time-filter-row__box--label input:checked + .time-filter-row__check .time-filter-row__check-svg--off {
+  display: none;
+}
+
+.time-filter-row__box--label input:checked + .time-filter-row__check .time-filter-row__check-svg--on {
+  display: block;
+}
+
+.time-filter-row__label-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  /* Cố định weight để tick không làm text reflow / box giật */
+  font-weight: 500;
+}
+
+@media (min-width: 640px) {
+  .time-filter-row__label-text {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 639px) {
+  .time-filter-row__label-text {
+    white-space: normal;
+  }
+}
+
+.time-filter-row__dates {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+@media (max-width: 639px) {
+  .time-filter-row__dates {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+}
+
+.time-filter-row__arrow {
+  color: #5f788b;
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+.time-filter-row__picker {
+  flex: 0 0 148px;
+  width: 148px;
+  min-width: 148px;
+  max-width: 148px;
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .time-filter-row__picker app-date-picker {
+  display: block;
+  width: 100%;
+}
+
+::ng-deep .time-filter-row__picker .date-input-wrapper {
+  width: 100%;
+}
+
+::ng-deep .time-filter-row__picker .date-input-wrapper--inline .input-box {
+  min-height: 48px;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.02),
+    0 11px 11px rgba(0, 0, 0, 0.02);
+}
+
 .price-slider {
   margin-top: 24px;
 

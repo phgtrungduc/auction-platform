@@ -303,16 +303,87 @@
       </div>
     </div>
 
-    <!-- Danh mục pháp lý (Date range) -->
     <div class="filter-group">
-      <h4 class="filter-title">Danh mục pháp lý</h4>
-      <div class="date-range-container">
-        <div class="date-input-adv">
-          <app-date-picker [placeholder]="'Từ ngày'"></app-date-picker>
+      <h4 class="filter-title">Thời điểm</h4>
+
+      <ng-template #timeFilterCheckIconTpl>
+        <span class="time-filter-row__check" aria-hidden="true">
+          <svg class="time-filter-row__check-svg time-filter-row__check-svg--off" width="24" height="24" viewBox="0 0 24 24"
+            fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="#5F788B" stroke-width="1.5" />
+          </svg>
+          <svg class="time-filter-row__check-svg time-filter-row__check-svg--on" width="24" height="24" viewBox="0 0 24 24"
+            fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="#367639" stroke="#367639" stroke-width="1.5" />
+            <path d="M7.5 12.2 L10.8 15.5 L16.9 8.5" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" fill="none" />
+          </svg>
+        </span>
+      </ng-template>
+
+      <div class="time-filter-list">
+        <div class="time-filter-row" [class.time-filter-row--expanded]="timeFilter.DOC_SALE.enabled">
+          <label class="time-filter-row__box time-filter-row__box--label">
+            <input type="checkbox" [checked]="timeFilter.DOC_SALE.enabled" (change)="toggleTimeKey('DOC_SALE')" />
+            <ng-container *ngTemplateOutlet="timeFilterCheckIconTpl"></ng-container>
+            <span class="time-filter-row__label-text">Thời gian bán hồ sơ tham gia đấu giá</span>
+          </label>
+
+          <div class="time-filter-row__cell-trailing">
+            <div class="time-filter-row__dates" *ngIf="timeFilter.DOC_SALE.enabled" (click)="$event.stopPropagation()">
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.DOC_SALE.from" [placeholder]="'Từ ngày'"></app-date-picker>
+              <span class="time-filter-row__arrow">→</span>
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.DOC_SALE.to" [placeholder]="'Đến ngày'"></app-date-picker>
+            </div>
+          </div>
         </div>
-        <span class="date-arrow">→</span>
-        <div class="date-input-adv">
-          <app-date-picker [placeholder]="'Đến ngày'"></app-date-picker>
+
+        <div class="time-filter-row" [class.time-filter-row--expanded]="timeFilter.ASSET_VIEW.enabled">
+          <label class="time-filter-row__box time-filter-row__box--label">
+            <input type="checkbox" [checked]="timeFilter.ASSET_VIEW.enabled" (change)="toggleTimeKey('ASSET_VIEW')" />
+            <ng-container *ngTemplateOutlet="timeFilterCheckIconTpl"></ng-container>
+            <span class="time-filter-row__label-text">Thời gian xem tài sản</span>
+          </label>
+
+          <div class="time-filter-row__cell-trailing">
+            <div class="time-filter-row__dates" *ngIf="timeFilter.ASSET_VIEW.enabled" (click)="$event.stopPropagation()">
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.ASSET_VIEW.from" [placeholder]="'Từ ngày'"></app-date-picker>
+              <span class="time-filter-row__arrow">→</span>
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.ASSET_VIEW.to" [placeholder]="'Đến ngày'"></app-date-picker>
+            </div>
+          </div>
+        </div>
+
+        <div class="time-filter-row" [class.time-filter-row--expanded]="timeFilter.AUCTION_TIME.enabled">
+          <label class="time-filter-row__box time-filter-row__box--label">
+            <input type="checkbox" [checked]="timeFilter.AUCTION_TIME.enabled" (change)="toggleTimeKey('AUCTION_TIME')" />
+            <ng-container *ngTemplateOutlet="timeFilterCheckIconTpl"></ng-container>
+            <span class="time-filter-row__label-text">Thời điểm tổ chức phiến đấu giá</span>
+          </label>
+
+          <div class="time-filter-row__cell-trailing">
+            <div class="time-filter-row__dates" *ngIf="timeFilter.AUCTION_TIME.enabled" (click)="$event.stopPropagation()">
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.AUCTION_TIME.from" [placeholder]="'Từ ngày'"></app-date-picker>
+              <span class="time-filter-row__arrow">→</span>
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.AUCTION_TIME.to" [placeholder]="'Đến ngày'"></app-date-picker>
+            </div>
+          </div>
+        </div>
+
+        <div class="time-filter-row" [class.time-filter-row--expanded]="timeFilter.RESULT_TIME.enabled">
+          <label class="time-filter-row__box time-filter-row__box--label">
+            <input type="checkbox" [checked]="timeFilter.RESULT_TIME.enabled" (change)="toggleTimeKey('RESULT_TIME')" />
+            <ng-container *ngTemplateOutlet="timeFilterCheckIconTpl"></ng-container>
+            <span class="time-filter-row__label-text">Thời điểm công bố kết quả</span>
+          </label>
+
+          <div class="time-filter-row__cell-trailing">
+            <div class="time-filter-row__dates" *ngIf="timeFilter.RESULT_TIME.enabled" (click)="$event.stopPropagation()">
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.RESULT_TIME.from" [placeholder]="'Từ ngày'"></app-date-picker>
+              <span class="time-filter-row__arrow">→</span>
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.RESULT_TIME.to" [placeholder]="'Đến ngày'"></app-date-picker>
+            </div>
+          </div>
         </div>
       </div>
     </div>
