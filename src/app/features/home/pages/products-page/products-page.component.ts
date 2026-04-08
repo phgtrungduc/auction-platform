@@ -146,7 +146,7 @@ export class ProductsPageComponent implements OnInit {
     });
   }
 
-  navToDetail(id: string | undefined) {
+  navToDetail(id: number | undefined) {
     if (id) {
       this.router.navigate(['/product-detail', id]);
     }
@@ -154,7 +154,7 @@ export class ProductsPageComponent implements OnInit {
 
   products = [
     {
-      id: 'dgts_moj',
+      id: 1,
       title: 'Đất Thanh Oai 500m²',
       desc: 'Quyền sử dụng đất - Hà Nội',
       price: '11.50 tỷ',
@@ -162,7 +162,7 @@ export class ProductsPageComponent implements OnInit {
       image: 'assets/images/product-sample-1.jpg',
     },
     {
-      id: 'dgts_moj1',
+      id: 2,
       title: 'Đất Thanh Oai 500m²',
       desc: 'Quyền sử dụng đất - Hà Nội',
       price: '11.50 tỷ (Fail)',
@@ -176,7 +176,7 @@ export class ProductsPageComponent implements OnInit {
     { isAd: true },
 
     {
-      id: 'dgts_moj2',
+      id: 3,
       title: 'Đất Thanh Oai 500m²',
       desc: 'Quyền sử dụng đất - Hà Nội',
       price: '11.50 tỷ',
@@ -186,7 +186,7 @@ export class ProductsPageComponent implements OnInit {
     // 👉 Ads thứ 2
     { isAd: true },
     {
-      id: 'dgts_moj3',
+      id: 4,
       title: 'Đất Thanh Oai 500m²',
       desc: 'Quyền sử dụng đất - Hà Nội',
       price: '11.50 tỷ',
@@ -195,7 +195,7 @@ export class ProductsPageComponent implements OnInit {
       image: 'assets/images/product-sample-1.jpg'
     },
     {
-      id: 'dgts_moj4',
+      id: 5,
       title: 'Đất Thanh Oai 500m²',
       desc: 'Quyền sử dụng đất - Hà Nội',
       price: '11.50 tỷ',
@@ -203,7 +203,7 @@ export class ProductsPageComponent implements OnInit {
       image: 'assets/images/product-sample-1.jpg'
     },
     {
-      id: 'dgts_moj5',
+      id: 6,
       title: 'Đất Thanh Oai 500m²',
       desc: 'Quyền sử dụng đất - Hà Nội',
       price: '11.50 tỷ',
@@ -211,7 +211,7 @@ export class ProductsPageComponent implements OnInit {
       image: 'assets/images/product-sample-1.jpg'
     },
     {
-      id: 'dgts_moj6',
+      id: 7,
       title: 'Đất Thanh Oai 500m²',
       desc: 'Quyền sử dụng đất - Hà Nội',
       price: '11.50 tỷ',
@@ -221,7 +221,7 @@ export class ProductsPageComponent implements OnInit {
       image: 'assets/images/product-sample-1.jpg'
     },
     {
-      id: 'dgts_moj7',
+      id: 8,
       title: 'Đất Thanh Oai 500m²',
       desc: 'Quyền sử dụng đất - Hà Nội',
       price: '11.50 tỷ',
@@ -231,7 +231,7 @@ export class ProductsPageComponent implements OnInit {
       image: 'assets/images/product-sample-1.jpg'
     },
     {
-      id: 'dgts_moj8',
+      id: 9,
       title: 'Đất Thanh Oai 500m²',
       desc: 'Quyền sử dụng đất - Hà Nội',
       price: '11.50 tỷ',
@@ -241,7 +241,7 @@ export class ProductsPageComponent implements OnInit {
       image: 'assets/images/product-sample-1.jpg'
     },
     {
-      id: 'dgts_moj9',
+      id: 10,
       title: 'Đất Thanh Oai 500m²',
       desc: 'Quyền sử dụng đất - Hà Nội',
       price: '11.50 tỷ',

@@ -49,13 +49,12 @@
                     <line x1="3" y1="9" x2="21" y2="9"></line>
                     <line x1="9" y1="21" x2="9" y2="9"></line>
                   </svg>
-                  {{ asset.property_type_name }} - {{ asset.asset_sub_type === 'RE_DAT_O' ? 'Đất ở' :
-                  asset.asset_sub_type }}
+                  {{ asset.assetType }} - {{ asset.assetSubType }}
                 </div>
               </div>
 
               <div class="info-row">
-                <span class="label">Nơi có tài sản:</span> {{ asset.asset_location || 'Đang cập nhật' }}
+                <span class="label">Nơi có tài sản:</span> {{ asset.assetLocation || 'Đang cập nhật' }}
               </div>
               <div class="info-row">
                 <span class="label">Ghi chú:</span> -
@@ -64,23 +63,23 @@
               <div class="price-boxes">
                 <div class="price-box">
                   <div class="p-label">Hồ sơ</div>
-                  <div class="p-val text-green">600.000đ</div>
+                  <div class="p-val text-green">-</div>
                 </div>
                 <div class="price-box">
                   <div class="p-label">Khởi điểm</div>
-                  <div class="p-val text-green">{{ formatCurrency(asset.starting_price) }}đ</div>
+                  <div class="p-val text-green">{{ formatCurrency(asset.startingPrice) }}</div>
                 </div>
                 <div class="price-box">
                   <div class="p-label">Đặt trước</div>
-                  <div class="p-val text-green">{{ formatCurrency(asset.deposit_amount) }}đ</div>
+                  <div class="p-val text-green">{{ formatCurrency(asset.depositValue) }}</div>
                 </div>
                 <div class="price-box">
                   <div class="p-label">Bước giá</div>
-                  <div class="p-val text-green">1.000.000đ</div>
+                  <div class="p-val text-green">{{ formatCurrency(asset.priceStep) }}</div>
                 </div>
                 <div class="price-box">
                   <div class="p-label">Giá trúng</div>
-                  <div class="p-val text-green">-</div>
+                  <div class="p-val text-green">{{ formatCurrency(asset.winningPrice) }}</div>
                 </div>
               </div>
             </div>
@@ -103,15 +102,15 @@
         <table class="info-table">
           <tr>
             <td class="t-label">Đơn vị đấu giá:</td>
-            <td>{{ product.auction_org_name }}</td>
+            <td>{{ product.auctionOrgName }}</td>
           </tr>
           <tr>
             <td class="t-label">Thông tin liên hệ:</td>
-            <td>{{ product.contact_phone || 'Đang cập nhật' }} - {{ product.contact_email || 'Đang cập nhật' }}</td>
+            <td>{{ product.contactPhone || 'Đang cập nhật' }} - {{ product.contactEmail || 'Đang cập nhật' }}</td>
           </tr>
           <tr>
             <td class="t-label">Địa điểm đấu giá:</td>
-            <td>{{ product.auction_location || 'Đang cập nhật' }}</td>
+            <td>{{ product.auctionLocation || 'Đang cập nhật' }}</td>
           </tr>
         </table>
       </div>
@@ -139,7 +138,7 @@
               </svg></div>
             <div class="t-content">
               <div class="t-title">Thời gian bán hồ sơ</div>
-              <div class="t-time">{{ product.doc_sale_start | date:'HH:mm dd/MM/yyyy' }} → {{ product.doc_sale_end |
+              <div class="t-time">{{ product.docSaleStart | date:'HH:mm dd/MM/yyyy' }} → {{ product.docSaleEnd |
                 date:'HH:mm dd/MM/yyyy' }}</div>
             </div>
           </div>
@@ -151,7 +150,11 @@
               </svg></div>
             <div class="t-content">
               <div class="t-title">Thời gian xem tài sản</div>
-              <div class="t-time">08:00 22/03/2026 → 17:00 05/04/2026</div>
+              <div class="t-time">{{ product.viewingStart ? (product.viewingStart | date:'HH:mm dd/MM/yyyy') :
+                ".........." }}
+                →
+                {{ product.viewingEnd ? (product.viewingEnd |
+                date:'HH:mm dd/MM/yyyy') : ".........." }}</div>
             </div>
           </div>
           <div class="timeline-item">
@@ -161,7 +164,7 @@
               </svg></div>
             <div class="t-content">
               <div class="t-title">Thời gian đấu giá</div>
-              <div class="t-time">{{ product.auction_datetime | date:'HH:mm dd/MM/yyyy' }}</div>
+              <div class="t-time">{{ product.auctionDatetime | date:'HH:mm dd/MM/yyyy' }}</div>
             </div>
           </div>
         </div>
@@ -183,7 +186,7 @@
           <div class="attachment-item" *ngFor="let file of product.attachments">
             <div class="file-info">
               <span class="file-icon pdf">PDF</span>
-              <span class="file-name">{{ file.file_name }}</span>
+              <span class="file-name">{{ file.fileName }}</span>
             </div>
             <a [href]="" target="_blank" class="file-action">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -198,7 +201,7 @@
 
       <!-- Nguồn -->
       <div class="source">
-        Nguồn: <a [href]="product.source_url" target="_blank">{{ product.source_url }}</a>
+        Nguồn: <a [href]="product.sourceUrl" target="_blank">{{ product.sourceUrl }}</a>
       </div>
     </div>
 
@@ -206,9 +209,10 @@
     <div class="layout__sidebar">
       <div class="summary-card">
         <div class="badges">
-          <span class="badge badge--green">Mở đăng ký</span>
-          <span class="badge badge--gray">Bất động sản - Đất ở</span>
-          <span class="badge badge--gray">Tài sản thi hành án</span>
+          <span class="badge {{ getNoticeStatusClass(product.status) }}">{{ getNoticeStatusLabel(product.status)
+            }}</span>
+          <span class="badge badge--gray" *ngFor="let cat of uniqueAssetCategories">{{ cat }}</span>
+          <span class="badge badge--gray" *ngFor="let legal of uniqueLegalCategories">{{ legal }}</span>
         </div>
 
         <h2 class="summary-title">{{ product.title }}</h2>
@@ -219,7 +223,7 @@
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          {{ product.asset_owner_name }} - {{ product.asset_owner_address }}
+          {{ product.assetOwnerName }} - {{ product.assetOwnerAddress }}
         </div>
 
         <div class="summary-meta">
@@ -275,12 +279,13 @@
   <!-- Similar Assets Section -->
   <div class="similar-section">
     <h2 class="similar-title">Tài sản tương tự</h2>
-    <div class="similar-grid" #similarScroll (mousedown)="onMouseDown($event)"
-      (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()" (mouseleave)="onMouseUp()">
+    <div class="similar-grid" #similarScroll (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
+      (mouseup)="onMouseUp()" (mouseleave)="onMouseUp()">
       <div class="similar-card" *ngFor="let item of similarProducts">
         <div class="similar-card__image">
           <img [src]="item.image" alt="Product Image">
-          <span class="similar-card__badge" [ngClass]="getStatusClass(item.status)">{{ item.status }}</span>
+          <span class="similar-card__badge" [ngClass]="getStatusClass(item.status)">{{ getNoticeStatusLabel(item.status)
+            }}</span>
         </div>
         <div class="similar-card__body">
           <h3 class="similar-card__title">{{ item.title }}</h3>

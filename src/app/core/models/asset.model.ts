@@ -55,3 +55,63 @@ export interface AssetQueryParams {
   ProvinceCode?: string;
   SortBy?: string;
 }
+
+export interface Attachment {
+  id: number;
+  fileName: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize: number | null;
+  displayOrder: number;
+}
+
+export interface NoticeAsset {
+  id: number;
+  noticeId: number;
+  displayOrder: number;
+  title: string;
+  description: string | null;
+  assetType: number | null;
+  assetSubType: number | null;
+  legalCategory: string | null;
+  startingPrice: number;
+  depositValue: number;
+  depositType: number;
+  winningPrice: number | null;
+  priceStep: number | null;
+  assetLocation: string | null;
+  provinceCode: string | null;
+  districtCode: string | null;
+  landArea: number | null;
+  landPurpose: string | null;
+  propertyTypeId: number;
+  propertyTypeName: string;
+}
+
+export interface MarketplaceNoticeDetail {
+  id: number;
+  sourceId: string;
+  sourceNoticeId: string;
+  sourceUrl: string;
+  title: string;
+  description: string | null;
+  auctionOrgName: string;
+  auctionOrgAddress: string | null;
+  assetOwnerName: string;
+  assetOwnerAddress: string | null;
+  docSaleStart: string;
+  docSaleEnd: string;
+  viewingStart: string | null;
+  viewingEnd: string | null;
+  auctionDatetime: string;
+  publishDate: string;
+  auctionLocation: string | null;
+  status: string;
+  auctionMethod: string | null;
+  contactPhone: string | null;
+  contactEmail: string | null;
+  fingerprint: string;
+  attachments: Attachment[];
+  assets: NoticeAsset[];
+  created: string;
+}

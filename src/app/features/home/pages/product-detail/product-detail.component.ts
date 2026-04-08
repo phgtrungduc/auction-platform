@@ -1,7 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SampleAuctionProducts } from '@shared/constants/sample-data.constant';
+import { AssetStore } from '../../../../store/asset/asset.store';
+import { Subject, takeUntil } from 'rxjs';
+import { MarketplaceNoticeDetail } from '../../../../core/models/asset.model';
 
 
 @Component({
@@ -11,22 +13,29 @@ import { SampleAuctionProducts } from '@shared/constants/sample-data.constant';
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  product: any = null;
+  public assetStore = inject(AssetStore);
+  private destroy$ = new Subject<void>();
+
+  product: MarketplaceNoticeDetail | null = null;
   expandedAssets: boolean[] = [];
 
   ngOnInit(): void {
+    this.assetStore.detailData$.pipe(takeUntil(this.destroy$)).subscribe(data => {
+      this.product = data;
+      if (this.product?.assets) {
+        this.expandedAssets = this.product.assets.map((_: any, i: number) => i === 0);
+      } else {
+        this.expandedAssets = [];
+      }
+    });
+
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.product = SampleAuctionProducts.find(p => p.source_id === id);
-        if (this.product?.assets) {
-          this.expandedAssets = this.product.assets.map((_: any, i: number) => i === 0);
-        } else {
-          this.expandedAssets = [];
-        }
+        this.assetStore.getDetail$(id);
 
         // Cuộn lên đầu trang mượt mà khi load item mới
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -34,13 +43,18 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   toggleAsset(index: number): void {
     this.expandedAssets[index] = !this.expandedAssets[index];
   }
 
   formatCurrency(value: number | string | null | undefined): string {
-    if (!value) return '0';
-    return Number(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    if (!value) return '-';
+    return Number(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "đ";
   }
 
   goBack(): void {
@@ -53,7 +67,7 @@ export class ProductDetailComponent implements OnInit {
       title: 'Đất Thanh Oai 500m²',
       desc: 'Trả giá lên • Hà Nội • 3 tài sản',
       price: '9.00 - 11.50 tỷ',
-      status: 'Mở đăng ký',
+      status: 'REGISTERING',
       image: 'assets/images/product-sample-1.jpg'
     },
     {
@@ -61,7 +75,7 @@ export class ProductDetailComponent implements OnInit {
       title: 'Đất Thanh Oai 500m²',
       desc: 'Trả giá lên • Hà Nội • 3 tài sản',
       price: '9.00 - 11.50 tỷ',
-      status: 'Mở đăng ký',
+      status: 'UPCOMING',
       image: 'assets/images/product-sample-1.jpg'
     },
     {
@@ -69,7 +83,7 @@ export class ProductDetailComponent implements OnInit {
       title: 'Đất Thanh Oai 500m²',
       desc: 'Trả giá lên • Hà Nội • 3 tài sản',
       price: '9.00 - 11.50 tỷ',
-      status: 'Đang diễn ra',
+      status: 'UPCOMING',
       image: 'assets/images/product-sample-1.jpg'
     },
     {
@@ -77,7 +91,7 @@ export class ProductDetailComponent implements OnInit {
       title: 'Đất Thanh Oai 500m²',
       desc: 'Trả giá lên • Hà Nội • 3 tài sản',
       price: '9.00 - 11.50 tỷ',
-      status: 'Sắp diễn ra',
+      status: 'ONGOING',
       image: 'assets/images/product-sample-1.jpg'
     },
     {
@@ -85,18 +99,63 @@ export class ProductDetailComponent implements OnInit {
       title: 'Đất Thanh Oai 500m²',
       desc: 'Trả giá lên • Hà Nội • 3 tài sản',
       price: '9.00 - 11.50 tỷ',
-      status: 'Sắp diễn ra',
+      status: 'COMPLETED',
       image: 'assets/images/product-sample-1.jpg'
     }
   ];
 
   getStatusClass(status: string): string {
     switch (status) {
-      case 'Mở đăng ký': return 'badge--green';
-      case 'Đang diễn ra': return 'badge--blue';
-      case 'Sắp diễn ra': return 'badge--yellow';
+      case 'REGISTERING': return 'badge--green';
+      case 'ONGOING': return 'badge--blue';
+      case 'UPCOMING': return 'badge--yellow';
+      case 'COMPLETED': return 'badge--dark';
       default: return 'badge--gray';
     }
+  }
+
+  getNoticeStatusLabel(status: string | undefined): string {
+    if (!status) return 'Chưa rõ';
+    switch (status) {
+      case 'UPCOMING': return 'Sắp diễn ra';
+      case 'REGISTERING': return 'Mở đăng ký';
+      case 'ONGOING': return 'Đang diễn ra';
+      case 'COMPLETED': return 'Đã kết thúc';
+      default: return status;
+    }
+  }
+
+  getNoticeStatusClass(status: string | undefined): string {
+    if (!status) return 'badge--gray';
+    switch (status) {
+      case 'UPCOMING': return 'badge--yellow';
+      case 'REGISTERING': return 'badge--green';
+      case 'ONGOING': return 'badge--blue';
+      case 'COMPLETED': return 'badge--dark';
+      default: return 'badge--gray';
+    }
+  }
+
+  get uniqueAssetCategories(): string[] {
+    if (!this.product?.assets) return [];
+    const categories = new Set<string>();
+    this.product.assets.forEach(a => {
+      if (a.assetType || a.assetSubType) {
+        categories.add(`${a.assetType || 'Chưa phân loại'} - ${a.assetSubType || 'Chưa phân loại'}`);
+      }
+    });
+    return Array.from(categories);
+  }
+
+  get uniqueLegalCategories(): string[] {
+    if (!this.product?.assets) return [];
+    const set = new Set<string>();
+    this.product.assets.forEach(a => {
+      if (a.legalCategory) {
+        set.add(a.legalCategory);
+      }
+    });
+    return Array.from(set);
   }
 
   getPriceClass(status: string): string {

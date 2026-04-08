@@ -1,6 +1,7 @@
 export const API_ENDPOINTS = {
     ASSET: {
         GET_LIST: '/marketplace/assets',
+        GET_DETAIL: '/marketplace',
     },
     DVHC: {
         GET_WARDS: '/dvhcs/wards',
