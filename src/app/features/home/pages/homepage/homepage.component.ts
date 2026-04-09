@@ -3,7 +3,7 @@ import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/co
 import { FormsModule } from '@angular/forms';
 import { BaseComponent } from '../../../../core/base/base.component';
 import { DvhcStore } from '../../../../store/dvhc/dvhc.store';
-import { combineLatest, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -181,32 +181,25 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       }
     });
 
-    combineLatest([this.assetStore.listData$, this.dvhcStore.listProvinces$])
+    this.assetStore.listData$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([items, provinces]) => {
-        const list = provinces ?? [];
-        this.auctionList = (items ?? []).map((item) => this.mapNoticeToAuctionItem(item, list));
+      .subscribe((items) => {
+        this.auctionList = (items ?? []).map((item) => this.mapNoticeToAuctionItem(item));
       });
 
-    combineLatest([this.assetStore.endedListData$, this.dvhcStore.listProvinces$])
+    this.assetStore.endedListData$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([items, provinces]) => {
-        const list = provinces ?? [];
-        this.endedAuctions = (items ?? []).map((item) => this.mapNoticeToEndedItem(item, list));
+      .subscribe((items) => {
+        this.endedAuctions = (items ?? []).map((item) => this.mapNoticeToEndedItem(item));
       });
   }
 
-  private resolveProvinceName(provinces: Dvhc[], provinceCode: string, provinceName?: string): string {
-    const matched = provinces.find((p) => p.code === provinceCode);
-    return matched?.name || provinceName || 'Không xác định';
-  }
-
-  private mapNoticeToAuctionItem(item: NoticeSearchDocument, provinces: Dvhc[]): AuctionItem {
+  private mapNoticeToAuctionItem(item: NoticeSearchDocument): AuctionItem {
     return {
       id: item.noticeId,
       title: item.title,
       type: '',
-      location: this.resolveProvinceName(provinces, item.provinceCode, item.provinceName),
+      location: item.provinceName || 'Không xác định',
       minPrice: item.minStartingPrice ? this.formatPrice(item.minStartingPrice) : 'Không xác định',
       maxPrice: item.maxStartingPrice ? this.formatPrice(item.maxStartingPrice) : 'Không xác định',
       owner: item.auctionOrgName,
@@ -216,11 +209,11 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     };
   }
 
-  private mapNoticeToEndedItem(item: NoticeSearchDocument, provinces: Dvhc[]): EndedAuctionItem {
+  private mapNoticeToEndedItem(item: NoticeSearchDocument): EndedAuctionItem {
     return {
       id: item.noticeId,
       title: item.title,
-      location: this.resolveProvinceName(provinces, item.provinceCode, item.provinceName),
+      location: item.provinceName || 'Không xác định',
       price: item.maxStartingPrice ? this.formatPrice(item.maxStartingPrice) : '—',
       increase: '',
       startPrice: item.minStartingPrice ? this.formatPrice(item.minStartingPrice) : '—',

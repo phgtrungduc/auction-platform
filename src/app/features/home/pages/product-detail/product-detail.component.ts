@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssetStore } from '../../../../store/asset/asset.store';
 import { Subject, takeUntil } from 'rxjs';
-import { MarketplaceNoticeDetail } from '../../../../core/models/asset.model';
+import { AdvancedSearchRequest, MarketplaceNoticeDetail, NoticeSearchDocument } from '../../../../core/models/asset.model';
 
 
 @Component({
@@ -21,6 +21,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   product: MarketplaceNoticeDetail | null = null;
   expandedAssets: boolean[] = [];
+  similarProducts: SimilarProductItem[] = [];
 
   ngOnInit(): void {
     this.assetStore.detailData$.pipe(takeUntil(this.destroy$)).subscribe(data => {
@@ -30,7 +31,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       } else {
         this.expandedAssets = [];
       }
+
+      const req = this.buildSimilarSearchRequest(this.product);
+      if (req) {
+        this.assetStore.getSimilarListData$(req);
+      }
     });
+
+    this.assetStore.similarListData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((items) => {
+        this.similarProducts = (items ?? []).map((x) => this.mapNoticeToSimilarProduct(x));
+      });
 
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -61,48 +73,45 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     window.history.back();
   }
 
-  similarProducts = [
-    {
-      id: 'dgts_moj8',
-      title: 'Đất Thanh Oai 500m²',
-      desc: 'Trả giá lên • Hà Nội • 3 tài sản',
-      price: '9.00 - 11.50 tỷ',
-      status: 'REGISTERING',
+  private buildSimilarSearchRequest(product: MarketplaceNoticeDetail | null): AdvancedSearchRequest | null {
+    if (!product?.assets?.length) return null;
+
+    const assetCategoryId = (product.assets[0] as any)?.assetTypeCode ?? product.assets[0]?.assetType ?? undefined;
+
+    const legalCategoryIds = (product.assets ?? [])
+      .map((a: any) => a.legalCategoryCode ?? a.legalCategoryId ?? a.legalCategory)
+      .map((x: any) => {
+        if (typeof x === 'number') return x;
+        if (typeof x === 'string' && /^\d+$/.test(x)) return Number(x);
+        return null;
+      })
+      .filter((x: number | null): x is number => x !== null);
+
+    return {
+      page: 1,
+      pageSize: 8,
+      sortBy: 'newest',
+      assetCategoryId: typeof assetCategoryId === 'number' ? assetCategoryId : undefined,
+      legalCategoryIds: legalCategoryIds.length ? Array.from(new Set(legalCategoryIds)) : undefined
+    };
+  }
+
+  private mapNoticeToSimilarProduct(item: NoticeSearchDocument): SimilarProductItem {
+    return {
+      id: String(item.noticeId),
+      title: item.title,
+      desc: `${item.provinceName || 'Không xác định'} · ${item.assetCount ?? 0} tài sản`,
+      price: `${this.formatToTy(item.minStartingPrice)} - ${this.formatToTy(item.maxStartingPrice)}`,
+      status: item.status,
+      owner: item.auctionOrgName,
       image: 'assets/images/product-sample-1.jpg'
-    },
-    {
-      id: 'dgts_moj6',
-      title: 'Đất Thanh Oai 500m²',
-      desc: 'Trả giá lên • Hà Nội • 3 tài sản',
-      price: '9.00 - 11.50 tỷ',
-      status: 'UPCOMING',
-      image: 'assets/images/product-sample-1.jpg'
-    },
-    {
-      id: 'dgts_moj7',
-      title: 'Đất Thanh Oai 500m²',
-      desc: 'Trả giá lên • Hà Nội • 3 tài sản',
-      price: '9.00 - 11.50 tỷ',
-      status: 'UPCOMING',
-      image: 'assets/images/product-sample-1.jpg'
-    },
-    {
-      id: 'dgts_moj5',
-      title: 'Đất Thanh Oai 500m²',
-      desc: 'Trả giá lên • Hà Nội • 3 tài sản',
-      price: '9.00 - 11.50 tỷ',
-      status: 'ONGOING',
-      image: 'assets/images/product-sample-1.jpg'
-    },
-    {
-      id: 'dgts_moj4',
-      title: 'Đất Thanh Oai 500m²',
-      desc: 'Trả giá lên • Hà Nội • 3 tài sản',
-      price: '9.00 - 11.50 tỷ',
-      status: 'COMPLETED',
-      image: 'assets/images/product-sample-1.jpg'
-    }
-  ];
+    };
+  }
+
+  private formatToTy(value: number | null | undefined): string {
+    if (value == null) return '—';
+    return (value / 1000000000).toFixed(1) + ' tỷ';
+  }
 
   getStatusClass(status: string): string {
     switch (status) {
@@ -120,6 +129,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       case 'UPCOMING': return 'Mở đăng ký';
       case 'ONGOING': return 'Đang diễn ra';
       case 'COMPLETED': return 'Đã kết thúc';
+      case 'CANCELED':
       case 'CANCELLED': return 'Huỷ đấu giá';
       default: return status;
     }
@@ -131,6 +141,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       case 'UPCOMING': return 'badge--green';
       case 'ONGOING': return 'badge--blue';
       case 'COMPLETED': return 'badge--dark';
+      case 'CANCELED':
       case 'CANCELLED': return 'badge--yellow';
       default: return 'badge--gray';
     }
@@ -194,4 +205,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     this.isDragging = false;
     this.draggedElement = null;
   }
+}
+
+interface SimilarProductItem {
+  id: string;
+  title: string;
+  desc: string;
+  price: string;
+  status: string;
+  owner: string;
+  image: string;
 }

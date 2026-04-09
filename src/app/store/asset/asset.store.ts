@@ -16,9 +16,11 @@ import {
 export interface AssetState {
     loading: boolean;
     endedLoading: boolean;
+    similarLoading: boolean;
     detailLoading: boolean;
     listData: NoticeSearchDocument[];
     endedListData: NoticeSearchDocument[];
+    similarListData: NoticeSearchDocument[];
     detailData: MarketplaceNoticeDetail | null;
     meta: {
         totalElements: number;
@@ -32,17 +34,26 @@ export interface AssetState {
         pageNumber: number;
         hasMore: boolean;
     };
+    similarMeta: {
+        totalElements: number;
+        pageSize: number;
+        pageNumber: number;
+        hasMore: boolean;
+    };
     _searchReq: AdvancedSearchRequest;
     _endedSearchReq: AdvancedSearchRequest;
+    _similarSearchReq: AdvancedSearchRequest;
     error: string;
 }
 
 const initialState: AssetState = {
     loading: false,
     endedLoading: false,
+    similarLoading: false,
     detailLoading: false,
     listData: [],
     endedListData: [],
+    similarListData: [],
     detailData: null,
     meta: {
         totalElements: 0,
@@ -56,12 +67,23 @@ const initialState: AssetState = {
         pageNumber: 1,
         hasMore: false,
     },
+    similarMeta: {
+        totalElements: 0,
+        pageSize: 10,
+        pageNumber: 1,
+        hasMore: false,
+    },
     _searchReq: {
         page: 1,
         pageSize: 20,
         sortBy: "newest"
     },
     _endedSearchReq: {
+        page: 1,
+        pageSize: 20,
+        sortBy: "newest"
+    },
+    _similarSearchReq: {
         page: 1,
         pageSize: 20,
         sortBy: "newest"
@@ -80,10 +102,13 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
 
     listData$ = this.select((s) => s.listData);
     endedListData$ = this.select((s) => s.endedListData);
+    similarListData$ = this.select((s) => s.similarListData);
     meta$ = this.select((s) => s.meta);
     endedMeta$ = this.select((s) => s.endedMeta);
+    similarMeta$ = this.select((s) => s.similarMeta);
     loading$ = this.select((s) => s.loading);
     endedLoading$ = this.select((s) => s.endedLoading);
+    similarLoading$ = this.select((s) => s.similarLoading);
     detailData$ = this.select((s) => s.detailData);
     detailLoading$ = this.select((s) => s.detailLoading);
 
@@ -153,6 +178,44 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
                         (e: HttpErrorResponse) => {
                             this.patchState({
                                 endedLoading: false,
+                                error: e.message
+                            });
+                            this.toastr.error(e.message || "Đã có lỗi xảy ra", "Lỗi");
+                        }
+                    )
+                );
+            })
+        )
+    );
+
+    readonly getSimilarListData$ = this.effect<AdvancedSearchRequest>(($) =>
+        $.pipe(
+            tap(() => {
+                this.patchState({
+                    similarLoading: true,
+                    error: "",
+                    similarListData: []
+                });
+            }),
+            switchMap((req) => {
+                return this.service.advancedSearch(req).pipe(
+                    tapResponse(
+                        (response: AdvancedSearchResponse) => {
+                            this.patchState({
+                                similarLoading: false,
+                                similarListData: response.items,
+                                similarMeta: {
+                                    totalElements: response.totalCount,
+                                    pageSize: response.pageSize,
+                                    pageNumber: response.page,
+                                    hasMore: response.page < response.totalPages
+                                },
+                                _similarSearchReq: req
+                            });
+                        },
+                        (e: HttpErrorResponse) => {
+                            this.patchState({
+                                similarLoading: false,
                                 error: e.message
                             });
                             this.toastr.error(e.message || "Đã có lỗi xảy ra", "Lỗi");

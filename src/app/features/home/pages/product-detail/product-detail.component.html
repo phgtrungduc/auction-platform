@@ -71,7 +71,7 @@
                 </div>
                 <div class="price-box">
                   <div class="p-label">Đặt trước</div>
-                  <div class="p-val text-green">{{ formatCurrency(asset.depositValue) }}</div>
+                  <div class="p-val text-green">{{ asset.depositValue < 100 ? (asset.depositValue + '%') : (formatCurrency(asset.depositValue)) }}</div>
                 </div>
                 <div class="price-box">
                   <div class="p-label">Bước giá</div>
@@ -288,14 +288,14 @@
             }}</span>
         </div>
         <div class="similar-card__body">
-          <h3 class="similar-card__title">{{ item.title }}</h3>
+          <h3 class="similar-card__title" [title]="item.title">{{ item.title }}</h3>
           <p class="similar-card__meta">{{ item.desc }}</p>
           <div class="similar-card__price" [ngClass]="getPriceClass(item.status)">{{ item.price }}</div>
 
           <div class="similar-card__footer">
             <div class="similar-card__owner">
               <span class="similar-card__avatar">LV</span>
-              Lạc Việt
+              {{ item.owner }}
             </div>
             <button class="similar-card__btn" (click)="navToDetail(item.id)">Chi tiết &rarr;</button>
           </div>
