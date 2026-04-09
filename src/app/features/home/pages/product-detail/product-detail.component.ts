@@ -106,10 +106,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   getStatusClass(status: string): string {
     switch (status) {
-      case 'REGISTERING': return 'badge--green';
+      case 'UPCOMING': return 'badge--green';
       case 'ONGOING': return 'badge--blue';
-      case 'UPCOMING': return 'badge--yellow';
       case 'COMPLETED': return 'badge--dark';
+      case 'CANCELLED': return 'badge--yellow';
       default: return 'badge--gray';
     }
   }
@@ -117,10 +117,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   getNoticeStatusLabel(status: string | undefined): string {
     if (!status) return 'Chưa rõ';
     switch (status) {
-      case 'UPCOMING': return 'Sắp diễn ra';
-      case 'REGISTERING': return 'Mở đăng ký';
+      case 'UPCOMING': return 'Mở đăng ký';
       case 'ONGOING': return 'Đang diễn ra';
       case 'COMPLETED': return 'Đã kết thúc';
+      case 'CANCELLED': return 'Huỷ đấu giá';
       default: return status;
     }
   }
@@ -128,10 +128,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   getNoticeStatusClass(status: string | undefined): string {
     if (!status) return 'badge--gray';
     switch (status) {
-      case 'UPCOMING': return 'badge--yellow';
-      case 'REGISTERING': return 'badge--green';
+      case 'UPCOMING': return 'badge--green';
       case 'ONGOING': return 'badge--blue';
       case 'COMPLETED': return 'badge--dark';
+      case 'CANCELLED': return 'badge--yellow';
       default: return 'badge--gray';
     }
   }

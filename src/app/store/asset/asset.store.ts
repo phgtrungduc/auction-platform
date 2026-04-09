@@ -6,12 +6,19 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
 
 import { AssetService } from "../../core/services/asset.service";
-import { Asset, AssetQueryParams, PaginatedAssetsResponse, MarketplaceNoticeDetail } from "../../core/models/asset.model";
+import {
+    AdvancedSearchRequest,
+    AdvancedSearchResponse,
+    MarketplaceNoticeDetail,
+    NoticeSearchDocument
+} from "../../core/models/asset.model";
 
 export interface AssetState {
     loading: boolean;
+    endedLoading: boolean;
     detailLoading: boolean;
-    listData: Asset[];
+    listData: NoticeSearchDocument[];
+    endedListData: NoticeSearchDocument[];
     detailData: MarketplaceNoticeDetail | null;
     meta: {
         totalElements: number;
@@ -19,14 +26,23 @@ export interface AssetState {
         pageNumber: number;
         hasMore: boolean;
     };
-    _searchReq: AssetQueryParams;
+    endedMeta: {
+        totalElements: number;
+        pageSize: number;
+        pageNumber: number;
+        hasMore: boolean;
+    };
+    _searchReq: AdvancedSearchRequest;
+    _endedSearchReq: AdvancedSearchRequest;
     error: string;
 }
 
 const initialState: AssetState = {
     loading: false,
+    endedLoading: false,
     detailLoading: false,
     listData: [],
+    endedListData: [],
     detailData: null,
     meta: {
         totalElements: 0,
@@ -34,9 +50,21 @@ const initialState: AssetState = {
         pageNumber: 1,
         hasMore: false,
     },
+    endedMeta: {
+        totalElements: 0,
+        pageSize: 10,
+        pageNumber: 1,
+        hasMore: false,
+    },
     _searchReq: {
-        Limit: 10,
-        Offset: 1,
+        page: 1,
+        pageSize: 20,
+        sortBy: "newest"
+    },
+    _endedSearchReq: {
+        page: 1,
+        pageSize: 20,
+        sortBy: "newest"
     },
     error: ""
 };
@@ -51,12 +79,15 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
     }
 
     listData$ = this.select((s) => s.listData);
+    endedListData$ = this.select((s) => s.endedListData);
     meta$ = this.select((s) => s.meta);
+    endedMeta$ = this.select((s) => s.endedMeta);
     loading$ = this.select((s) => s.loading);
+    endedLoading$ = this.select((s) => s.endedLoading);
     detailData$ = this.select((s) => s.detailData);
     detailLoading$ = this.select((s) => s.detailLoading);
 
-    readonly getListData$ = this.effect<AssetQueryParams>(($) =>
+    readonly getListData$ = this.effect<AdvancedSearchRequest>(($) =>
         $.pipe(
             tap(() => {
                 this.patchState({
@@ -66,17 +97,17 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
                 });
             }),
             switchMap((req) => {
-                return this.service.getAssets(req).pipe(
+                return this.service.advancedSearch(req).pipe(
                     tapResponse(
-                        (response: PaginatedAssetsResponse) => {
+                        (response: AdvancedSearchResponse) => {
                             this.patchState({
                                 loading: false,
                                 listData: response.items,
                                 meta: {
                                     totalElements: response.totalCount,
-                                    pageSize: response.limit,
-                                    pageNumber: response.offset,
-                                    hasMore: response.hasMore
+                                    pageSize: response.pageSize,
+                                    pageNumber: response.page,
+                                    hasMore: response.page < response.totalPages
                                 },
                                 _searchReq: req
                             });
@@ -84,6 +115,44 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
                         (e: HttpErrorResponse) => {
                             this.patchState({
                                 loading: false,
+                                error: e.message
+                            });
+                            this.toastr.error(e.message || "Đã có lỗi xảy ra", "Lỗi");
+                        }
+                    )
+                );
+            })
+        )
+    );
+
+    readonly getEndedListData$ = this.effect<AdvancedSearchRequest>(($) =>
+        $.pipe(
+            tap(() => {
+                this.patchState({
+                    endedLoading: true,
+                    error: "",
+                    endedListData: []
+                });
+            }),
+            switchMap((req) => {
+                return this.service.advancedSearch(req).pipe(
+                    tapResponse(
+                        (response: AdvancedSearchResponse) => {
+                            this.patchState({
+                                endedLoading: false,
+                                endedListData: response.items,
+                                endedMeta: {
+                                    totalElements: response.totalCount,
+                                    pageSize: response.pageSize,
+                                    pageNumber: response.page,
+                                    hasMore: response.page < response.totalPages
+                                },
+                                _endedSearchReq: req
+                            });
+                        },
+                        (e: HttpErrorResponse) => {
+                            this.patchState({
+                                endedLoading: false,
                                 error: e.message
                             });
                             this.toastr.error(e.message || "Đã có lỗi xảy ra", "Lỗi");

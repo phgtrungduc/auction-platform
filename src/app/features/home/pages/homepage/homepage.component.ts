@@ -3,13 +3,16 @@ import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/co
 import { FormsModule } from '@angular/forms';
 import { BaseComponent } from '../../../../core/base/base.component';
 import { DvhcStore } from '../../../../store/dvhc/dvhc.store';
-import { takeUntil } from 'rxjs';
+import { combineLatest, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CustomSelectComponent } from '@shared/components/custom-select/custom-select.component';
 import { CategoryDropdownComponent } from '@shared/components/category-dropdown/category-dropdown.component';
 import { CategoryItem } from '@shared/components/header/header.component';
+import { AssetStore } from '../../../../store/asset/asset.store';
+import { Dvhc } from '../../../../core/models/dvhc.model';
+import { NoticeSearchDocument } from '../../../../core/models/asset.model';
 
 @Component({
   selector: 'app-homepage',
@@ -47,6 +50,16 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   ngOnInit() {
     this.startBannerAutoPlay();
     this.dvhcStore.getProvinces$();
+    this.assetStore.getListData$({
+      page: 1,
+      pageSize: 8,
+      statuses: ['UPCOMING', 'ONGOING']
+    });
+    this.assetStore.getEndedListData$({
+      page: 1,
+      pageSize: 8,
+      statuses: ['COMPLETED', 'CANCELLED']
+    });
   }
 
   override ngOnDestroy() {
@@ -92,9 +105,11 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   // ─────────────────────────────────────────────────────────────────────────
 
   private dvhcStore = inject(DvhcStore);
+  private assetStore = inject(AssetStore);
 
   selectedLocationValue: any = null;
   optionsLocation: { label: string, value: any }[] = [];
+  provinces: Dvhc[] = [];
 
   selectedCategory: string | null = null;
   listCategories: CategoryItem[] = [
@@ -158,12 +173,62 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     super();
     this.dvhcStore.listProvinces$.pipe(takeUntil(this.destroy$)).subscribe(data => {
       if (data) {
+        this.provinces = data;
         this.optionsLocation = data.map(item => ({
           label: item.nameWithType,
           value: item.code
         }));
       }
     });
+
+    combineLatest([this.assetStore.listData$, this.dvhcStore.listProvinces$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([items, provinces]) => {
+        const list = provinces ?? [];
+        this.auctionList = (items ?? []).map((item) => this.mapNoticeToAuctionItem(item, list));
+      });
+
+    combineLatest([this.assetStore.endedListData$, this.dvhcStore.listProvinces$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([items, provinces]) => {
+        const list = provinces ?? [];
+        this.endedAuctions = (items ?? []).map((item) => this.mapNoticeToEndedItem(item, list));
+      });
+  }
+
+  private resolveProvinceName(provinces: Dvhc[], provinceCode: string, provinceName?: string): string {
+    const matched = provinces.find((p) => p.code === provinceCode);
+    return matched?.name || provinceName || 'Không xác định';
+  }
+
+  private mapNoticeToAuctionItem(item: NoticeSearchDocument, provinces: Dvhc[]): AuctionItem {
+    return {
+      id: item.noticeId,
+      title: item.title,
+      type: '',
+      location: this.resolveProvinceName(provinces, item.provinceCode, item.provinceName),
+      minPrice: item.minStartingPrice ? this.formatPrice(item.minStartingPrice) : 'Không xác định',
+      maxPrice: item.maxStartingPrice ? this.formatPrice(item.maxStartingPrice) : 'Không xác định',
+      owner: item.auctionOrgName,
+      image: 'assets/images/product-sample-1.jpg',
+      status: item.status,
+      assetCount: item.assetCount
+    };
+  }
+
+  private mapNoticeToEndedItem(item: NoticeSearchDocument, provinces: Dvhc[]): EndedAuctionItem {
+    return {
+      id: item.noticeId,
+      title: item.title,
+      location: this.resolveProvinceName(provinces, item.provinceCode, item.provinceName),
+      price: item.maxStartingPrice ? this.formatPrice(item.maxStartingPrice) : '—',
+      increase: '',
+      startPrice: item.minStartingPrice ? this.formatPrice(item.minStartingPrice) : '—',
+      company: item.auctionOrgName,
+      image: 'assets/images/product-sample-1.jpg',
+      status: item.status,
+      assetCount: item.assetCount
+    };
   }
 
   private router = inject(Router);
@@ -179,48 +244,9 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   startX = 0;
   scrollLeft = 0;
 
-  auctionList: AuctionItem[] = [
-    {
-      id: 1,
-      title: 'Đất Thanh Oai 500m²',
-      type: 'Quyền sử dụng đất',
-      location: 'Hà Nội',
-      price: 11.5,
-      owner: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Mở đăng ký'
-    },
-    {
-      id: 2,
-      title: 'Đất Thanh Oai 500m²',
-      type: 'Quyền sử dụng đất',
-      location: 'Hà Nội',
-      price: 11.5,
-      owner: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Mở đăng ký'
-    },
-    {
-      id: 3,
-      title: 'Đất Thanh Oai 500m²',
-      type: 'Quyền sử dụng đất',
-      location: 'Hà Nội',
-      price: 11.5,
-      owner: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Mở đăng ký'
-    },
-    {
-      id: 4,
-      title: 'Đất Thanh Oai 500m²',
-      type: 'Quyền sử dụng đất',
-      location: 'Hà Nội',
-      price: 11.5,
-      owner: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Mở đăng ký'
-    }
-  ];
+  auctionList: AuctionItem[] = [];
+
+  endedAuctions: EndedAuctionItem[] = [];
 
   featuredAreas = [
     {
@@ -314,64 +340,6 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     }
   ];
 
-  endedAuctions = [
-    {
-      id: 5,
-      title: 'Đất Thanh Oai 500m²',
-      location: 'Hà Nội',
-      price: '11.50 tỷ',
-      increase: '+28%',
-      startPrice: '9.00 tỷ',
-      company: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Đã kết thúc'
-    },
-    {
-      id: 6,
-      title: 'Đất Thanh Oai 500m²',
-      location: 'Hà Nội',
-      price: '11.50 tỷ',
-      increase: '+28%',
-      startPrice: '9.00 tỷ',
-      company: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Đã kết thúc'
-    },
-    {
-      id: 7,
-      title: 'Đất Thanh Oai 500m²',
-      location: 'Hà Nội',
-      price: '11.50 tỷ',
-      increase: '+28%',
-      startPrice: '9.00 tỷ',
-      company: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Đã kết thúc'
-    },
-    {
-      id: 8,
-      title: 'Đất Thanh Oai 500m²',
-      location: 'Hà Nội',
-      price: '11.50 tỷ',
-      increase: '+28%',
-      startPrice: '9.00 tỷ',
-      company: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Đã kết thúc'
-    },
-    {
-      id: 9,
-      title: 'Đất Thanh Oai 500m²',
-      location: 'Hà Nội',
-      price: '11.50 tỷ',
-      increase: '+28%',
-      startPrice: '9.00 tỷ',
-      company: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Đã kết thúc'
-    },
-  ];
-
   tools = [
     {
       title: 'Định giá tài sản đấu giá',
@@ -452,14 +420,45 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     this.isDragging = false;
     this.draggedElement = null;
   }
+
+  formatPrice(price: number | null | undefined): string {
+    if (price == null) return 'Không xác định';
+    return (price / 1000000000).toFixed(1) + ' tỷ';
+  }
+
+  getNoticeStatusLabel(status: string | undefined): string {
+    if (!status) return 'Chưa rõ';
+    switch (status) {
+      case 'UPCOMING': return 'Mở đăng ký';
+      case 'ONGOING': return 'Đang diễn ra';
+      case 'COMPLETED': return 'Đã kết thúc';
+      case 'CANCELLED': return 'Huỷ đấu giá';
+      default: return status;
+    }
+  }
 }
 interface AuctionItem {
   id: number;
   title: string;
   type: string;
   location: string;
-  price: number;
+  minPrice: string;
+  maxPrice: string;
   owner: string;
   image: string;
   status: string;
+  assetCount: number;
+}
+
+interface EndedAuctionItem {
+  id: number;
+  title: string;
+  location: string;
+  price: string;
+  increase: string;
+  startPrice: string;
+  company: string;
+  image: string;
+  status: string;
+  assetCount: number;
 }

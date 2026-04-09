@@ -37,27 +37,6 @@
 
             <div class="hero__field col-md-3">
               <div class="custom-select has-icon">
-                <!-- icon bên trái -->
-                <!-- <span class="select-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M2.66675 6.76201C2.66675 3.76401 5.05475 1.33334 8.00008 1.33334C10.9454 1.33334 13.3334 3.76401 13.3334 6.76201C13.3334 9.73668 11.6314 13.2087 8.97542 14.4493C8.67014 14.5923 8.33717 14.6664 8.00008 14.6664C7.66299 14.6664 7.33003 14.5923 7.02475 14.4493C4.36875 13.208 2.66675 9.73734 2.66675 6.76268V6.76201Z"
-                      stroke="#367639" />
-                    <path
-                      d="M8 8.66669C9.10457 8.66669 10 7.77126 10 6.66669C10 5.56212 9.10457 4.66669 8 4.66669C6.89543 4.66669 6 5.56212 6 6.66669C6 7.77126 6.89543 8.66669 8 8.66669Z"
-                      stroke="#367639" />
-                  </svg>
-                </span>
-
-                <select>
-                  <option>Khu vực</option>
-                  <option>Hà Nội</option>
-                  <option>Hồ Chí Minh</option>
-                  <option>Đà Nẵng</option>
-                </select>
-                <span class="select-arrow">
-                  <i class="fa fa-chevron-down"></i>
-                </span> -->
                 <app-custom-select [options]="optionsLocation" [placeholder]="'Địa điểm'"
                   icon="fa-solid fa-location-dot" [(value)]="selectedLocationValue"
                   (valueChange)="onChangeLocation($event)" [searchable]="true">
@@ -123,72 +102,6 @@
     </div>
   </section>
 
-  <!-- Main sections -->
-  <!-- <section class="homepage__sections mar-top">
-    <div class="homepage-section">
-      <div class="homepage-section__header">
-
-        <h2 class="homepage-section__title">
-          PHIÊN ĐẤU GIÁ SẮP DIỄN RA
-        </h2>
-
-        <div class="homepage-section__subheader">
-
-          <p class="homepage-section__desc">
-            Các bất động sản đang mở đăng ký với giá tốt nhất
-          </p>
-
-          <button class="homepage-section__link">
-            Xem tất cả
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-
-        </div>
-      </div>
-      <div class="auction-grid">
-
-        <div class="auction-card" *ngFor="let item of auctionList">
-
-          <div class="auction-card__image">
-            <img [src]="item.image" />
-
-            <span class="auction-card__status">
-              {{item.status}}
-            </span>
-          </div>
-
-          <div class="auction-card__content">
-
-            <h3 class="auction-card__title">
-              {{item.title}}
-            </h3>
-
-            <div class="auction-card__meta">
-              {{item.type}} · {{item.location}}
-            </div>
-
-            <div class="auction-card__price">
-              <span class="price">{{item.price}} tỷ</span>
-              <span class="label">Khởi điểm</span>
-            </div>
-
-            <div class="auction-card__footer">
-
-              <div class="auction-card__owner">
-                <span class="avatar">LV</span>
-                {{item.owner}}
-              </div>
-
-              <button class="auction-card__btn" (click)="navToDetail(item.id)">
-                Chi tiết →
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
-
   <section class="ended-auction mar-top">
 
     <div class="homepage-section__header">
@@ -219,8 +132,11 @@
           <div class="auction-card__image">
             <img [src]="item.image" />
 
-            <span class="endedauction-card__status">
-              {{item.status}}
+            <span class="endedauction-card__status" [ngClass]="{
+              'endedauction-card__status--upcoming': item.status === 'UPCOMING',
+              'endedauction-card__status--ongoing': item.status === 'ONGOING'
+            }">
+              {{getNoticeStatusLabel(item.status)}}
             </span>
           </div>
           <!-- <img class="ended-auction__image" [src]="item.image">
@@ -230,16 +146,16 @@
           </span> -->
           <div class="auction-card__content">
 
-            <h3 class="auction-card__title">
+            <h3 class="auction-card__title" [title]="item.title">
               {{item.title}}
             </h3>
 
             <div class="auction-card__meta">
-              {{item.type}} · {{item.location}}
+              Trả giá lên · {{item.location}} · {{item.assetCount}} tài sản
             </div>
 
             <div class="auction-card__price">
-              <span class="price">{{item.price}} tỷ</span>
+              <span class="price">{{item.minPrice}} - {{item.maxPrice}}</span>
               <span class="label">Khởi điểm</span>
             </div>
 
@@ -405,8 +321,11 @@
           <div class="auction-card__image">
             <img [src]="item.image" />
 
-            <span class="endedauction-card__status">
-              {{item.status}}
+            <span class="endedauction-card__status" [ngClass]="{
+              'endedauction-card__status--completed': item.status === 'COMPLETED',
+              'endedauction-card__status--canceled': item.status === 'CANCELED' || item.status === 'CANCELLED'
+            }">
+              {{getNoticeStatusLabel(item.status)}}
             </span>
           </div>
           <!-- <img class="ended-auction__image" [src]="item.image">
@@ -416,11 +335,11 @@
           </span> -->
           <div class="ended-auction__body">
 
-            <div class="ended-auction__name">
+            <div class="ended-auction__name" [title]="item.title">
               {{item.title}}
             </div>
             <div class="ended-auction__location">
-              Quyền sử dụng đất • {{item.location}}
+              {{item.location}} · {{item.assetCount}} tài sản
             </div>
             <div class="ended-auction__price">
               <!-- Dòng 1 -->
@@ -436,7 +355,7 @@
                 <div class="ended-auction__left">
                   {{item.price}}
                   <span class="ended-auction__increase">
-                    ({{item.increase}})
+                    {{item.increase}}
                   </span>
                 </div>
 

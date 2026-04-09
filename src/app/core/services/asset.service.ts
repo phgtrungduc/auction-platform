@@ -1,7 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PaginatedAssetsResponse, AssetQueryParams, MarketplaceNoticeDetail } from '../models/asset.model';
+import {
+  AdvancedSearchRequest,
+  AdvancedSearchResponse,
+  PaginatedAssetsResponse,
+  AssetQueryParams,
+  MarketplaceNoticeDetail
+} from '../models/asset.model';
 import { environment } from '@env/environment';
 import { API_ENDPOINTS } from '@shared/data-access/api/api-endpoint';
 
@@ -31,5 +37,10 @@ export class AssetService {
   getDetail(id: number | string): Observable<MarketplaceNoticeDetail> {
     const url = `${this.API_URL}${API_ENDPOINTS.ASSET.GET_DETAIL}/${id}`;
     return this.http.get<MarketplaceNoticeDetail>(url);
+  }
+
+  advancedSearch(request?: AdvancedSearchRequest): Observable<AdvancedSearchResponse> {
+    const url = `${this.API_URL}${API_ENDPOINTS.ASSET.ADVANCED_SEARCH}`;
+    return this.http.post<AdvancedSearchResponse>(url, request ?? {});
   }
 }

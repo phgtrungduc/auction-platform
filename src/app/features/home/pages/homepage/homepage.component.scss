@@ -546,7 +546,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  padding: 4px;
+  padding: 8px;
   border-radius: 16px;
 }
 
@@ -565,12 +565,23 @@
 
 .auction-card__content {
   padding: 8px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 180px);
 }
 
 .auction-card__title {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 4px;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.4em * 3);
+  line-height: 1.4;
 }
 
 .auction-card__meta {
@@ -582,6 +593,7 @@
 /* PRICE */
 
 .auction-card__price {
+  margin-top: auto;
   margin-bottom: 16px;
 }
 
@@ -602,20 +614,35 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   padding: 8px 0 4px 0;
   border-top: solid 1px #EDF1F4;
+  margin-top: 0;
 }
 
 .auction-card__owner {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   font-size: 14px;
+  flex: 1;
+  min-width: 0;
+  max-width: calc(100% - 90px);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.35;
 }
 
 .avatar {
   width: 28px;
+  min-width: 28px;
+  max-width: 28px;
   height: 28px;
+  min-height: 28px;
+  max-height: 28px;
+  flex: 0 0 28px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: #3b5ccc;
   color: white;
@@ -636,6 +663,7 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
+  flex-shrink: 0;
 }
 
 .auction-card__btn:hover {
@@ -947,15 +975,19 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  align-items: stretch;
 }
 
 .btn-more {
-  //margin-top:10px;
+  margin-top: auto;
+  align-self: flex-start;
   background: #2e7d32;
   color: #fff;
   border: none;
   padding: 6px 12px;
   border-radius: 8px;
+  flex-shrink: 0;
+  margin-top: 8px;
 }
 
 .news-grid {
@@ -1032,6 +1064,8 @@
   /* Safari */
   -ms-user-select: none;
   /* IE */
+  display: flex;
+  flex-direction: column;
 }
 
 .ended-auction__card:hover {
@@ -1051,20 +1085,30 @@
 
 .ended-auction__body {
   padding: 8px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .ended-auction__name {
   font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.4em * 3);
+  line-height: 1.4;
 }
 
 .ended-auction__location {
   font-size: 13px;
   color: #6b7280;
-}
-
-.ended-auction__price {
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .ended-auction__winner {
@@ -1087,7 +1131,8 @@
 
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
+  min-height: 200px;
 
   background: #fff;
   border-radius: 14px;
@@ -1122,12 +1167,21 @@
   z-index: 2;
   max-width: 65%;
   padding: 12px 0 12px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: stretch;
 }
 
 .tool-card__image {
-  //position:absolute;
   right: 10px;
   bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  align-self: stretch;
 }
 
 .tool-card__image img {
@@ -1143,10 +1197,11 @@
 }
 
 .ended-auction__price {
-  margin-top: 10px;
+  margin-top: auto;
+  margin-bottom: 8px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  //gap: 4px;
 }
 
 /* dòng 1 */
@@ -1193,19 +1248,24 @@
   cursor: grabbing;
 }
 
-.ended-auction__card {
-  scroll-snap-align: start;
-}
-
 .tool-card__content_title {
   font-size: 20px;
   color: #367639;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  line-height: 1.3;
+  flex-shrink: 0;
+  min-height: calc(1.3em * 2);
 }
 
 .tool-card__content_desc {
   font-size: 12px;
   color: #5F788B;
   font-weight: 400;
+  margin: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  line-height: 1.45;
 }
 
 .tool-card__icon {
@@ -1222,6 +1282,7 @@
 
   font-size: 36px;
   margin-bottom: 10px;
+  flex-shrink: 0;
 }
 
 .news-layout {
@@ -1469,6 +1530,22 @@
   border-radius: 12px;
 }
 
+.endedauction-card__status--upcoming {
+  background: #3f6b2a;
+}
+
+.endedauction-card__status--ongoing {
+  background: #2f6fdf;
+}
+
+.endedauction-card__status--completed {
+  background: #64748b;
+}
+
+.endedauction-card__status--canceled {
+  background: #b45309;
+}
+
 .items-center {
   align-items: center;
 }
@@ -1633,28 +1710,41 @@
   }
 
   .tool-card {
-    flex-direction: column-reverse;
-    align-items: center;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 0;
     padding: 0;
   }
 
   .tool-card__content {
-    max-width: 100%;
-    padding: 20px;
-    width: 100%;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+    width: auto;
+    padding: 16px 8px 16px 16px;
   }
 
   .tool-card__image {
-    width: 100%;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 44%;
+    min-width: 0;
     display: flex;
-    justify-content: center;
+    align-items: flex-end;
+    justify-content: flex-end;
+    align-self: stretch;
+    padding: 8px 12px 8px 4px;
     position: static;
   }
 
   .tool-card__image img {
     mask-image: none;
     -webkit-mask-image: none;
-    max-height: 150px;
+    max-height: 140px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: right bottom;
   }
 
   /* Card phiến kết thúc responsive scroll */

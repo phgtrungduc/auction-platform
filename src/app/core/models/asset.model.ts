@@ -56,6 +56,53 @@ export interface AssetQueryParams {
   SortBy?: string;
 }
 
+export type AdvancedTimeFilter = string;
+
+export interface AdvancedSearchRequest {
+  query?: string;
+  assetCategoryId?: number;
+  statuses?: string[];
+  minPrice?: string;
+  maxPrice?: string;
+  timeFilters?: AdvancedTimeFilter[];
+  legalCategoryIds?: number[];
+  provinceCode?: string;
+  districtCode?: string;
+  sortBy?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface NoticeSearchDocument {
+  noticeId: number;
+  sourceId: string;
+  sourceNoticeId: string;
+  sourceUrl: string;
+  title: string;
+  auctionOrgName: string;
+  status: string;
+  docSaleStart: string;
+  docSaleEnd: string;
+  viewingStart: string | null;
+  viewingEnd: string | null;
+  auctionDatetime: string;
+  publishDate: string;
+  provinceCode: string;
+  provinceName: string;
+  districtCode: string;
+  assetCount: number;
+  minStartingPrice: number;
+  maxStartingPrice: number;
+}
+
+export interface AdvancedSearchResponse {
+  items: NoticeSearchDocument[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
 export interface Attachment {
   id: number;
   fileName: string;
@@ -72,8 +119,11 @@ export interface NoticeAsset {
   title: string;
   description: string | null;
   assetType: number | null;
+  assetTypeCode: number | null;
   assetSubType: number | null;
+  assetSubTypeCode: number | null;
   legalCategory: string | null;
+  legalCategoryCode: string | null;
   startingPrice: number;
   depositValue: number;
   depositType: number;
