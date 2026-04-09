@@ -21,6 +21,7 @@ export class CustomSelectComponent {
   @Input() icon: string | null = null;
   /** Truyền true để hiện ô tìm kiếm bên trong dropdown */
   @Input() searchable: boolean = false;
+  @Input() disabled: boolean = false;
 
   @Output() valueChange = new EventEmitter<any>();
 
@@ -42,10 +43,17 @@ export class CustomSelectComponent {
   }
 
   ngOnChanges() {
+    if (this.disabled) {
+      this.isOpen = false;
+      this.searchQuery = '';
+    }
     this.setSelectedLabel();
   }
 
   toggleDropdown() {
+    if (this.disabled) {
+      return;
+    }
     this.isOpen = !this.isOpen;
     if (!this.isOpen) {
       this.searchQuery = '';   // reset khi đóng
@@ -76,6 +84,9 @@ export class CustomSelectComponent {
 
   clearValue(event: Event) {
     event.stopPropagation();
+    if (this.disabled) {
+      return;
+    }
     this.value = null;
     this.selectedLabel = '';
     this.searchQuery = '';

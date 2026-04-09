@@ -1,5 +1,5 @@
-<div class="custom-select" [class.has-value]="selectedLabel">
-    <div class="select-box" (click)="toggleDropdown()">
+<div class="custom-select" [class.has-value]="selectedLabel" [class.is-disabled]="disabled">
+    <div class="select-box" [class.is-disabled]="disabled" (click)="toggleDropdown()">
         <i [ngClass]="icon"></i>
         <span class="label-select" *ngIf="selectedLabel; else placeholderTpl">
             {{ selectedLabel }}
@@ -16,7 +16,7 @@
         </span>
     </div>
 
-    <div class="dropdown" *ngIf="isOpen">
+    <div class="dropdown" *ngIf="isOpen && !disabled">
         <!-- Ô tìm kiếm – chỉ hiển thị khi searchable = true -->
         <div class="search-box" *ngIf="searchable" (click)="$event.stopPropagation()">
             <i class="fa-solid fa-magnifying-glass search-box__icon"></i>

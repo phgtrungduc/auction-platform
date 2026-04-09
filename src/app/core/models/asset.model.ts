@@ -56,7 +56,11 @@ export interface AssetQueryParams {
   SortBy?: string;
 }
 
-export type AdvancedTimeFilter = string;
+export interface AdvancedTimeFilter {
+  type: 'Auction' | 'DocSale' | 'AssetView' | 'Result';
+  from: string;
+  to: string;
+}
 
 export interface AdvancedSearchRequest {
   query?: string;

@@ -17,6 +17,16 @@
     &:hover {
         border-color: #409eff;
     }
+
+    &.is-disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        pointer-events: none;
+
+        &:hover {
+            border-color: #ccc;
+        }
+    }
 }
 
 .arrow {

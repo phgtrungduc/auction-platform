@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   OnChanges,
+  OnDestroy,
   Output,
   SimpleChanges,
   ViewChild
@@ -18,7 +19,7 @@ import {
   templateUrl: './date-picker.component.html',
   styleUrl: './date-picker.component.scss'
 })
-export class DatePickerComponent implements OnChanges {
+export class DatePickerComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() value: Date | null = null;
   @Input() placeholder: string = 'Chọn ngày';
   /** Compact row style for advanced filters (Figma inline date fields). */
@@ -132,10 +133,26 @@ export class DatePickerComponent implements OnChanges {
     return `Tháng ${m.toString().padStart(2, '0')} ${y}`;
   }
 
-  @HostListener('document:click', ['$event'])
-  clickOutside(event: any) {
-    if (!this.container?.nativeElement.contains(event.target)) {
+  /**
+   * Dùng capture phase vì một số layout (vd. bộ lọc thời gian) gọi stopPropagation()
+   * trên wrapper — khi đó bubble không tới document và HostListener không chạy.
+   * Capture vẫn bắt được click sang ô date-picker khác để đóng lịch hiện tại.
+   */
+  private readonly docClickCapture = (event: Event) => {
+    const target = event.target;
+    if (!(target instanceof Node) || !this.container?.nativeElement) {
+      return;
+    }
+    if (!this.container.nativeElement.contains(target) && this.isOpen) {
       this.isOpen = false;
     }
+  };
+
+  ngAfterViewInit() {
+    document.addEventListener('click', this.docClickCapture, true);
+  }
+
+  ngOnDestroy() {
+    document.removeEventListener('click', this.docClickCapture, true);
   }
 }

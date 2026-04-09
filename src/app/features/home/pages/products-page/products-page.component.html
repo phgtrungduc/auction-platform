@@ -8,8 +8,8 @@
 
   <!-- Content -->
   <section class="page__content">
-    <h3 class="page__title">Danh Sách Tài Sản Đấu Giá</h3>
-    <p class="page__subtitle">Tìm thấy 41 tài sản</p>
+    <h3 class="page__title">Danh sách tài sản đấu giá</h3>
+    <p class="page__subtitle">Tìm thấy {{ totalCount }} tài sản</p>
     <!-- Top bar -->
     <div class="content__header">
       <div class="header-filters">
@@ -72,84 +72,82 @@
       </div>
     </div>
 
+    <!-- Loading Skeleton -->
+    <div class="grid" *ngIf="isFilterLoading">
+      <div class="card card--skeleton" *ngFor="let _ of [1,2,3,4,5,6,7,8]">
+        <div class="skeleton-img"></div>
+        <div class="card__body">
+          <div class="skeleton-line w80"></div>
+          <div class="skeleton-line w50"></div>
+          <div class="skeleton-line w40"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Product grid or Empty state -->
-    <ng-container *ngIf="products && products.length > 0; else emptyState">
-      <div class="grid">
+    <ng-container *ngIf="!isFilterLoading">
+      <ng-container *ngIf="notices.length > 0; else emptyState">
+        <div class="grid">
+          <div class="card" *ngFor="let item of notices" (click)="navToDetail(item.noticeId)">
 
-        <ng-container *ngFor="let item of products">
-
-          <!-- Ads -->
-          <div *ngIf="item.isAd" class="card ad">
-            <span>Quảng cáo</span>
-          </div>
-
-          <!-- Product -->
-          <div *ngIf="!item.isAd" class="card">
-
-            <div class="card__image">
-              <img [src]="item.image" />
-              <span class="badge" [ngClass]="getStatusClass(item.status)">{{ item.status }}</span>
+            <div class="card__image-wrap">
+              <div class="card__image-inner">
+                <img src="assets/images/product-sample-1.jpg" alt="" />
+              </div>
+              <span class="card__badge badge" [ngClass]="getStatusClassByCode(item.status)">
+                {{ getNoticeStatusLabel(item.status) }}
+              </span>
             </div>
 
             <div class="card__body">
-              <h4>{{ item.title }}</h4>
-              <p class="meta">{{ item.desc }}</p>
+              <h4 class="card__title">{{ formatNoticeTitle(item.title) }}</h4>
 
-              <div class="price">
-                <div class="price__bottom">
-                  <!-- SUCCESS -->
-                  <ng-container *ngIf="item.outcomeStatus === 'SUCCESS'; else normalPrice">
-                    <span class="price--success">
-                      <span class="label">Trúng</span><br />
-                      <span class="value">{{ item.price }}</span>
-                      <span class="increase">(+28%)</span>
-                    </span>
-                  </ng-container>
-
-                  <!-- NORMAL / FAIL -->
-                  <ng-template #normalPrice>
-                    <span [ngClass]="{'price--fail': item.outcomeStatus === 'FAIL'}">
-                      {{ item.price }}
-                    </span>
-                  </ng-template>
-                  <span class="sub" *ngIf="!item.startPrice">
-                    khởi điểm
-                  </span>
-                </div>
-
-
-                <!-- start price -->
-                <span class="sub-starting" *ngIf="item.startPrice">
-                  khởi điểm {{ item.startPrice }}
-                </span>
+              <div class="card__meta-row">
+                <!-- <span>Trả giá lên</span>
+                <span class="card__meta-dot" aria-hidden="true"></span> -->
+                <span>{{ item.provinceName || 'Không xác định' }}</span>
+                <ng-container *ngIf="item.assetCount > 1">
+                  <span class="card__meta-dot" aria-hidden="true"></span>
+                  <span>{{ item.assetCount }} tài sản</span>
+                </ng-container>
               </div>
 
-              <div class="footer">
+              <p class="card__price">{{ formatNoticePriceLine(item) }}</p>
+
+              <div class="card__divider" role="presentation"></div>
+
+              <div class="card__footer">
                 <div class="auction-card__owner">
-                  <span class="avatar">LV</span>
-                  <span class="org">Lạc Việt</span>
+                  <span class="avatar">{{ getOwnerInitials(item.auctionOrgName) }}</span>
+                  <span class="card__org-name">{{ item.auctionOrgName }}</span>
                 </div>
-                <button class="btn" (click)="navToDetail(item.id)">Chi tiết →</button>
+                <button type="button" class="btn btn--detail"
+                  (click)="navToDetail(item.noticeId); $event.stopPropagation()">
+                  <span>Chi tiết</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </button>
               </div>
             </div>
 
           </div>
+        </div>
 
-        </ng-container>
+        <app-pagination [(page)]="currentPage" (pageChange)="onPageChange($event)" [totalPages]="totalPages">
+        </app-pagination>
+      </ng-container>
 
-      </div>
-
-      <app-pagination [(page)]="currentPage" (pageChange)="onPageChange($event)" [totalPages]="totalPages">
-      </app-pagination>
+      <!-- Empty State -->
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <img src="assets/images/not-found-listing_V2.png" alt="Không tìm thấy" />
+          <p>Không tìm thấy kết quả phù hợp</p>
+        </div>
+      </ng-template>
     </ng-container>
-
-    <!-- Empty State -->
-    <ng-template #emptyState>
-      <div class="empty-state">
-        <img src="assets/images/not-found-listing_V2.png" alt="Không tìm thấy" />
-        <p>Không tìm thấy kết quả phù hợp</p>
-      </div>
-    </ng-template>
 
     <section class="recommend-login" *ngIf="!hasLoggedIn">
       <svg class="recommend-login__icon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"
@@ -194,48 +192,29 @@
     <div class="filter-group">
       <h4 class="filter-title">Loại tài sản</h4>
       <ul class="asset-type-list">
-        <li class="active">Tất cả</li>
-        <li>
-          Bất động sản
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-chevron-down">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
+        <li [class.active]="selectedAssetCategoryId === null && selectedAssetSubCategoryId === null"
+          (click)="selectAllAssetCategories()">
+          Tất cả
         </li>
-        <li>
-          Xe cộ
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-chevron-down">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </li>
-        <li>
-          Máy móc
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-chevron-down">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </li>
-        <li>
-          Hàng hóa
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-chevron-down">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </li>
-        <li>
-          Đồ dùng
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-chevron-down">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </li>
-        <li>Khác</li>
+
+        <ng-container *ngFor="let category of assetCategories">
+          <li [class.active]="isAssetCategoryActive(category.id)" (click)="selectAssetCategory(category)">
+            <span>{{ category.name }}</span>
+            <svg *ngIf="category.children.length" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="feather feather-chevron-down"
+              [class.is-open]="isAssetCategoryExpanded(category.id)">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </li>
+
+          <ul class="asset-subtype-list" *ngIf="category.children.length && isAssetCategoryExpanded(category.id)">
+            <li *ngFor="let child of category.children" [class.active]="isAssetSubCategoryActive(child.id)"
+              (click)="selectAssetSubCategory(category.id, child.id); $event.stopPropagation()">
+              {{ child.name }}
+            </li>
+          </ul>
+        </ng-container>
       </ul>
     </div>
 
@@ -243,10 +222,14 @@
     <div class="filter-group">
       <h4 class="filter-title">Trạng thái</h4>
       <div class="pill-container">
-        <button class="btn-pill active">Mở đăng ký</button>
-        <button class="btn-pill">Sắp diễn ra</button>
-        <button class="btn-pill">Đang diễn ra</button>
-        <button class="btn-pill">Đã kết thúc</button>
+        <button
+          *ngFor="let status of optionsStatus"
+          class="btn-pill"
+          [class.active]="isStatusActive(status.value)"
+          (click)="toggleStatus(status.value)"
+        >
+          {{ status.label }}
+        </button>
       </div>
     </div>
 
@@ -254,49 +237,88 @@
     <div class="filter-group">
       <h4 class="filter-title">Giá khởi điểm</h4>
       <label class="custom-radio">
-        <input type="radio" name="startPrice" checked>
+        <input type="radio" name="startPrice" [checked]="isStartPricePreset('all')" (change)="selectStartPricePreset('all')">
         <span class="radio-mark"></span>
         Tất cả mức giá
       </label>
       <label class="custom-radio">
-        <input type="radio" name="startPrice">
+        <input type="radio" name="startPrice" [checked]="isStartPricePreset('lt1b')" (change)="selectStartPricePreset('lt1b')">
         <span class="radio-mark"></span>
         Dưới 1 tỷ
       </label>
       <label class="custom-radio">
-        <input type="radio" name="startPrice">
+        <input type="radio" name="startPrice" [checked]="isStartPricePreset('1_5')" (change)="selectStartPricePreset('1_5')">
         <span class="radio-mark"></span>
         1 - 5 tỷ
       </label>
       <label class="custom-radio">
-        <input type="radio" name="startPrice">
+        <input type="radio" name="startPrice" [checked]="isStartPricePreset('5_10')" (change)="selectStartPricePreset('5_10')">
         <span class="radio-mark"></span>
         5 - 10 tỷ
       </label>
       <label class="custom-radio">
-        <input type="radio" name="startPrice">
+        <input type="radio" name="startPrice" [checked]="isStartPricePreset('gt10')" (change)="selectStartPricePreset('gt10')">
         <span class="radio-mark"></span>
         Trên 10 tỷ
       </label>
 
-      <!-- Mock Slider range -->
       <div class="price-slider">
-        <div class="slider-track">
-          <div class="slider-range"></div>
-          <div class="slider-thumb left"></div>
-          <div class="slider-thumb right"></div>
+        <div
+          #priceSliderTrack
+          class="slider-track"
+          (pointerdown)="onPriceTrackPointerDown($event)"
+        >
+          <div
+            class="slider-range"
+            [style.left.%]="sliderPctMin"
+            [style.width.%]="sliderPctWidth"
+          ></div>
+          <div
+            class="slider-thumb"
+            [style.left.%]="sliderPctMin"
+            (pointerdown)="onMinThumbPointerDown($event)"
+            (pointermove)="onPriceThumbPointerMove($event)"
+            (pointerup)="onPriceThumbPointerUp($event)"
+            (pointercancel)="onPriceThumbPointerUp($event)"
+          ></div>
+          <div
+            class="slider-thumb"
+            [style.left.%]="sliderPctMax"
+            (pointerdown)="onMaxThumbPointerDown($event)"
+            (pointermove)="onPriceThumbPointerMove($event)"
+            (pointerup)="onPriceThumbPointerUp($event)"
+            (pointercancel)="onPriceThumbPointerUp($event)"
+          ></div>
         </div>
         <div class="slider-labels">
-          <span>0 VNĐ</span>
-          <span>100.000.000.000 VNĐ</span>
+          <span>{{ formatVndLabel(0) }}</span>
+          <span>{{ formatVndLabel(sliderMaxVnd) }}</span>
         </div>
         <div class="slider-inputs">
           <div class="input-wrap">
-            <input type="text" value="0">
+            <input
+              type="text"
+              name="advPriceMin"
+              [(ngModel)]="priceMinStr"
+              (ngModelChange)="onPriceMinStrChange($event)"
+              (blur)="commitPriceMinStr()"
+              (keydown.enter)="commitPriceMinStr()"
+              autocomplete="off"
+              inputmode="numeric"
+            />
             <span class="unit">VNĐ</span>
           </div>
           <div class="input-wrap">
-            <input type="text" value="10.000.000.000">
+            <input
+              type="text"
+              name="advPriceMax"
+              [(ngModel)]="priceMaxStr"
+              (ngModelChange)="onPriceMaxStrChange($event)"
+              (blur)="commitPriceMaxStr()"
+              (keydown.enter)="commitPriceMaxStr()"
+              autocomplete="off"
+              inputmode="numeric"
+            />
             <span class="unit">VNĐ</span>
           </div>
         </div>
@@ -392,33 +414,71 @@
     <div class="filter-group">
       <h4 class="filter-title">Danh mục pháp lý</h4>
       <div class="pill-container">
-        <button class="btn-pill">Thi hành án</button>
-        <button class="btn-pill">Nợ xấu (VAMC)</button>
-        <button class="btn-pill">Thanh lý tài sản</button>
-        <button class="btn-pill">Phá sản</button>
-        <button class="btn-pill">Khác</button>
+        <button *ngFor="let item of visibleLegalCategories" class="btn-pill" [class.active]="isLegalCategoryActive(item.id)"
+          (click)="toggleLegalCategory(item.id)">
+          {{ item.name }}
+        </button>
       </div>
+      <button
+        *ngIf="shouldShowLegalCategoryToggle"
+        type="button"
+        class="pill-see-more-btn"
+        (click)="toggleLegalCategoryExpand()"
+      >
+        <span>{{ isLegalCategoryExpanded ? 'Thu gọn' : 'Xem thêm' }}</span>
+        <svg class="pill-see-more-icon" [class.is-expanded]="isLegalCategoryExpanded" width="12" height="12" viewBox="0 0 24 24" fill="none"
+          xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
     </div>
 
-    <!-- Địa điểm đấu giá -->
-    <div class="filter-group no-border-bottom">
+    <!-- Địa điểm đấu giá (3 cấp — theo Figma node 4561:6180) -->
+    <div class="filter-group no-border-bottom auction-location">
       <h4 class="filter-title">Địa điểm đấu giá</h4>
-      <p class="filter-subtitle">Tỉnh/Thành phố</p>
-      <ul class="asset-type-list">
-        <li class="active">Tất cả</li>
-        <li>Hà Nội</li>
-        <li>Hồ Chí Minh</li>
-        <li>Đà Nẵng</li>
-        <li>Quảng Ninh</li>
-        <li>Hưng Yên</li>
-      </ul>
+      <div class="auction-location__stack">
+        <div class="auction-location__field">
+          <span class="auction-location__label">Tỉnh/Thành phố</span>
+          <app-custom-select
+            class="auction-location__select"
+            [options]="optionsAdvProvince"
+            [placeholder]="'Chọn Tỉnh/Thành phố'"
+            [value]="selectedAdvProvinceId"
+            (valueChange)="onAdvProvincePick($event)"
+            [searchable]="true"
+          />
+        </div>
+        <div class="auction-location__field">
+          <span class="auction-location__label">Quận/Huyện</span>
+          <app-custom-select
+            class="auction-location__select"
+            [options]="optionsAdvDistrict"
+            [placeholder]="'Chọn Quận/Huyện'"
+            [value]="selectedAdvDistrictId"
+            (valueChange)="onAdvDistrictPick($event)"
+            [searchable]="true"
+            [disabled]="!selectedAdvProvinceId"
+          />
+        </div>
+        <div class="auction-location__field">
+          <span class="auction-location__label">Phường/Xã</span>
+          <app-custom-select
+            class="auction-location__select"
+            [options]="optionsAdvWard"
+            [placeholder]="'Chọn Phường/ Xã'"
+            [value]="selectedAdvWardId"
+            (valueChange)="onAdvWardPick($event)"
+            [searchable]="true"
+            [disabled]="!selectedAdvDistrictId"
+          />
+        </div>
+      </div>
     </div>
 
   </div>
 
   <div class="adv-filter-footer">
-    <button class="btn-apply-filter" (click)="closeAdvancedFilter()">Áp dụng</button>
-    <button class="btn-clear-filter" (click)="closeAdvancedFilter()">
+    <button class="btn-clear-filter" (click)="clearAdvancedFilters()">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
@@ -426,6 +486,11 @@
         <line x1="9" y1="9" x2="15" y2="15"></line>
       </svg>
       Xóa bộ lọc
+    </button>
+    <button class="btn-apply-filter" [class.loading]="isFilterLoading" [disabled]="isFilterLoading"
+      (click)="applyAdvancedFilters()">
+      <span *ngIf="!isFilterLoading">Áp dụng</span>
+      <span *ngIf="isFilterLoading" class="btn-apply-filter__spinner"></span>
     </button>
   </div>
 </div>
