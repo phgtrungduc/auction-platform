@@ -288,7 +288,15 @@
             }}</span>
         </div>
         <div class="similar-card__body">
-          <h3 class="similar-card__title similar-card__title--tooltip" [attr.data-tooltip]="item.title">
+          <h3
+            class="similar-card__title"
+            [tooltip]="item.title"
+            container="body"
+            placement="bottom"
+            [adaptivePosition]="false"
+            tooltipClass="similar-title-tooltip"
+            tabindex="0"
+          >
             <span class="similar-card__title-text">{{ item.title }}</span>
           </h3>
           <p class="similar-card__meta">{{ item.desc }}</p>

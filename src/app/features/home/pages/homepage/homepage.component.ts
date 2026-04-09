@@ -13,11 +13,12 @@ import { CategoryItem } from '@shared/components/header/header.component';
 import { AssetStore } from '../../../../store/asset/asset.store';
 import { Dvhc } from '../../../../core/models/dvhc.model';
 import { NoticeSearchDocument } from '../../../../core/models/asset.model';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomSelectComponent, CategoryDropdownComponent],
+  imports: [CommonModule, FormsModule, CustomSelectComponent, CategoryDropdownComponent, TooltipModule],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss',
 })

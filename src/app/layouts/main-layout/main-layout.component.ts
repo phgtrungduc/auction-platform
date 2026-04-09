@@ -9,8 +9,5 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
   imports: [HeaderComponent, FooterComponent, RouterOutlet],
-  template: '<router-outlet />',
 })
-export class MainLayoutComponent {
-
-}
+export class MainLayoutComponent {}

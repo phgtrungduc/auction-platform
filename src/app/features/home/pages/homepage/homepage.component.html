@@ -146,7 +146,15 @@
           </span> -->
           <div class="auction-card__content">
 
-            <h3 class="auction-card__title auction-card__title--tooltip" [attr.data-tooltip]="item.title">
+            <h3
+              class="auction-card__title"
+              [tooltip]="item.title"
+              container="body"
+              placement="bottom"
+              [adaptivePosition]="false"
+              tooltipClass="similar-title-tooltip"
+              tabindex="0"
+            >
               <span class="auction-card__title-text">{{item.title}}</span>
             </h3>
 
@@ -330,7 +338,15 @@
           </div>
           <div class="ended-auction__body">
 
-            <div class="ended-auction__name ended-auction__name--tooltip" [attr.data-tooltip]="item.title">
+            <div
+              class="ended-auction__name"
+              [tooltip]="item.title"
+              container="body"
+              placement="bottom"
+              [adaptivePosition]="false"
+              tooltipClass="similar-title-tooltip"
+              tabindex="0"
+            >
               <span class="ended-auction__name-text">{{item.title}}</span>
             </div>
             <div class="ended-auction__location">

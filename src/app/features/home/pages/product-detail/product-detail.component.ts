@@ -4,12 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AssetStore } from '../../../../store/asset/asset.store';
 import { Subject, takeUntil } from 'rxjs';
 import { AdvancedSearchRequest, MarketplaceNoticeDetail, NoticeSearchDocument } from '../../../../core/models/asset.model';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TooltipModule],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })
