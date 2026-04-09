@@ -146,8 +146,8 @@
           </span> -->
           <div class="auction-card__content">
 
-            <h3 class="auction-card__title" [title]="item.title">
-              {{item.title}}
+            <h3 class="auction-card__title auction-card__title--tooltip" [attr.data-tooltip]="item.title">
+              <span class="auction-card__title-text">{{item.title}}</span>
             </h3>
 
             <div class="auction-card__meta">
@@ -328,15 +328,10 @@
               {{getNoticeStatusLabel(item.status)}}
             </span>
           </div>
-          <!-- <img class="ended-auction__image" [src]="item.image">
-
-          <span class="auction-card__status">
-            {{item.status}}
-          </span> -->
           <div class="ended-auction__body">
 
-            <div class="ended-auction__name" [title]="item.title">
-              {{item.title}}
+            <div class="ended-auction__name ended-auction__name--tooltip" [attr.data-tooltip]="item.title">
+              <span class="ended-auction__name-text">{{item.title}}</span>
             </div>
             <div class="ended-auction__location">
               {{item.location}} · {{item.assetCount}} tài sản

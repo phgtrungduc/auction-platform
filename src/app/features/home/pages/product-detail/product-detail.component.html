@@ -288,7 +288,9 @@
             }}</span>
         </div>
         <div class="similar-card__body">
-          <h3 class="similar-card__title" [title]="item.title">{{ item.title }}</h3>
+          <h3 class="similar-card__title similar-card__title--tooltip" [attr.data-tooltip]="item.title">
+            <span class="similar-card__title-text">{{ item.title }}</span>
+          </h3>
           <p class="similar-card__meta">{{ item.desc }}</p>
           <div class="similar-card__price" [ngClass]="getPriceClass(item.status)">{{ item.price }}</div>
 
