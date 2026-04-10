@@ -304,7 +304,7 @@
 
           <div class="similar-card__footer">
             <div class="similar-card__owner">
-              <span class="similar-card__avatar">LV</span>
+              <span class="similar-card__avatar">{{getOwnerInitials(item.owner)}}</span>
               {{ item.owner }}
             </div>
             <button class="similar-card__btn" (click)="navToDetail(item.id)">Chi tiết &rarr;</button>

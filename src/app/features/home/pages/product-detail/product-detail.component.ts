@@ -206,6 +206,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     this.isDragging = false;
     this.draggedElement = null;
   }
+
+  getOwnerInitials(name: string | undefined): string {
+    if (!name) {
+      return '?';
+    }
+    return name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(w => w[0].toUpperCase())
+      .join('');
+  }
 }
 
 interface SimilarProductItem {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy, DestroyRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseComponent } from '../../../../core/base/base.component';
 import { DvhcStore } from '../../../../store/dvhc/dvhc.store';
@@ -14,6 +14,9 @@ import { AssetStore } from '../../../../store/asset/asset.store';
 import { Dvhc } from '../../../../core/models/dvhc.model';
 import { NoticeSearchDocument } from '../../../../core/models/asset.model';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { CategoryStore } from '../../../../store/category/category.store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AssetCategory } from '../../../../core/models/category.model';
 
 @Component({
   selector: 'app-homepage',
@@ -48,9 +51,21 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     return Array.from({ length: this.maxBannerIndex + 1 }, (_, i) => i);
   }
 
+  assetCategories: AssetCategory[] = [];
+
   ngOnInit() {
     this.startBannerAutoPlay();
     this.dvhcStore.getProvinces$();
+    this.categoryStore.list$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((categories) => {
+        this.assetCategories = categories ?? [];
+        this.listCategories = this.assetCategories.map((item) => ({
+          label: item.name,
+          children: (item.children ?? []).map((child) => ({ label: child.name }))
+        }));
+      });
+    this.categoryStore.getAssetCategories$();
     this.assetStore.getListData$({
       page: 1,
       pageSize: 8,
@@ -107,57 +122,15 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   private dvhcStore = inject(DvhcStore);
   private assetStore = inject(AssetStore);
+  private categoryStore = inject(CategoryStore);
+  private destroyRef = inject(DestroyRef);
 
   selectedLocationValue: any = null;
   optionsLocation: { label: string, value: any }[] = [];
   provinces: Dvhc[] = [];
 
   selectedCategory: string | null = null;
-  listCategories: CategoryItem[] = [
-    {
-      label: 'Bất động sản',
-      children: [
-        { label: 'Đất ở' },
-        { label: 'Đất nông nghiệp' },
-        { label: 'Nhà phố' },
-        { label: 'Căn hộ' },
-        { label: 'Nhà xưởng' },
-        { label: 'Shophouse' },
-      ]
-    },
-    {
-      label: 'Xe cộ',
-      children: [
-        { label: 'Ô tô' },
-        { label: 'Xe tải' },
-        { label: 'Xe máy' }
-      ]
-    },
-    {
-      label: 'Máy móc',
-      children: [
-        { label: 'Máy công trình' },
-        { label: 'Máy nông nghiệp' },
-        { label: 'Dây chuyền' },
-      ]
-    },
-    {
-      label: 'Hàng hóa',
-      children: [
-        { label: 'Gạch/vật liệu' },
-        { label: 'Sắt thép' },
-        { label: 'Hàng tồn kho' },
-      ]
-    },
-    {
-      label: 'Đồ dùng',
-      children: [
-        { label: 'Nội thất' },
-        { label: 'Thiết bị' },
-        { label: 'Công vụ' },
-      ]
-    }
-  ];
+  listCategories: CategoryItem[] = [];
 
 
   onChangeLocation(value: any) {
@@ -383,7 +356,6 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   ];
 
   onSearch() {
-    // TODO: hook vào router / service tìm kiếm tài sản đấu giá
     console.log({
       keyword: this.keyword,
       city: this.selectedLocationValue,
@@ -429,6 +401,18 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       case 'CANCELLED': return 'Huỷ đấu giá';
       default: return status;
     }
+  }
+
+  getOwnerInitials(name: string | undefined): string {
+    if (!name) {
+      return '?';
+    }
+    return name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(w => w[0].toUpperCase())
+      .join('');
   }
 }
 interface AuctionItem {

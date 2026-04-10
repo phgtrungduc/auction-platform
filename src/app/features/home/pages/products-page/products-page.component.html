@@ -15,12 +15,22 @@
       <div class="header-filters">
         <!-- Search bar -->
         <div class="search-wrapper">
-          <i class="fa fa-search search-icon"></i>
-          <input class="search search--text" placeholder="Nhập từ khoá cần tìm..." />
+          <i class="fa fa-search search-icon" style="cursor:pointer" (click)="onSearch()"></i>
+          <input
+            class="search search--text"
+            placeholder="Nhập từ khoá cần tìm..."
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="onSearch()"
+          />
         </div>
 
         <!-- Category Dropdown -->
-        <app-category-dropdown class="dropdown-category" [categories]="categories" [(value)]="selectedCategory">
+        <app-category-dropdown
+          class="dropdown-category"
+          [categories]="categories"
+          [(value)]="selectedCategory"
+          (valueChange)="onCategoryChange($event)"
+        >
         </app-category-dropdown>
 
         <!-- Status -->
