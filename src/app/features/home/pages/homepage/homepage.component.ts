@@ -62,6 +62,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
         this.assetCategories = categories ?? [];
         this.listCategories = this.assetCategories.map((item) => ({
           label: item.name,
+          value: item.id.toString(),
           children: (item.children ?? []).map((child) => ({ label: child.name }))
         }));
       });
@@ -129,7 +130,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   optionsLocation: { label: string, value: any }[] = [];
   provinces: Dvhc[] = [];
 
-  selectedCategory: string | null = null;
+  selectedCategory: number | null = null;
   listCategories: CategoryItem[] = [];
 
 
