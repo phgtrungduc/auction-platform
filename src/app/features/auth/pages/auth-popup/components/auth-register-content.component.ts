@@ -40,7 +40,7 @@ import { FormsModule } from '@angular/forms';
         <input [(ngModel)]="confirmPassword" type="password" placeholder="Xác nhận mật khẩu" />
       </label>
 
-      <button type="button" [disabled]="!isValidForm()" (click)="registerRequested.emit()">Đăng ký</button>
+      <button type="button" [disabled]="!isValidForm()" (click)="registerRequested.emit(password)">Đăng ký</button>
     </div>
   `,
   styles: `
@@ -121,7 +121,7 @@ import { FormsModule } from '@angular/forms';
   `,
 })
 export class AuthRegisterContentComponent {
-  @Output() registerRequested = new EventEmitter<void>();
+  @Output() registerRequested = new EventEmitter<string>();
   password = '';
   confirmPassword = '';
 

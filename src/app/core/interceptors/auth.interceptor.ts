@@ -5,8 +5,13 @@ import { Router } from '@angular/router';
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   const router = ServiceLocator.injector.get(Router);
+  const isAuthPublicEndpoint =
+    req.url.includes('login') ||
+    req.url.includes('register') ||
+    req.url.includes('request-otp') ||
+    req.url.includes('verify-otp');
 
-  if (!req.url.includes('login') && !req.url.includes('register')) {
+  if (!isAuthPublicEndpoint) {
     const bearerToken = localStorage.getItem('BearerToken');
     const cloneRequest = req.clone({
       headers: req.headers.set('Authorization', 'Bearer ' + bearerToken),

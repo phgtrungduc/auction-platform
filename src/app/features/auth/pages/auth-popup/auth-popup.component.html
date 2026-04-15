@@ -23,7 +23,7 @@
           (closeRequested)="closePopup()"
           (backRequested)="handleRegisterBack()"
         >
-          <app-auth-register-content (registerRequested)="handleRegisterSubmit()" />
+          <app-auth-register-content (registerRequested)="handleRegisterSubmit($event)" />
         </app-auth-popup-layout>
       }
 

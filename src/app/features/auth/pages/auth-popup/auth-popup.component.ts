@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthEmailContentComponent } from './components/auth-email-content.component';
 import { AuthOtpContentComponent } from './components/auth-otp-content.component';
 import { AuthPasswordContentComponent } from './components/auth-password-content.component';
 import { AuthPopupLayoutComponent } from './components/auth-popup-layout.component';
 import { AuthRegisterContentComponent } from './components/auth-register-content.component';
+import { AuthService } from '../../services/auth.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 type AuthPopupStep = 'email' | 'otp' | 'register' | 'password';
 
@@ -27,51 +30,132 @@ export class AuthPopupComponent {
   currentStep: AuthPopupStep = 'email';
   submittedEmail = '';
   remainingOtpSeconds = 56;
+  registrationToken = '';
+  isSubmitting = false;
 
-  private readonly existingAccounts = new Set<string>(['admin@assetauction.vn', 'demo@assetauction.vn']);
+  constructor(
+    private readonly authService: AuthService,
+    private readonly logger: LoggerService,
+    private readonly router: Router,
+  ) {}
 
   openPopup(): void {
     this.isPopupOpen = true;
     this.currentStep = 'email';
     this.submittedEmail = '';
     this.remainingOtpSeconds = 56;
+    this.registrationToken = '';
+    this.isSubmitting = false;
   }
 
   closePopup(): void {
     this.isPopupOpen = false;
     this.currentStep = 'email';
+    this.registrationToken = '';
+    this.isSubmitting = false;
   }
 
   handleEmailContinue(email: string): void {
+    if (this.isSubmitting) {
+      return;
+    }
+
     this.submittedEmail = email.trim().toLowerCase();
-    this.currentStep = 'otp';
-    this.remainingOtpSeconds = 56;
+    this.isSubmitting = true;
+
+    this.authService.requestOtp({ email: this.submittedEmail }).subscribe({
+      next: response => {
+        if (!response.success) {
+          this.logger.error('Không thể gửi OTP. Vui lòng thử lại.');
+          this.isSubmitting = false;
+          return;
+        }
+
+        if (response.userId !== null) {
+          this.logger.info('Email đã có tài khoản. Tạm thời chuyển sang màn hình đăng nhập.');
+          this.closePopup();
+          this.router.navigate(['/auth/login']);
+          this.isSubmitting = false;
+          return;
+        }
+
+        this.currentStep = 'otp';
+        this.remainingOtpSeconds = 56;
+        this.logger.success('Mã OTP đã được gửi tới email của bạn.');
+        this.isSubmitting = false;
+      },
+      error: () => {
+        this.logger.error('Gửi OTP thất bại. Vui lòng kiểm tra email và thử lại.');
+        this.isSubmitting = false;
+      },
+    });
   }
 
   handleOtpVerify(otp: string): void {
-    if (!otp || otp.length < 6) {
+    if (!otp || otp.length < 6 || this.isSubmitting) {
       return;
     }
 
-    const isAccountExisted = this.existingAccounts.has(this.submittedEmail);
-    if (isAccountExisted) {
-      this.closePopup();
-      return;
-    }
+    this.isSubmitting = true;
+    this.authService.verifyOtp({ email: this.submittedEmail, otp }).subscribe({
+      next: response => {
+        const isOtpVerified = response.otpVerified === true || response.success === true;
+        if (!isOtpVerified) {
+          this.logger.error('OTP không hợp lệ hoặc đã hết hạn.');
+          this.isSubmitting = false;
+          return;
+        }
 
-    this.currentStep = 'register';
+        this.registrationToken = response.registrationToken ?? '';
+        this.currentStep = 'register';
+        this.isSubmitting = false;
+      },
+      error: () => {
+        this.logger.error('Xác thực OTP thất bại. Vui lòng thử lại.');
+        this.isSubmitting = false;
+      },
+    });
   }
 
   handleOtpBack(): void {
     this.currentStep = 'email';
+    this.registrationToken = '';
   }
 
   handleRegisterBack(): void {
     this.currentStep = 'otp';
   }
 
-  handleRegisterSubmit(): void {
-    this.currentStep = 'password';
+  handleRegisterSubmit(password: string): void {
+    if (!password || this.isSubmitting) {
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.authService
+      .register({
+        email: this.submittedEmail,
+        password,
+        registrationToken: this.registrationToken,
+      })
+      .subscribe({
+        next: response => {
+          // if (!response.accessToken) {
+          //   this.logger.error('Đăng ký không thành công. Vui lòng thử lại.');
+          //   this.isSubmitting = false;
+          //   return;
+          // }
+
+          this.logger.success('Đăng ký thành công!');
+          this.closePopup();
+          this.router.navigate(['/']);
+          this.isSubmitting = false;
+        },
+        error: () => {
+          this.logger.error('Đăng ký thất bại. Vui lòng thử lại.');
+          this.isSubmitting = false;
+        },
+      });
   }
 
   handlePasswordBack(): void {

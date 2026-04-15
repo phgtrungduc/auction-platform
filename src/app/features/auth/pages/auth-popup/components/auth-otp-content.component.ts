@@ -13,7 +13,16 @@ import { FormsModule } from '@angular/forms';
 
       <div class="otp-grid">
         @for (digit of otpDigits; track $index; let i = $index) {
-          <input maxlength="1" [(ngModel)]="otpDigits[i]" />
+          <input
+            id="otp-input-{{ i }}"
+            maxlength="1"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            [ngModel]="otpDigits[i]"
+            (ngModelChange)="onDigitChange($event, i)"
+            (keydown)="onKeyDown($event, i)"
+            (paste)="onPaste($event, i)"
+          />
         }
       </div>
 
@@ -101,5 +110,68 @@ export class AuthOtpContentComponent {
 
   get otpValue(): string {
     return this.otpDigits.join('').trim();
+  }
+
+  onDigitChange(value: string, index: number): void {
+    const sanitized = (value ?? '').replace(/\D/g, '');
+
+    if (!sanitized) {
+      this.otpDigits[index] = '';
+      return;
+    }
+
+    // Handle fast typing/autofill where multiple digits can come at once.
+    const digits = sanitized.slice(0, this.otpDigits.length - index).split('');
+    digits.forEach((digit, offset) => {
+      this.otpDigits[index + offset] = digit;
+    });
+
+    const nextIndex = Math.min(index + digits.length, this.otpDigits.length - 1);
+    this.focusInput(nextIndex);
+  }
+
+  onKeyDown(event: KeyboardEvent, index: number): void {
+    if (event.key === 'Backspace' && !this.otpDigits[index] && index > 0) {
+      this.focusInput(index - 1);
+      return;
+    }
+
+    if (event.key === 'ArrowLeft' && index > 0) {
+      event.preventDefault();
+      this.focusInput(index - 1);
+      return;
+    }
+
+    if (event.key === 'ArrowRight' && index < this.otpDigits.length - 1) {
+      event.preventDefault();
+      this.focusInput(index + 1);
+    }
+  }
+
+  onPaste(event: ClipboardEvent, index: number): void {
+    event.preventDefault();
+    const pastedText = event.clipboardData?.getData('text') ?? '';
+    const digits = pastedText.replace(/\D/g, '').slice(0, this.otpDigits.length - index).split('');
+
+    if (!digits.length) {
+      return;
+    }
+
+    digits.forEach((digit, offset) => {
+      this.otpDigits[index + offset] = digit;
+    });
+
+    const lastFilledIndex = Math.min(index + digits.length - 1, this.otpDigits.length - 1);
+    this.focusInput(lastFilledIndex);
+  }
+
+  private focusInput(index: number): void {
+    const inputElement = document.getElementById(`otp-input-${index}`) as HTMLInputElement | null;
+    if (!inputElement) {
+      return;
+    }
+
+    inputElement.focus();
+    inputElement.select();
   }
 }
