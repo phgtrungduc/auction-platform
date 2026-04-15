@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { BaseComponent } from '../../../core/base/base.component';
 import { Router } from '@angular/router';
+import { AuthPopupComponent } from '../../../features/auth/pages/auth-popup/auth-popup.component';
 
 export interface CategoryItem {
   label: string;
@@ -13,6 +14,7 @@ export interface CategoryItem {
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
+  imports: [AuthPopupComponent],
 })
 export class HeaderComponent extends BaseComponent {
   private router = inject(Router);

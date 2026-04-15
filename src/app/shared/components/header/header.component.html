@@ -143,7 +143,7 @@
       </div>
 
       <!-- Login button -->
-      <button class="btn-login">
+      <button type="button" class="btn-login" (click)="authPopup.openPopup()">
         <i class="fa fa-sign-in"></i>
         Đăng nhập
       </button>
@@ -151,3 +151,5 @@
     </div>
   </div>
 </header>
+
+<app-auth-popup #authPopup />
