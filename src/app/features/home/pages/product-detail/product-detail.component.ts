@@ -5,6 +5,7 @@ import { AssetStore } from '../../../../store/asset/asset.store';
 import { Subject, takeUntil } from 'rxjs';
 import { AdvancedSearchRequest, MarketplaceNoticeDetail, NoticeSearchDocument } from '../../../../core/models/asset.model';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ToastService } from '@core/services/toast.service';
 
 
 @Component({
@@ -18,11 +19,19 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   public assetStore = inject(AssetStore);
+  private toastService = inject(ToastService);
   private destroy$ = new Subject<void>();
 
   product: MarketplaceNoticeDetail | null = null;
   expandedAssets: boolean[] = [];
   similarProducts: SimilarProductItem[] = [];
+
+  countdownDays: string = '0';
+  countdownHours: string = '00';
+  countdownMinutes: string = '00';
+  countdownSeconds: string = '00';
+  isDocSaleExpired: boolean = false;
+  private timerInterval: any;
 
   ngOnInit(): void {
     this.assetStore.detailData$.pipe(takeUntil(this.destroy$)).subscribe(data => {
@@ -31,6 +40,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.expandedAssets = this.product.assets.map((_: any, i: number) => i === 0);
       } else {
         this.expandedAssets = [];
+      }
+
+      if (this.product?.docSaleEnd) {
+        this.startCountdown(this.product.docSaleEnd);
       }
 
       const req = this.buildSimilarSearchRequest(this.product);
@@ -59,6 +72,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
   }
 
   toggleAsset(index: number): void {
@@ -217,6 +233,55 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       .slice(0, 2)
       .map(w => w[0].toUpperCase())
       .join('');
+  }
+
+  private startCountdown(docSaleEnd: string): void {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+
+    const endTime = new Date(docSaleEnd).getTime();
+
+    this.updateCountdown(endTime);
+
+    this.timerInterval = setInterval(() => {
+      this.updateCountdown(endTime);
+    }, 1000);
+  }
+
+  private updateCountdown(endTime: number): void {
+    const now = new Date().getTime();
+    const distance = endTime - now;
+
+    if (distance <= 0) {
+      this.countdownDays = '0';
+      this.countdownHours = '00';
+      this.countdownMinutes = '00';
+      this.countdownSeconds = '00';
+      this.isDocSaleExpired = true;
+      if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+      }
+      return;
+    }
+
+    this.isDocSaleExpired = false;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    this.countdownDays = days.toString();
+    this.countdownHours = hours < 10 ? '0' + hours : hours.toString();
+    this.countdownMinutes = minutes < 10 ? '0' + minutes : minutes.toString();
+    this.countdownSeconds = seconds < 10 ? '0' + seconds : seconds.toString();
+  }
+
+  registerForAuction() {
+    //this.toastService.success('Đăng ký tham gia đấu giá thành công');
+    //this.toastService.error('Đăng ký tham gia đấu giá thành công');
+    //this.toastService.info('Đăng ký tham gia đấu giá thành công', 'Thông báo!');
   }
 }
 
