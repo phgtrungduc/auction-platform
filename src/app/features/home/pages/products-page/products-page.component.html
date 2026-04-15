@@ -102,7 +102,7 @@
 
             <div class="card__image-wrap">
               <div class="card__image-inner">
-                <img src="assets/images/product-sample-1.jpg" alt="" />
+                <img [src]="getNoticeImage(item)" alt="" />
               </div>
               <span class="card__badge badge" [ngClass]="getStatusClassByCode(item.status)">
                 {{ getNoticeStatusLabel(item.status) }}

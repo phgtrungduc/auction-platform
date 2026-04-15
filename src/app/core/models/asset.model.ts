@@ -97,6 +97,9 @@ export interface NoticeSearchDocument {
   assetCount: number;
   minStartingPrice: number;
   maxStartingPrice: number;
+  firstAssetCategoryId?: number;
+  firstAssetCategoryName?: string;
+  firstAssetCategoryRefId?: string;
 }
 
 export interface AdvancedSearchResponse {

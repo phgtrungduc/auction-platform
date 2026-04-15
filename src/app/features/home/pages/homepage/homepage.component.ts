@@ -26,6 +26,45 @@ import { AssetCategory } from '../../../../core/models/category.model';
   styleUrl: './homepage.component.scss',
 })
 export class HomepageComponent extends BaseComponent implements OnInit {
+  private readonly defaultNoticeImage = 'assets/images/product-sample-1.jpg';
+  private readonly categoryImageByRefId: Record<string, string> = {
+    REAL_ESTATE: 'assets/images/bds.png',
+    VEHICLE: 'assets/images/xeco.png',
+    MACHINERY: 'assets/images/maymoc.png',
+    GOODS: 'assets/images/hanghoa.png',
+    HOUSEHOLD: 'assets/images/dodung.png',
+
+    RE_DAT_O: 'assets/images/dato.png',
+    RE_DAT_NONG_NGHIEP: 'assets/images/datnongnghiep.png',
+    RE_NHA_PHO: 'assets/images/nhapho.png',
+    RE_CAN_HO: 'assets/images/canho.png',
+    RE_NHA_XUONG: 'assets/images/nhaxuong.png',
+    RE_SHOPHOUSE: 'assets/images/shopehouse.png',
+    VEH_OTO: 'assets/images/oto.png',
+    VEH_XE_TAI: 'assets/images/xeco.png',
+    VEH_XE_MAY: 'assets/images/xemay.png',
+    MAC_MAY_CONG_TRINH: 'assets/images/maycongtrinh.png',
+    MAC_MAY_NONG_NGHIEP: 'assets/images/maynongnghiep.png',
+    MAC_DAY_CHUYEN: 'assets/images/daychuyen.png',
+    GOODS_GACH_VAT_LIEU: 'assets/images/gach.png',
+    GOODS_SAT_THEP: 'assets/images/satthep.png',
+    GOODS_HANG_TON_KHO: 'assets/images/hangtonkho.png',
+    HH_NOI_THAT: 'assets/images/noithat.png',
+    HH_THIET_BI: 'assets/images/thietbi.png',
+    HH_CONG_CU: 'assets/images/congcu.png',
+
+    // Backward-compatible aliases
+    RE_BDS: 'assets/images/bds.png',
+    VHE_OTO: 'assets/images/oto.png',
+    VH_XE_MAY: 'assets/images/xemay.png',
+    VH_XE_CO: 'assets/images/xeco.png',
+    EQ_MAY_MOC: 'assets/images/maymoc.png',
+    EQ_MAY_CONG_TRINH: 'assets/images/maycongtrinh.png',
+    EQ_MAY_NONG_NGHIEP: 'assets/images/maynongnghiep.png',
+    GOODS_HANG_HOA: 'assets/images/hanghoa.png',
+    GOODS_DO_DUNG: 'assets/images/dodung.png',
+    OTHER: 'assets/images/khac.png',
+  };
 
   // ── Banner Slideshow ──────────────────────────────────────────────────────
   readonly bannersPerView = 4;          // số banner hiển thị cùng lúc
@@ -178,7 +217,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       minPrice: item.minStartingPrice ? this.formatPrice(item.minStartingPrice) : 'Không xác định',
       maxPrice: item.maxStartingPrice ? this.formatPrice(item.maxStartingPrice) : 'Không xác định',
       owner: item.auctionOrgName,
-      image: 'assets/images/product-sample-1.jpg',
+      image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       status: item.status,
       assetCount: item.assetCount
     };
@@ -193,18 +232,31 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       increase: '',
       startPrice: item.minStartingPrice ? this.formatPrice(item.minStartingPrice) : '—',
       company: item.auctionOrgName,
-      image: 'assets/images/product-sample-1.jpg',
+      image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       status: item.status,
       assetCount: item.assetCount
     };
+  }
+
+  private getNoticeImageByCategoryRefId(refId?: string): string {
+    if (!refId) {
+      return this.defaultNoticeImage;
+    }
+
+    const normalizedRefId = refId.trim().toUpperCase();
+    return this.categoryImageByRefId[normalizedRefId] ?? this.defaultNoticeImage;
   }
 
   private router = inject(Router);
 
   navToDetail(id: number | undefined) {
     if (id) {
-      this.router.navigate(['/product-detail', id]);
+      this.router.navigate(['/products-listing', id]);
     }
+  }
+
+  navToListings() {
+    this.router.navigate(['/products-listing']);
   }
 
   keyword = '';
