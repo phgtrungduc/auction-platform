@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthEmailContentComponent } from './components/auth-email-content.component';
 import { AuthOtpContentComponent } from './components/auth-otp-content.component';
@@ -64,30 +65,8 @@ export class AuthPopupComponent {
     this.isSubmitting = true;
 
     this.authService.requestOtp({ email: this.submittedEmail }).subscribe({
-      next: response => {
-        if (!response.success) {
-          this.logger.error('Không thể gửi OTP. Vui lòng thử lại.');
-          this.isSubmitting = false;
-          return;
-        }
-
-        if (response.userId !== null) {
-          this.logger.info('Email đã có tài khoản. Tạm thời chuyển sang màn hình đăng nhập.');
-          this.closePopup();
-          this.router.navigate(['/auth/login']);
-          this.isSubmitting = false;
-          return;
-        }
-
-        this.currentStep = 'otp';
-        this.remainingOtpSeconds = 60;
-        this.logger.success('Mã OTP đã được gửi tới email của bạn.');
-        this.isSubmitting = false;
-      },
-      error: () => {
-        this.logger.error('Gửi OTP thất bại. Vui lòng kiểm tra email và thử lại.');
-        this.isSubmitting = false;
-      },
+      next: response => this.handleRequestOtpResponse(response, true),
+      error: error => this.handleRequestOtpError(error),
     });
   }
 
@@ -126,19 +105,8 @@ export class AuthPopupComponent {
     if (this.isSubmitting) return;
     this.isSubmitting = true;
     this.authService.requestOtp({ email: this.submittedEmail }).subscribe({
-      next: response => {
-        if (response.success) {
-          this.remainingOtpSeconds = 60;
-          this.logger.success('Mã OTP mới đã được gửi tới email của bạn.');
-        } else {
-          this.logger.error('Không thể gửi lại OTP. Vui lòng thử lại.');
-        }
-        this.isSubmitting = false;
-      },
-      error: () => {
-        this.logger.error('Gửi lại OTP thất bại. Vui lòng thử lại.');
-        this.isSubmitting = false;
-      },
+      next: response => this.handleRequestOtpResponse(response, false),
+      error: error => this.handleRequestOtpError(error),
     });
   }
 
@@ -184,5 +152,63 @@ export class AuthPopupComponent {
 
   handlePasswordSubmit(): void {
     this.closePopup();
+  }
+
+  private handleRequestOtpResponse(
+    response: { success?: boolean; userId?: number | null; message?: string | null },
+    isInitialRequest: boolean,
+  ): void {
+    const normalizedMessage = response.message?.trim().toLowerCase() ?? '';
+    const hasRecentOtpMessage =
+      normalizedMessage.includes('đã yêu cầu otp gần đây') ||
+      normalizedMessage.includes('vui lòng đợi trước khi gửi lại');
+
+    if (response.userId != null) {
+      this.logger.info('Email đã có tài khoản. Tạm thời chuyển sang màn hình đăng nhập.');
+      this.closePopup();
+      this.router.navigate(['/auth/login']);
+      this.isSubmitting = false;
+      return;
+    }
+
+    if (response.success || hasRecentOtpMessage) {
+      this.currentStep = 'otp';
+      this.remainingOtpSeconds = 60;
+
+      if (hasRecentOtpMessage) {
+        this.logger.info(response.message || 'Bạn đã yêu cầu OTP gần đây. Vui lòng tiếp tục nhập mã OTP.');
+      } else if (isInitialRequest) {
+        this.logger.success('Mã OTP đã được gửi tới email của bạn.');
+      } else {
+        this.logger.success('Mã OTP mới đã được gửi tới email của bạn.');
+      }
+
+      this.isSubmitting = false;
+      return;
+    }
+
+    this.logger.error(response.message || 'Không thể gửi OTP. Vui lòng thử lại.');
+    this.isSubmitting = false;
+  }
+
+  private handleRequestOtpError(error: unknown): void {
+    const httpError = error as HttpErrorResponse | null;
+    const errorBody = (httpError?.error ?? {}) as { message?: string };
+    const message = errorBody.message?.trim() ?? '';
+    const normalizedMessage = message.toLowerCase();
+    const isRecentOtpMessage =
+      normalizedMessage.includes('đã yêu cầu otp gần đây') ||
+      normalizedMessage.includes('vui lòng đợi trước khi gửi lại');
+
+    if (httpError?.status === 400 && isRecentOtpMessage) {
+      this.currentStep = 'otp';
+      this.remainingOtpSeconds = 60;
+      this.logger.info(message || 'Bạn đã yêu cầu OTP gần đây. Vui lòng tiếp tục nhập mã OTP.');
+      this.isSubmitting = false;
+      return;
+    }
+
+    this.logger.error('Gửi OTP thất bại. Vui lòng kiểm tra email và thử lại.');
+    this.isSubmitting = false;
   }
 }

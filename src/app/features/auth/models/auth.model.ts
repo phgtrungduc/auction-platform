@@ -17,8 +17,9 @@ export interface RequestOtpRequest {
 }
 
 export interface RequestOtpResponse {
-  success: boolean;
-  userId: number | null;
+  success?: boolean;
+  userId?: number | null;
+  message?: string | null;
 }
 
 export interface VerifyOtpRequest {
