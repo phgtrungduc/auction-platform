@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -26,10 +26,16 @@ import { FormsModule } from '@angular/forms';
         }
       </div>
 
-      <p class="otp-time">Mã OTP sẽ hết hiệu lực sau: ({{ remainingSeconds }}s)</p>
-      <p class="resend-row">Chưa nhận được mã OTP? <button type="button">Gửi lại mã</button></p>
+      <p class="otp-time" [class.expired]="remainingSeconds <= 0">
+        @if (remainingSeconds > 0) {
+          Mã OTP sẽ hết hiệu lực sau: <strong>{{ remainingSeconds }} giây</strong>
+        } @else {
+          Mã OTP đã hết hiệu lực. Vui lòng gửi lại mã.
+        }
+      </p>
+      <p class="resend-row">Chưa nhận được mã OTP? <button type="button" (click)="onResend()">Gửi lại mã</button></p>
 
-      <button class="verify-btn" type="button" [disabled]="otpValue.length !== 6" (click)="verifyRequested.emit(otpValue)">
+      <button class="verify-btn" type="button" [disabled]="otpValue.length !== 6 || remainingSeconds <= 0" (click)="verifyRequested.emit(otpValue)">
         Xác thực
       </button>
     </div>
@@ -58,7 +64,6 @@ import { FormsModule } from '@angular/forms';
       padding: 0 42px;
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      //gap: 10px;
       margin: 10px 0;
     }
     .otp-grid input {
@@ -71,12 +76,26 @@ import { FormsModule } from '@angular/forms';
       font-weight: 600;
       outline: none;
       background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .otp-grid input:focus {
+      border-color: #367639;
+      box-shadow: 0 0 0 3px rgba(54, 118, 57, 0.15);
     }
     .otp-time {
       margin-top: 6px;
       margin-bottom: 2px;
       font-size: 12px;
       color: #6b7280;
+      transition: color 0.3s;
+    }
+    .otp-time strong {
+      font-weight: 700;
+      color: #367639;
+    }
+    .otp-time.expired {
+      color: #e53935;
+      font-weight: 500;
     }
     .resend-row {
       margin: 0 0 14px;
@@ -101,15 +120,48 @@ import { FormsModule } from '@angular/forms';
     }
   `,
 })
-export class AuthOtpContentComponent {
+export class AuthOtpContentComponent implements OnInit, OnDestroy {
   @Input() email = '';
-  @Input() remainingSeconds = 56;
+  @Input() set initialSeconds(val: number) {
+    this.remainingSeconds = val;
+  }
   @Output() verifyRequested = new EventEmitter<string>();
+  @Output() resendRequested = new EventEmitter<void>();
 
+  remainingSeconds = 60;
   otpDigits = ['', '', '', '', '', ''];
+
+  private _timerInterval?: ReturnType<typeof setInterval>;
 
   get otpValue(): string {
     return this.otpDigits.join('').trim();
+  }
+
+  ngOnInit(): void {
+    this.startCountdown();
+  }
+
+  ngOnDestroy(): void {
+    this.clearTimer();
+  }
+
+  startCountdown(): void {
+    this.clearTimer();
+    this._timerInterval = setInterval(() => {
+      if (this.remainingSeconds > 0) {
+        this.remainingSeconds--;
+      } else {
+        this.clearTimer();
+      }
+    }, 1000);
+  }
+
+  onResend(): void {
+    this.remainingSeconds = 60;
+    this.otpDigits = ['', '', '', '', '', ''];
+    this.startCountdown();
+    this.resendRequested.emit();
+    this.focusInput(0);
   }
 
   onDigitChange(value: string, index: number): void {
@@ -128,9 +180,21 @@ export class AuthOtpContentComponent {
 
     const nextIndex = Math.min(index + digits.length, this.otpDigits.length - 1);
     this.focusInput(nextIndex);
+
+    // Auto-submit when last digit is filled
+    if (this.otpValue.length === this.otpDigits.length && this.remainingSeconds > 0) {
+      this.verifyRequested.emit(this.otpValue);
+    }
   }
 
   onKeyDown(event: KeyboardEvent, index: number): void {
+    if (event.key === 'Enter') {
+      if (index === this.otpDigits.length - 1 && this.otpValue.length === this.otpDigits.length && this.remainingSeconds > 0) {
+        this.verifyRequested.emit(this.otpValue);
+      }
+      return;
+    }
+
     if (event.key === 'Backspace' && !this.otpDigits[index] && index > 0) {
       this.focusInput(index - 1);
       return;
@@ -165,13 +229,21 @@ export class AuthOtpContentComponent {
     this.focusInput(lastFilledIndex);
   }
 
-  private focusInput(index: number): void {
-    const inputElement = document.getElementById(`otp-input-${index}`) as HTMLInputElement | null;
-    if (!inputElement) {
-      return;
+  private clearTimer(): void {
+    if (this._timerInterval) {
+      clearInterval(this._timerInterval);
+      this._timerInterval = undefined;
     }
+  }
 
-    inputElement.focus();
-    inputElement.select();
+  private focusInput(index: number): void {
+    setTimeout(() => {
+      const inputElement = document.getElementById(`otp-input-${index}`) as HTMLInputElement | null;
+      if (!inputElement) {
+        return;
+      }
+      inputElement.focus();
+      inputElement.select();
+    }, 0);
   }
 }

@@ -37,7 +37,7 @@ export class AuthPopupComponent {
     private readonly authService: AuthService,
     private readonly logger: LoggerService,
     private readonly router: Router,
-  ) {}
+  ) { }
 
   openPopup(): void {
     this.isPopupOpen = true;
@@ -80,7 +80,7 @@ export class AuthPopupComponent {
         }
 
         this.currentStep = 'otp';
-        this.remainingOtpSeconds = 56;
+        this.remainingOtpSeconds = 60;
         this.logger.success('Mã OTP đã được gửi tới email của bạn.');
         this.isSubmitting = false;
       },
@@ -120,6 +120,26 @@ export class AuthPopupComponent {
   handleOtpBack(): void {
     this.currentStep = 'email';
     this.registrationToken = '';
+  }
+
+  handleOtpResend(): void {
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+    this.authService.requestOtp({ email: this.submittedEmail }).subscribe({
+      next: response => {
+        if (response.success) {
+          this.remainingOtpSeconds = 60;
+          this.logger.success('Mã OTP mới đã được gửi tới email của bạn.');
+        } else {
+          this.logger.error('Không thể gửi lại OTP. Vui lòng thử lại.');
+        }
+        this.isSubmitting = false;
+      },
+      error: () => {
+        this.logger.error('Gửi lại OTP thất bại. Vui lòng thử lại.');
+        this.isSubmitting = false;
+      },
+    });
   }
 
   handleRegisterBack(): void {

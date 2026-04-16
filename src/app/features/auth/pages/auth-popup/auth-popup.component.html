@@ -11,8 +11,9 @@
         <app-auth-popup-layout [showBack]="true" (closeRequested)="closePopup()" (backRequested)="handleOtpBack()">
           <app-auth-otp-content
             [email]="submittedEmail"
-            [remainingSeconds]="remainingOtpSeconds"
+            [initialSeconds]="remainingOtpSeconds"
             (verifyRequested)="handleOtpVerify($event)"
+            (resendRequested)="handleOtpResend()"
           />
         </app-auth-popup-layout>
       }

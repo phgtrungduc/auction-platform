@@ -37,7 +37,7 @@ import { FormsModule } from '@angular/forms';
             />
           </svg>
         </span>
-        <input [(ngModel)]="password" type="password" placeholder="Mật khẩu" />
+        <input [(ngModel)]="password" type="password" placeholder="Mật khẩu" (keydown.enter)="onEnter()" />
       </label>
 
       <div class="row">
@@ -143,4 +143,10 @@ export class AuthPasswordContentComponent {
   @Output() submitRequested = new EventEmitter<void>();
   password = '';
   remember = false;
+
+  onEnter(): void {
+    if (this.password.length >= 6) {
+      this.submitRequested.emit();
+    }
+  }
 }
