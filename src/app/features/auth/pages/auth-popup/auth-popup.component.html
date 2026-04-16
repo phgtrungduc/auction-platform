@@ -34,7 +34,7 @@
           (closeRequested)="closePopup()"
           (backRequested)="handlePasswordBack()"
         >
-          <app-auth-password-content (submitRequested)="handlePasswordSubmit()" />
+          <app-auth-password-content (submitRequested)="handlePasswordSubmit($event)" />
         </app-auth-popup-layout>
       }
     </div>

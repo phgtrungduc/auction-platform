@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -50,10 +50,10 @@ import { FormsModule } from '@angular/forms';
 
       <button
         type="button"
-        [disabled]="password.length < 6"
-        (click)="submitRequested.emit()"
+        [disabled]="password.length < 8"
+        (click)="submitRequested.emit(password)" 
       >
-        Đăng ký
+        Đăng nhập
       </button>
     </div>
   `,
@@ -140,13 +140,13 @@ import { FormsModule } from '@angular/forms';
   `,
 })
 export class AuthPasswordContentComponent {
-  @Output() submitRequested = new EventEmitter<void>();
+  @Output() submitRequested = new EventEmitter<string>();
   password = '';
   remember = false;
 
   onEnter(): void {
-    if (this.password.length >= 6) {
-      this.submitRequested.emit();
+    if (this.password.length >= 8) {
+      this.submitRequested.emit(this.password);
     }
   }
 }

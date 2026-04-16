@@ -150,8 +150,35 @@ export class AuthPopupComponent {
     this.currentStep = 'register';
   }
 
-  handlePasswordSubmit(): void {
-    this.closePopup();
+  handlePasswordSubmit(password: string): void {
+    if (!password || this.isSubmitting) {
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.authService
+      .login({
+        email: this.submittedEmail,
+        password,
+      })
+      .subscribe({
+        next: response => {
+          if (!response.accessToken) {
+            this.logger.error('Đăng nhập không thành công. Vui lòng thử lại.');
+            this.isSubmitting = false;
+            return;
+          }
+
+          this.logger.success('Đăng nhập thành công!');
+          this.closePopup();
+          this.router.navigate(['/']);
+          this.isSubmitting = false;
+        },
+        error: () => {
+          this.logger.error('Đăng nhập thất bại. Vui lòng thử lại.');
+          this.isSubmitting = false;
+        },
+      });
   }
 
   private handleRequestOtpResponse(
@@ -165,15 +192,16 @@ export class AuthPopupComponent {
 
     if (response.userId != null) {
       this.logger.info('Email đã có tài khoản. Tạm thời chuyển sang màn hình đăng nhập.');
-      this.closePopup();
-      this.router.navigate(['/auth/login']);
+      //this.closePopup();
+      //this.router.navigate(['/auth/login']);
+      this.currentStep = 'password';
       this.isSubmitting = false;
       return;
     }
 
     if (response.success || hasRecentOtpMessage) {
       this.currentStep = 'otp';
-      this.remainingOtpSeconds = 60;
+      this.remainingOtpSeconds = 600;
 
       if (hasRecentOtpMessage) {
         this.logger.info(response.message || 'Bạn đã yêu cầu OTP gần đây. Vui lòng tiếp tục nhập mã OTP.');
@@ -202,7 +230,7 @@ export class AuthPopupComponent {
 
     if (httpError?.status === 400 && isRecentOtpMessage) {
       this.currentStep = 'otp';
-      this.remainingOtpSeconds = 60;
+      this.remainingOtpSeconds = 600;
       this.logger.info(message || 'Bạn đã yêu cầu OTP gần đây. Vui lòng tiếp tục nhập mã OTP.');
       this.isSubmitting = false;
       return;
