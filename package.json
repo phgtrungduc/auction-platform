@@ -27,7 +27,7 @@
     "@ngrx/store": "^19.0.0",
     "immer": "^11.1.4",
     "moment": "^2.30.1",
-    "ngrx-immer": "^4.1.1",
+    "ngrx-immer": "3",
     "ngx-bootstrap": "^19.0.1",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
