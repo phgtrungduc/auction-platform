@@ -1,19 +1,182 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy, DestroyRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseComponent } from '../../../../core/base/base.component';
+import { DvhcStore } from '../../../../store/dvhc/dvhc.store';
+import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { CustomSelectComponent } from '@shared/components/custom-select/custom-select.component';
+import { CategoryDropdownComponent } from '@shared/components/category-dropdown/category-dropdown.component';
+import { CategoryItem } from '@shared/components/header/header.component';
+import { AssetStore } from '../../../../store/asset/asset.store';
+import { Dvhc } from '../../../../core/models/dvhc.model';
+import { NoticeSearchDocument } from '../../../../core/models/asset.model';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { CategoryStore } from '../../../../store/category/category.store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AssetCategory } from '../../../../core/models/category.model';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CustomSelectComponent, CategoryDropdownComponent, TooltipModule],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss',
 })
-export class HomepageComponent extends BaseComponent {
+export class HomepageComponent extends BaseComponent implements OnInit {
+  private readonly defaultNoticeImage = 'assets/images/product-sample-1.jpg';
+  private readonly categoryImageByRefId: Record<string, string> = {
+    REAL_ESTATE: 'assets/images/bds.png',
+    VEHICLE: 'assets/images/xeco.png',
+    MACHINERY: 'assets/images/maymoc.png',
+    GOODS: 'assets/images/hanghoa.png',
+    HOUSEHOLD: 'assets/images/dodung.png',
+
+    RE_DAT_O: 'assets/images/dato.png',
+    RE_DAT_NONG_NGHIEP: 'assets/images/datnongnghiep.png',
+    RE_NHA_PHO: 'assets/images/nhapho.png',
+    RE_CAN_HO: 'assets/images/canho.png',
+    RE_NHA_XUONG: 'assets/images/nhaxuong.png',
+    RE_SHOPHOUSE: 'assets/images/shopehouse.png',
+    VEH_OTO: 'assets/images/oto.png',
+    VEH_XE_TAI: 'assets/images/xeco.png',
+    VEH_XE_MAY: 'assets/images/xemay.png',
+    MAC_MAY_CONG_TRINH: 'assets/images/maycongtrinh.png',
+    MAC_MAY_NONG_NGHIEP: 'assets/images/maynongnghiep.png',
+    MAC_DAY_CHUYEN: 'assets/images/daychuyen.png',
+    GOODS_GACH_VAT_LIEU: 'assets/images/gach.png',
+    GOODS_SAT_THEP: 'assets/images/satthep.png',
+    GOODS_HANG_TON_KHO: 'assets/images/hangtonkho.png',
+    HH_NOI_THAT: 'assets/images/noithat.png',
+    HH_THIET_BI: 'assets/images/thietbi.png',
+    HH_CONG_CU: 'assets/images/congcu.png',
+
+    // Backward-compatible aliases
+    RE_BDS: 'assets/images/bds.png',
+    VHE_OTO: 'assets/images/oto.png',
+    VH_XE_MAY: 'assets/images/xemay.png',
+    VH_XE_CO: 'assets/images/xeco.png',
+    EQ_MAY_MOC: 'assets/images/maymoc.png',
+    EQ_MAY_CONG_TRINH: 'assets/images/maycongtrinh.png',
+    EQ_MAY_NONG_NGHIEP: 'assets/images/maynongnghiep.png',
+    GOODS_HANG_HOA: 'assets/images/hanghoa.png',
+    GOODS_DO_DUNG: 'assets/images/dodung.png',
+    OTHER: 'assets/images/khac.png',
+  };
+
+  // ── Banner Slideshow ──────────────────────────────────────────────────────
+  readonly bannersPerView = 4;          // số banner hiển thị cùng lúc
+  banners = [
+    { src: 'assets/images/banner/banner_bds.png', alt: 'Bất động sản' },
+    { src: 'assets/images/banner/banner_xe_co.png', alt: 'Xe cộ' },
+    { src: 'assets/images/banner/banner_may_moc.png', alt: 'Máy móc' },
+    { src: 'assets/images/banner/banner_hang_hoa.png', alt: 'Hàng hoá' },
+    { src: 'assets/images/banner/banner_do_dung.png', alt: 'Đồ dùng' },
+    { src: 'assets/images/banner/banner_khac.png', alt: 'Khác' },
+  ];
+
+  currentBannerIndex = 0;
+  private bannerInterval: ReturnType<typeof setInterval> | null = null;
+  private readonly BANNER_INTERVAL_MS = 4000;
+
+  private get maxBannerIndex() {
+    return this.banners.length - this.bannersPerView;  // 6 - 4 = 2
+  }
+
+  /** Array [0, 1, ..., maxBannerIndex] used to render dots */
+  get dotIndices(): number[] {
+    return Array.from({ length: this.maxBannerIndex + 1 }, (_, i) => i);
+  }
+
+  assetCategories: AssetCategory[] = [];
+
+  ngOnInit() {
+    this.startBannerAutoPlay();
+    this.dvhcStore.getProvinces$();
+    this.categoryStore.list$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((categories) => {
+        this.assetCategories = categories ?? [];
+        this.listCategories = this.assetCategories.map((item) => ({
+          label: item.name,
+          value: item.id.toString(),
+          children: (item.children ?? []).map((child) => ({ label: child.name }))
+        }));
+      });
+    this.categoryStore.getAssetCategories$();
+    this.assetStore.getListData$({
+      page: 1,
+      pageSize: 8,
+      statuses: ['UPCOMING', 'ONGOING']
+    });
+    this.assetStore.getEndedListData$({
+      page: 1,
+      pageSize: 8,
+      statuses: ['COMPLETED', 'CANCELLED']
+    });
+  }
+
+  override ngOnDestroy() {
+    this.stopBannerAutoPlay();
+    super.ngOnDestroy();
+  }
+
+  private startBannerAutoPlay() {
+    this.bannerInterval = setInterval(() => {
+      this.currentBannerIndex =
+        this.currentBannerIndex < this.maxBannerIndex
+          ? this.currentBannerIndex + 1
+          : 0;                          // quay về đầu khi hết
+    }, this.BANNER_INTERVAL_MS);
+  }
+
+  private stopBannerAutoPlay() {
+    if (this.bannerInterval !== null) {
+      clearInterval(this.bannerInterval);
+      this.bannerInterval = null;
+    }
+  }
+
+  prevBanner() {
+    this.stopBannerAutoPlay();
+    this.currentBannerIndex =
+      this.currentBannerIndex > 0 ? this.currentBannerIndex - 1 : this.maxBannerIndex;
+    this.startBannerAutoPlay();
+  }
+
+  nextBanner() {
+    this.stopBannerAutoPlay();
+    this.currentBannerIndex =
+      this.currentBannerIndex < this.maxBannerIndex ? this.currentBannerIndex + 1 : 0;
+    this.startBannerAutoPlay();
+  }
+
+  goToBanner(index: number) {
+    this.stopBannerAutoPlay();
+    this.currentBannerIndex = Math.min(index, this.maxBannerIndex);
+    this.startBannerAutoPlay();
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+
+  private dvhcStore = inject(DvhcStore);
+  private assetStore = inject(AssetStore);
+  private categoryStore = inject(CategoryStore);
+  private destroyRef = inject(DestroyRef);
+
+  selectedLocationValue: any = null;
+  optionsLocation: { label: string, value: any }[] = [];
+  provinces: Dvhc[] = [];
+
+  selectedCategory: number | null = null;
+  listCategories: CategoryItem[] = [];
+
+
+  onChangeLocation(value: any) {
+    console.log('Selected:', value);
+  }
+
   private sanitizer = inject(DomSanitizer);
 
   private svg(raw: string): SafeHtml {
@@ -22,65 +185,88 @@ export class HomepageComponent extends BaseComponent {
 
   constructor() {
     super();
+    this.dvhcStore.listProvinces$.pipe(takeUntil(this.destroy$)).subscribe(data => {
+      if (data) {
+        this.provinces = data;
+        this.optionsLocation = data.map(item => ({
+          label: item.nameWithType,
+          value: item.code
+        }));
+      }
+    });
+
+    this.assetStore.listData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((items) => {
+        this.auctionList = (items ?? []).map((item) => this.mapNoticeToAuctionItem(item));
+      });
+
+    this.assetStore.endedListData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((items) => {
+        this.endedAuctions = (items ?? []).map((item) => this.mapNoticeToEndedItem(item));
+      });
+  }
+
+  private mapNoticeToAuctionItem(item: NoticeSearchDocument): AuctionItem {
+    return {
+      id: item.noticeId,
+      title: item.title,
+      type: '',
+      location: item.provinceName || 'Không xác định',
+      minPrice: item.minStartingPrice ? this.formatPrice(item.minStartingPrice) : 'Không xác định',
+      maxPrice: item.maxStartingPrice ? this.formatPrice(item.maxStartingPrice) : 'Không xác định',
+      owner: item.auctionOrgName,
+      image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
+      status: item.status,
+      assetCount: item.assetCount
+    };
+  }
+
+  private mapNoticeToEndedItem(item: NoticeSearchDocument): EndedAuctionItem {
+    return {
+      id: item.noticeId,
+      title: item.title,
+      location: item.provinceName || 'Không xác định',
+      price: item.maxStartingPrice ? this.formatPrice(item.maxStartingPrice) : '—',
+      increase: '',
+      startPrice: item.minStartingPrice ? this.formatPrice(item.minStartingPrice) : '—',
+      company: item.auctionOrgName,
+      image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
+      status: item.status,
+      assetCount: item.assetCount
+    };
+  }
+
+  private getNoticeImageByCategoryRefId(refId?: string): string {
+    if (!refId) {
+      return this.defaultNoticeImage;
+    }
+
+    const normalizedRefId = refId.trim().toUpperCase();
+    return this.categoryImageByRefId[normalizedRefId] ?? this.defaultNoticeImage;
   }
 
   private router = inject(Router);
 
-  navToDetail(id: string | undefined) {
+  navToDetail(id: number | undefined) {
     if (id) {
-      this.router.navigate(['/product-detail', id]);
+      this.router.navigate(['/products-listing', id]);
     }
   }
 
-  selectedCity = 'Hà Nội';
-  selectedCategory = 'Loại BĐS';
+  navToListings() {
+    this.router.navigate(['/products-listing']);
+  }
+
   keyword = '';
   isDragging = false;
   startX = 0;
   scrollLeft = 0;
 
-  auctionList: AuctionItem[] = [
-    {
-      id: 'dgts_moj',
-      title: 'Đất Thanh Oai 500m²',
-      type: 'Quyền sử dụng đất',
-      location: 'Hà Nội',
-      price: 11.5,
-      owner: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Mở đăng ký'
-    },
-    {
-      id: 'dgts_moj1',
-      title: 'Đất Thanh Oai 500m²',
-      type: 'Quyền sử dụng đất',
-      location: 'Hà Nội',
-      price: 11.5,
-      owner: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Mở đăng ký'
-    },
-    {
-      id: 'dgts_moj2',
-      title: 'Đất Thanh Oai 500m²',
-      type: 'Quyền sử dụng đất',
-      location: 'Hà Nội',
-      price: 11.5,
-      owner: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Mở đăng ký'
-    },
-    {
-      id: 'dgts_moj3',
-      title: 'Đất Thanh Oai 500m²',
-      type: 'Quyền sử dụng đất',
-      location: 'Hà Nội',
-      price: 11.5,
-      owner: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Mở đăng ký'
-    }
-  ];
+  auctionList: AuctionItem[] = [];
+
+  endedAuctions: EndedAuctionItem[] = [];
 
   featuredAreas = [
     {
@@ -174,64 +360,6 @@ export class HomepageComponent extends BaseComponent {
     }
   ];
 
-  endedAuctions = [
-    {
-      id: 'dgts_moj8',
-      title: 'Đất Thanh Oai 500m²',
-      location: 'Hà Nội',
-      price: '11.50 tỷ',
-      increase: '+28%',
-      startPrice: '9.00 tỷ',
-      company: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Đã kết thúc'
-    },
-    {
-      id: 'dgts_moj7',
-      title: 'Đất Thanh Oai 500m²',
-      location: 'Hà Nội',
-      price: '11.50 tỷ',
-      increase: '+28%',
-      startPrice: '9.00 tỷ',
-      company: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Đã kết thúc'
-    },
-    {
-      id: 'dgts_moj6',
-      title: 'Đất Thanh Oai 500m²',
-      location: 'Hà Nội',
-      price: '11.50 tỷ',
-      increase: '+28%',
-      startPrice: '9.00 tỷ',
-      company: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Đã kết thúc'
-    },
-    {
-      id: 'dgts_moj5',
-      title: 'Đất Thanh Oai 500m²',
-      location: 'Hà Nội',
-      price: '11.50 tỷ',
-      increase: '+28%',
-      startPrice: '9.00 tỷ',
-      company: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Đã kết thúc'
-    },
-    {
-      id: 'dgts_moj4',
-      title: 'Đất Thanh Oai 500m²',
-      location: 'Hà Nội',
-      price: '11.50 tỷ',
-      increase: '+28%',
-      startPrice: '9.00 tỷ',
-      company: 'Lạc Việt',
-      image: 'assets/images/product-sample-1.jpg',
-      status: 'Đã kết thúc'
-    },
-  ];
-
   tools = [
     {
       title: 'Định giá tài sản đấu giá',
@@ -281,10 +409,9 @@ export class HomepageComponent extends BaseComponent {
   ];
 
   onSearch() {
-    // TODO: hook vào router / service tìm kiếm tài sản đấu giá
     console.log({
       keyword: this.keyword,
-      city: this.selectedCity,
+      city: this.selectedLocationValue,
       category: this.selectedCategory,
     });
     this.router.navigate(['/products-listing']);
@@ -312,14 +439,57 @@ export class HomepageComponent extends BaseComponent {
     this.isDragging = false;
     this.draggedElement = null;
   }
+
+  formatPrice(price: number | null | undefined): string {
+    if (price == null) return 'Không xác định';
+    return (price / 1000000000).toFixed(1) + ' tỷ';
+  }
+
+  getNoticeStatusLabel(status: string | undefined): string {
+    if (!status) return 'Chưa rõ';
+    switch (status) {
+      case 'UPCOMING': return 'Mở đăng ký';
+      case 'ONGOING': return 'Đang diễn ra';
+      case 'COMPLETED': return 'Đã kết thúc';
+      case 'CANCELLED': return 'Huỷ đấu giá';
+      default: return status;
+    }
+  }
+
+  getOwnerInitials(name: string | undefined): string {
+    if (!name) {
+      return '?';
+    }
+    return name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(w => w[0].toUpperCase())
+      .join('');
+  }
 }
 interface AuctionItem {
-  id: string;
+  id: number;
   title: string;
   type: string;
   location: string;
-  price: number;
+  minPrice: string;
+  maxPrice: string;
   owner: string;
   image: string;
   status: string;
+  assetCount: number;
+}
+
+interface EndedAuctionItem {
+  id: number;
+  title: string;
+  location: string;
+  price: string;
+  increase: string;
+  startPrice: string;
+  company: string;
+  image: string;
+  status: string;
+  assetCount: number;
 }

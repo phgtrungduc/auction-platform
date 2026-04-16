@@ -279,3 +279,83 @@ button {
 .truncate {
   @include truncate;
 }
+
+// ============================================================
+// Tooltip variants (ngx-bootstrap)
+// ============================================================
+/* ngx-bootstrap tooltip:
+ * `tooltipClass="similar-title-tooltip"` adds this class on the tooltip host element.
+ * We override Bootstrap's default dark tooltip styles with higher specificity + !important.
+ */
+/* Fallback: if `tooltipClass` is not attached as a class for some reason,
+   still keep tooltips readable in this app.
+   We scope to direct-to-body tooltips to avoid impacting in-component tooltips. */
+body > .tooltip .tooltip-inner {
+  background-color: #ffffff !important;
+  color: #000000   !important;
+  //color: #111827 !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12) !important;
+  opacity: 1 !important;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  max-width: 360px !important;
+}
+
+/* Arrow color overrides (Bootstrap/ngx-bootstrap can render via ::before or ::after) */
+body > .tooltip.bs-tooltip-bottom .tooltip-arrow::before,
+body > .tooltip.tooltip-bottom .tooltip-arrow::before,
+body > .tooltip.bs-tooltip-bottom .tooltip-arrow::after,
+body > .tooltip.tooltip-bottom .tooltip-arrow::after {
+  border-bottom-color: #ffffff !important;
+}
+
+body > .tooltip.bs-tooltip-top .tooltip-arrow::before,
+body > .tooltip.tooltip-top .tooltip-arrow::before,
+body > .tooltip.bs-tooltip-top .tooltip-arrow::after,
+body > .tooltip.tooltip-top .tooltip-arrow::after {
+  border-top-color: #ffffff !important;
+}
+
+body > .tooltip.bs-tooltip-left .tooltip-arrow::before,
+body > .tooltip.tooltip-left .tooltip-arrow::before,
+body > .tooltip.bs-tooltip-left .tooltip-arrow::after,
+body > .tooltip.tooltip-left .tooltip-arrow::after {
+  border-left-color: #ffffff !important;
+}
+
+body > .tooltip.bs-tooltip-right .tooltip-arrow::before,
+body > .tooltip.tooltip-right .tooltip-arrow::before,
+body > .tooltip.bs-tooltip-right .tooltip-arrow::after,
+body > .tooltip.tooltip-right .tooltip-arrow::after {
+  border-right-color: #ffffff !important;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #367639;
+  border-color: #367639;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}

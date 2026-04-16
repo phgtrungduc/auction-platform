@@ -52,6 +52,7 @@
 
 .hero {
   position: relative;
+  z-index: 10;
   margin: 0 auto;
   max-width: var(--homepage-max-width);
   padding: 0 var(--spacing-6) var(--spacing-12);
@@ -60,7 +61,6 @@
 .hero--banner {
   margin-top: var(--spacing-2);
   border-radius: 16px;
-  overflow: hidden;
 
   background-image: url('../../../../../assets/images/background-hero.jpg');
   background-size: cover;
@@ -93,53 +93,164 @@
 
 .hero__content {
   width: 85%;
-  text-align: center;
+  //text-align: center;
 }
 
-/* Banner strip below hero */
+/* ── Banner Slideshow (4-up carousel) ─────────────────────────────────────── */
 
-.homepage__banners {
+.banner-slider {
   max-width: var(--homepage-max-width);
   margin: 0 auto;
-  //padding-left: var(--spacing-6);
-  //padding-right: var(--spacing-6);
-}
-
-.homepage__banners-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--homepage-gap);
-
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @media (max-width: 640px) {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.homepage__banner {
+  user-select: none;
   position: relative;
-  border-radius: 16px;
+}
+
+.banner-slider__track-wrapper {
+  position: relative;
   overflow: hidden;
-  background-color: #EDF1F4;
-  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.18);
-  aspect-ratio: 16 / 9;
-  transition: transform 0.25s ease;
+  border-radius: 0;
+  background-color: transparent;
 }
 
-.homepage__banner:hover {
-  transform: translateY(-4px);
+.banner-slider__track {
+  display: flex;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  //gap: 8px;
 }
 
-.homepage__banner img {
+/* Each slide = 1/4 of wrapper width */
+.banner-slider__slide {
+  flex: 0 0 calc(100% / 4);
+  min-width: 0;
+  padding: 0 6px;
+}
+
+/* White card – identical look to the category cards in design */
+.banner-slider__card {
+  background: #fff;
+  border-radius: 16px;
+  //box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 12px 14px;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  &:hover {
+    background: #f4f7f5;
+    border-color: #cdd6cf;
+    transform: scale(1.05);
+    //box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Image container – fixed height so all cards look uniform */
+.banner-slider__img-wrap {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: inherit;
+  height: 120px;
+  /* ← điều chỉnh chiều cao ảnh ở đây */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    /* ảnh thu nhỏ vừa khung, không bị cắt */
+    display: block;
+  }
 }
+
+/* Name label below image */
+.banner-slider__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a2e14;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Arrow buttons */
+.banner-slider__arrow {
+  position: absolute;
+  top: calc(50% - 14px);
+  /* 14px = half of dots bar height */
+  transform: translateY(-50%);
+  z-index: 2;
+
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #e2e8e0;
+  cursor: pointer;
+
+  background: #fff;
+  color: #3f6b2a;
+  font-size: 13px;
+
+  display: flex;
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    background: #f0f7ee;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  }
+
+  &--prev {
+    left: -16px;
+  }
+
+  &--next {
+    right: -16px;
+  }
+}
+
+.banner-slider:hover {
+  .banner-slider__arrow {
+    display: flex;
+  }
+}
+
+/* Dot indicators */
+.banner-slider__dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.banner-slider__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  background: #c9d8c5;
+  transition: background 0.25s ease, width 0.25s ease, border-radius 0.25s ease;
+
+  &--active {
+    background: #3f6b2a;
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  &:hover:not(&--active) {
+    background: #7aaa74;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
 
 .hero__title {
   font-size: 2.5rem;
@@ -195,12 +306,11 @@
   display: flex;
   //flex-direction: column;
   gap: var(--spacing-2);
+  padding: 0 6px;
 
   &--keyword {
     flex: 1 1 auto;
   }
-
-  padding: 0 6px;
 }
 
 .hero__label {
@@ -212,7 +322,7 @@
 .hero__input {
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-gray-200);
-  padding: var(--spacing-3) var(--spacing-4);
+  padding: 10px var(--spacing-4);
   background-color: var(--color-gray-50);
   display: flex;
   align-items: center;
@@ -345,7 +455,7 @@
   align-items: center;
   gap: 6px;
 
-  padding: 8px 16px;
+  padding: 6px 16px;
   border-radius: 8px;
   border: none;
 
@@ -435,7 +545,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  padding: 4px;
+  padding: 8px;
   border-radius: 16px;
 }
 
@@ -453,25 +563,45 @@
 /* CONTENT */
 
 .auction-card__content {
-  padding: 8px;
+  padding: 8px 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 180px);
 }
 
 .auction-card__title {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 4px;
+  position: relative;
 }
+
+.auction-card__title-text {
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.4em * 3);
+  line-height: 1.4;
+  font-size: 15px;
+}
+
+// Tooltip is rendered via ngx-bootstrap (container="body") to avoid being clipped by scroll containers.
 
 .auction-card__meta {
   font-size: 13px;
   color: #6b7280;
-  margin-bottom: 12px;
+  margin-bottom: 18px;
 }
 
 /* PRICE */
 
 .auction-card__price {
-  margin-bottom: 16px;
+  margin-top: auto;
+  margin-bottom: 8px;
+  font-size: 15px;
 }
 
 .auction-card__price .price {
@@ -491,22 +621,37 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   padding: 8px 0 4px 0;
   border-top: solid 1px #EDF1F4;
+  margin-top: 0;
 }
 
 .auction-card__owner {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   font-size: 14px;
+  flex: 1;
+  min-width: 0;
+  max-width: calc(100% - 90px);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.35;
 }
 
 .avatar {
   width: 28px;
+  min-width: 28px;
+  max-width: 28px;
   height: 28px;
+  min-height: 28px;
+  max-height: 28px;
+  flex: 0 0 28px;
+  flex-shrink: 0;
   border-radius: 50%;
-  background: #3b5ccc;
+  background: #3b6e2f;
   color: white;
   display: flex;
   align-items: center;
@@ -525,6 +670,7 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
+  flex-shrink: 0;
 }
 
 .auction-card__btn:hover {
@@ -653,14 +799,14 @@
   display: grid;
   gap: 12px;
   margin-bottom: 12px;
-  height: 144px;
+  //height: 144px;
 
   &--row1 {
     grid-template-columns: repeat(3, 1fr);
   }
 
   &--row2 {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(7, 1fr);
   }
 }
 
@@ -673,7 +819,7 @@
 
   background-size: cover;
   background-position: center;
-  background-color: #e8f0e9;
+  background-color: #fff;
   height: 100%;
   width: 100%;
 
@@ -696,10 +842,10 @@
 .category-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right,
-      rgba(255, 255, 255, 0.88) 0%,
-      rgba(255, 255, 255, 0.45) 45%,
-      rgba(255, 255, 255, 0) 60%);
+  // background: linear-gradient(to right,
+  //     rgba(255, 255, 255, 0.88) 0%,
+  //     rgba(255, 255, 255, 0.45) 45%,
+  //     rgba(255, 255, 255, 0) 60%);
   pointer-events: none;
   border-radius: inherit;
 }
@@ -707,15 +853,18 @@
 // Icon + text nằm góc trên trái, không có hộp nền
 .category-card__info {
   position: absolute;
-  top: 55px;
-  left: 16px;
+  //top: 55px;
+  //left: 16px;
   z-index: 1;
   font-weight: 500;
-
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 6px;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
 
   // SVG render qua [innerHTML] không có _ngcontent attr → cần ::ng-deep để bypass encapsulation
   ::ng-deep svg path {
@@ -812,7 +961,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  //justify-content: center;
 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
@@ -822,6 +971,7 @@
   height: auto;
   object-fit: contain;
   margin-bottom: 12px;
+  margin: auto;
 }
 
 .company-card--highlight img {
@@ -832,15 +982,19 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  align-items: stretch;
 }
 
 .btn-more {
-  //margin-top:10px;
+  margin-top: auto;
+  align-self: flex-start;
   background: #2e7d32;
   color: #fff;
   border: none;
   padding: 6px 12px;
   border-radius: 8px;
+  flex-shrink: 0;
+  margin-top: 8px;
 }
 
 .news-grid {
@@ -917,6 +1071,8 @@
   /* Safari */
   -ms-user-select: none;
   /* IE */
+  display: flex;
+  flex-direction: column;
 }
 
 .ended-auction__card:hover {
@@ -935,21 +1091,37 @@
 }
 
 .ended-auction__body {
-  padding: 8px;
+  padding: 8px 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .ended-auction__name {
   font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
 }
+
+.ended-auction__name-text {
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.4em * 3);
+  line-height: 1.4;
+  font-size: 15px;
+}
+
+// Tooltip is rendered via ngx-bootstrap (container="body") to avoid being clipped by scroll containers.
 
 .ended-auction__location {
   font-size: 13px;
   color: #6b7280;
-}
-
-.ended-auction__price {
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 18px;
 }
 
 .ended-auction__winner {
@@ -972,7 +1144,8 @@
 
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
+  min-height: 200px;
 
   background: #fff;
   border-radius: 14px;
@@ -1007,12 +1180,21 @@
   z-index: 2;
   max-width: 65%;
   padding: 12px 0 12px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: stretch;
 }
 
 .tool-card__image {
-  //position:absolute;
   right: 10px;
   bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  align-self: stretch;
 }
 
 .tool-card__image img {
@@ -1028,10 +1210,11 @@
 }
 
 .ended-auction__price {
-  margin-top: 10px;
+  margin-top: auto;
+  margin-bottom: 8px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  //gap: 4px;
 }
 
 /* dòng 1 */
@@ -1052,6 +1235,8 @@
   align-items: center;
   gap: 6px;
   color: #367639;
+  font-size: 15px;
+  font-weight: 450;
 }
 
 /* bên phải */
@@ -1078,19 +1263,24 @@
   cursor: grabbing;
 }
 
-.ended-auction__card {
-  scroll-snap-align: start;
-}
-
 .tool-card__content_title {
   font-size: 20px;
   color: #367639;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  line-height: 1.3;
+  flex-shrink: 0;
+  min-height: calc(1.3em * 2);
 }
 
 .tool-card__content_desc {
   font-size: 12px;
   color: #5F788B;
   font-weight: 400;
+  margin: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  line-height: 1.45;
 }
 
 .tool-card__icon {
@@ -1107,6 +1297,7 @@
 
   font-size: 36px;
   margin-bottom: 10px;
+  flex-shrink: 0;
 }
 
 .news-layout {
@@ -1354,6 +1545,22 @@
   border-radius: 12px;
 }
 
+.endedauction-card__status--upcoming {
+  background: #3f6b2a;
+}
+
+.endedauction-card__status--ongoing {
+  background: #2f6fdf;
+}
+
+.endedauction-card__status--completed {
+  background: #64748b;
+}
+
+.endedauction-card__status--canceled {
+  background: #b45309;
+}
+
 .items-center {
   align-items: center;
 }
@@ -1364,9 +1571,13 @@
   width: 100%;
 }
 
+.dropdown-category {
+  width: 100%;
+}
+
 .custom-select select {
   width: 100%;
-  padding: 12px 40px 12px 16px;
+  padding: 10px 40px 10px 16px;
   border-radius: 12px;
   border: 1px solid #e0e6e2;
   outline: none;
@@ -1514,28 +1725,41 @@
   }
 
   .tool-card {
-    flex-direction: column-reverse;
-    align-items: center;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 0;
     padding: 0;
   }
 
   .tool-card__content {
-    max-width: 100%;
-    padding: 20px;
-    width: 100%;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+    width: auto;
+    padding: 16px 8px 16px 16px;
   }
 
   .tool-card__image {
-    width: 100%;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 44%;
+    min-width: 0;
     display: flex;
-    justify-content: center;
+    align-items: flex-end;
+    justify-content: flex-end;
+    align-self: stretch;
+    padding: 8px 12px 8px 4px;
     position: static;
   }
 
   .tool-card__image img {
     mask-image: none;
     -webkit-mask-image: none;
-    max-height: 150px;
+    max-height: 140px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: right bottom;
   }
 
   /* Card phiến kết thúc responsive scroll */
@@ -1568,4 +1792,8 @@
   .stat-card {
     flex: 1 1 100%;
   }
+}
+
+.company-info {
+  margin-top: 16px;
 }

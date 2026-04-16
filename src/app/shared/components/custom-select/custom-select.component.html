@@ -1,0 +1,52 @@
+<div class="custom-select" [class.has-value]="selectedLabel" [class.is-disabled]="disabled">
+    <div class="select-box" [class.is-disabled]="disabled" (click)="toggleDropdown()">
+        <i [ngClass]="icon"></i>
+        <span class="label-select" *ngIf="selectedLabel; else placeholderTpl">
+            {{ selectedLabel }}
+        </span>
+
+        <ng-template #placeholderTpl>
+            <span class="placeholder-select">{{ placeholder }}</span>
+        </ng-template>
+
+        <span class="select-arrow" [class.open]="isOpen"><i class="fa fa-angle-down"></i></span>
+        <!-- Clear icon -->
+        <span *ngIf="selectedLabel" class="clear-icon" (click)="clearValue($event)">
+            <i class="fa-regular fa-circle-xmark"></i>
+        </span>
+    </div>
+
+    <div class="dropdown" *ngIf="isOpen && !disabled">
+        <!-- Ô tìm kiếm – chỉ hiển thị khi searchable = true -->
+        <div class="search-box" *ngIf="searchable" (click)="$event.stopPropagation()">
+            <i class="fa-solid fa-magnifying-glass search-box__icon"></i>
+            <input
+                class="search-box__input"
+                type="text"
+                [(ngModel)]="searchQuery"
+                placeholder="Tìm kiếm..."
+                autofocus
+            />
+            <button
+                *ngIf="searchQuery"
+                class="search-box__clear"
+                (click)="searchQuery = ''"
+                tabindex="-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Danh sách options đã lọc -->
+        <div class="option"
+             *ngFor="let option of filteredOptions"
+             (click)="selectOption(option)">
+            {{ option.label }}
+        </div>
+
+        <!-- Không tìm thấy -->
+        <div class="option option--empty" *ngIf="filteredOptions.length === 0">
+            Không tìm thấy kết quả
+        </div>
+    </div>
+
+</div>

@@ -35,68 +35,23 @@
         <div class="hero__search-card">
           <div class="hero__search row">
 
-            <div class="hero__field col-md-2">
+            <div class="hero__field col-md-3">
               <div class="custom-select has-icon">
-                <!-- icon bên trái -->
-                <span class="select-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M2.66675 6.76201C2.66675 3.76401 5.05475 1.33334 8.00008 1.33334C10.9454 1.33334 13.3334 3.76401 13.3334 6.76201C13.3334 9.73668 11.6314 13.2087 8.97542 14.4493C8.67014 14.5923 8.33717 14.6664 8.00008 14.6664C7.66299 14.6664 7.33003 14.5923 7.02475 14.4493C4.36875 13.208 2.66675 9.73734 2.66675 6.76268V6.76201Z"
-                      stroke="#367639" />
-                    <path
-                      d="M8 8.66669C9.10457 8.66669 10 7.77126 10 6.66669C10 5.56212 9.10457 4.66669 8 4.66669C6.89543 4.66669 6 5.56212 6 6.66669C6 7.77126 6.89543 8.66669 8 8.66669Z"
-                      stroke="#367639" />
-                  </svg>
-                </span>
-
-                <!-- select thật -->
-                <select>
-                  <option>Khu vực</option>
-                  <option>Hà Nội</option>
-                  <option>Hồ Chí Minh</option>
-                  <option>Đà Nẵng</option>
-                </select>
-                <span class="select-arrow">
-                  <i class="fa fa-chevron-down"></i>
-                </span>
+                <app-custom-select [options]="optionsLocation" [placeholder]="'Địa điểm'"
+                  icon="fa-solid fa-location-dot" [(value)]="selectedLocationValue"
+                  (valueChange)="onChangeLocation($event)" [searchable]="true">
+                </app-custom-select>
               </div>
             </div>
 
 
-            <div class="hero__field col-md-2">
-              <div class="custom-select has-icon">
-                <!-- icon bên trái -->
-                <span class="select-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14.6666 14.6667H1.33325" stroke="#367639" stroke-linecap="round" />
-                    <path
-                      d="M13.9999 14.6667V4.00001C13.9999 2.74268 13.9999 2.11468 13.6093 1.72401C13.2186 1.33334 12.5906 1.33334 11.3333 1.33334H9.99994C8.7426 1.33334 8.1146 1.33334 7.72394 1.72401C7.40927 2.03801 7.34794 2.50668 7.33594 3.33334"
-                      stroke="#367639" />
-                    <path
-                      d="M10 14.6667V6.00001C10 4.74268 10 4.11468 9.60933 3.72401C9.21867 3.33334 8.59067 3.33334 7.33333 3.33334H4.66667C3.40933 3.33334 2.78133 3.33334 2.39067 3.72401C2 4.11468 2 4.74268 2 6.00001V14.6667"
-                      stroke="#367639" />
-                    <path d="M6 14.6667V12.6667M4 5.33334H8M4 7.33334H8M4 9.33334H8" stroke="#367639"
-                      stroke-linecap="round" />
-                  </svg>
-                </span>
-
-                <!-- select thật -->
-                <select>
-                  <option>Loại BĐS</option>
-                  <option>Nhà đất</option>
-                  <option>Chung cư</option>
-                  <option>Đất nền</option>
-                </select>
-
-                <!-- arrow -->
-                <span class="select-arrow">
-                  <i class="fa fa-chevron-down"></i>
-                </span>
-
-              </div>
+            <div class="hero__field col-md-3">
+              <app-category-dropdown class="dropdown-category" [categories]="listCategories"
+                [(value)]="selectedCategory" iconClass="fa-solid fa-city">
+              </app-category-dropdown>
             </div>
 
-            <div class="hero__field hero__field--keyword col-md-8">
+            <div class="hero__field hero__field--keyword col-md-6">
               <div class="hero__input-wrapper">
                 <input class="hero__input hero__input--text" type="text" [(ngModel)]="keyword"
                   placeholder="Nhập từ khoá cần tìm" />
@@ -114,89 +69,38 @@
     </div>
   </section>
 
-  <!-- Banners under hero -->
-  <section class="homepage__banners mt-2" aria-label="Banners">
-    <div class="homepage__banners-grid">
-      <div class="homepage__banner">
-        <img src="assets/images/banner1.jpg" alt="Banner 1" />
+  <!-- Banners Slideshow -->
+  <section class="banner-slider mt-2" aria-label="Banners">
+    <div class="banner-slider__track-wrapper">
+      <div class="banner-slider__track"
+        [style.transform]="'translateX(' + (-currentBannerIndex * (100 / bannersPerView)) + '%)'">
+        <div class="banner-slider__slide" *ngFor="let banner of banners">
+          <div class="banner-slider__card">
+            <div class="banner-slider__img-wrap">
+              <img [src]="banner.src" [alt]="banner.alt" />
+            </div>
+            <span class="banner-slider__name">{{ banner.alt }}</span>
+          </div>
+        </div>
       </div>
-      <div class="homepage__banner">
-        <img src="assets/images/banner2.jpg" alt="Banner 2" />
-      </div>
-      <div class="homepage__banner">
-        <img src="assets/images/banner3.jpg" alt="Banner 3" />
-      </div>
-      <div class="homepage__banner">
-        <img src="assets/images/banner4.jpg" alt="Banner 4" />
-      </div>
+    </div>
+
+    <!-- Prev / Next arrows -->
+    <button class="banner-slider__arrow banner-slider__arrow--prev" (click)="prevBanner()" aria-label="Previous banner">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <button class="banner-slider__arrow banner-slider__arrow--next" (click)="nextBanner()" aria-label="Next banner">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+    <!-- Dot indicators (maxBannerIndex + 1 dots = banners.length - bannersPerView + 1) -->
+    <div class="banner-slider__dots">
+      <button *ngFor="let i of dotIndices" class="banner-slider__dot"
+        [class.banner-slider__dot--active]="i === currentBannerIndex" (click)="goToBanner(i)"
+        [attr.aria-label]="'Go to banner ' + (i + 1)">
+      </button>
     </div>
   </section>
-
-  <!-- Main sections -->
-  <!-- <section class="homepage__sections mar-top">
-    <div class="homepage-section">
-      <div class="homepage-section__header">
-
-        <h2 class="homepage-section__title">
-          PHIÊN ĐẤU GIÁ SẮP DIỄN RA
-        </h2>
-
-        <div class="homepage-section__subheader">
-
-          <p class="homepage-section__desc">
-            Các bất động sản đang mở đăng ký với giá tốt nhất
-          </p>
-
-          <button class="homepage-section__link">
-            Xem tất cả
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-
-        </div>
-      </div>
-      <div class="auction-grid">
-
-        <div class="auction-card" *ngFor="let item of auctionList">
-
-          <div class="auction-card__image">
-            <img [src]="item.image" />
-
-            <span class="auction-card__status">
-              {{item.status}}
-            </span>
-          </div>
-
-          <div class="auction-card__content">
-
-            <h3 class="auction-card__title">
-              {{item.title}}
-            </h3>
-
-            <div class="auction-card__meta">
-              {{item.type}} · {{item.location}}
-            </div>
-
-            <div class="auction-card__price">
-              <span class="price">{{item.price}} tỷ</span>
-              <span class="label">Khởi điểm</span>
-            </div>
-
-            <div class="auction-card__footer">
-
-              <div class="auction-card__owner">
-                <span class="avatar">LV</span>
-                {{item.owner}}
-              </div>
-
-              <button class="auction-card__btn" (click)="navToDetail(item.id)">
-                Chi tiết →
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
 
   <section class="ended-auction mar-top">
 
@@ -212,7 +116,7 @@
           CÁC BẤT ĐỘNG SẢN ĐANG MỞ ĐĂNG KÝ VỚI GIÁ TỐT NHẤT
         </p>
 
-        <button class="homepage-section__link">
+        <button class="homepage-section__link" (click)="navToListings()">
           Xem tất cả
           <i class="fa-solid fa-arrow-right"></i>
         </button>
@@ -228,8 +132,11 @@
           <div class="auction-card__image">
             <img [src]="item.image" />
 
-            <span class="endedauction-card__status">
-              {{item.status}}
+            <span class="endedauction-card__status" [ngClass]="{
+              'endedauction-card__status--upcoming': item.status === 'UPCOMING',
+              'endedauction-card__status--ongoing': item.status === 'ONGOING'
+            }">
+              {{getNoticeStatusLabel(item.status)}}
             </span>
           </div>
           <!-- <img class="ended-auction__image" [src]="item.image">
@@ -239,29 +146,37 @@
           </span> -->
           <div class="auction-card__content">
 
-            <h3 class="auction-card__title">
-              {{item.title}}
+            <h3
+              class="auction-card__title"
+              [tooltip]="item.title"
+              container="body"
+              placement="bottom"
+              [adaptivePosition]="false"
+              tooltipClass="similar-title-tooltip"
+              tabindex="0"
+            >
+              <span class="auction-card__title-text">{{item.title}}</span>
             </h3>
 
             <div class="auction-card__meta">
-              {{item.type}} · {{item.location}}
+              Trả giá lên · {{item.location}} · {{item.assetCount}} tài sản
             </div>
 
             <div class="auction-card__price">
-              <span class="price">{{item.price}} tỷ</span>
+              <span class="price">{{item.minPrice}} - {{item.maxPrice}}</span>
               <span class="label">Khởi điểm</span>
             </div>
 
             <div class="auction-card__footer">
 
               <div class="auction-card__owner">
-                <span class="avatar">LV</span>
+                <span class="avatar">{{getOwnerInitials(item.owner)}}</span>
                 {{item.owner}}
               </div>
 
-              <!-- <button class="auction-card__btn" (click)="navToDetail(item.id)">
+              <button class="auction-card__btn" (click)="navToDetail(item.id)">
                 Chi tiết →
-              </button> -->
+              </button>
             </div>
           </div>
         </div>
@@ -319,23 +234,9 @@
       Chọn loại tài sản bạn quan tâm
     </p>
 
-    <!-- Hàng 1: 3 card lớn -->
-    <div class="category-grid category-grid--row1">
-      <div class="category-card" *ngFor="let item of categories.slice(0, 3)"
-        [style.backgroundImage]="'url(' + item.image + ')'">
-        <div class="category-card__overlay"></div>
-        <div class="category-card__info">
-          <span [innerHTML]="item.svgIcon"></span>
-          <span>{{item.name}}</span>
-        </div>
-      </div>
-    </div>
-
     <!-- Hàng 2: 4 card nhỏ hơn -->
     <div class="category-grid category-grid--row2">
-      <div class="category-card" *ngFor="let item of categories.slice(3)"
-        [style.backgroundImage]="'url(' + item.image + ')'">
-        <div class="category-card__overlay"></div>
+      <div class="category-card" *ngFor="let item of categories">
         <div class="category-card__info">
           <span [innerHTML]="item.svgIcon"></span>
           <span>{{item.name}}</span>
@@ -412,7 +313,7 @@
           CÁC BẤT ĐỘNG SẢN ĐANG MỞ ĐĂNG KÝ VỚI GIÁ TỐT NHẤT
         </p>
 
-        <button class="homepage-section__link">
+        <button class="homepage-section__link" (click)="navToListings()">
           Xem tất cả
           <i class="fa-solid fa-arrow-right"></i>
         </button>
@@ -428,22 +329,28 @@
           <div class="auction-card__image">
             <img [src]="item.image" />
 
-            <span class="endedauction-card__status">
-              {{item.status}}
+            <span class="endedauction-card__status" [ngClass]="{
+              'endedauction-card__status--completed': item.status === 'COMPLETED',
+              'endedauction-card__status--canceled': item.status === 'CANCELED' || item.status === 'CANCELLED'
+            }">
+              {{getNoticeStatusLabel(item.status)}}
             </span>
           </div>
-          <!-- <img class="ended-auction__image" [src]="item.image">
-
-          <span class="auction-card__status">
-            {{item.status}}
-          </span> -->
           <div class="ended-auction__body">
 
-            <div class="ended-auction__name">
-              {{item.title}}
+            <div
+              class="ended-auction__name"
+              [tooltip]="item.title"
+              container="body"
+              placement="bottom"
+              [adaptivePosition]="false"
+              tooltipClass="similar-title-tooltip"
+              tabindex="0"
+            >
+              <span class="ended-auction__name-text">{{item.title}}</span>
             </div>
             <div class="ended-auction__location">
-              Quyền sử dụng đất • {{item.location}}
+              {{item.location}} · {{item.assetCount}} tài sản
             </div>
             <div class="ended-auction__price">
               <!-- Dòng 1 -->
@@ -459,7 +366,7 @@
                 <div class="ended-auction__left">
                   {{item.price}}
                   <span class="ended-auction__increase">
-                    ({{item.increase}})
+                    {{item.increase}}
                   </span>
                 </div>
 
@@ -472,13 +379,13 @@
             <div class="auction-card__footer">
 
               <div class="auction-card__owner">
-                <span class="avatar">LV</span>
+                <span class="avatar">{{getOwnerInitials(item.company)}}</span>
                 {{item.company}}
               </div>
 
-              <!-- <button class="auction-card__btn" (click)="navToDetail(item.id)">
+              <button class="auction-card__btn" (click)="navToDetail(item.id)">
                 Chi tiết →
-              </button> -->
+              </button>
             </div>
           </div>
         </div>

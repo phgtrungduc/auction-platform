@@ -1,0 +1,42 @@
+@if (isPopupOpen) {
+  <div class="auth-popup-overlay" (click)="closePopup()">
+    <div class="auth-popup-dialog" (click)="$event.stopPropagation()">
+      @if (currentStep === 'email') {
+        <app-auth-popup-layout [showBack]="false" (closeRequested)="closePopup()">
+          <app-auth-email-content (continueRequested)="handleEmailContinue($event)" />
+        </app-auth-popup-layout>
+      }
+
+      @if (currentStep === 'otp') {
+        <app-auth-popup-layout [showBack]="true" (closeRequested)="closePopup()" (backRequested)="handleOtpBack()">
+          <app-auth-otp-content
+            [email]="submittedEmail"
+            [initialSeconds]="remainingOtpSeconds"
+            (verifyRequested)="handleOtpVerify($event)"
+            (resendRequested)="handleOtpResend()"
+          />
+        </app-auth-popup-layout>
+      }
+
+      @if (currentStep === 'register') {
+        <app-auth-popup-layout
+          [showBack]="true"
+          (closeRequested)="closePopup()"
+          (backRequested)="handleRegisterBack()"
+        >
+          <app-auth-register-content (registerRequested)="handleRegisterSubmit($event)" />
+        </app-auth-popup-layout>
+      }
+
+      @if (currentStep === 'password') {
+        <app-auth-popup-layout
+          [showBack]="true"
+          (closeRequested)="closePopup()"
+          (backRequested)="handlePasswordBack()"
+        >
+          <app-auth-password-content (submitRequested)="handlePasswordSubmit()" />
+        </app-auth-popup-layout>
+      }
+    </div>
+  </div>
+}

@@ -6,7 +6,7 @@ export const AUTH_ROUTES: Routes = [
     path: 'login',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./pages/login/login.component').then(m => m.LoginComponent),
+      import('./pages/auth-popup/auth-popup.component').then(m => m.AuthPopupComponent),
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];

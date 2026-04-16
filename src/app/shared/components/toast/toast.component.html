@@ -1,0 +1,9 @@
+<div class="toast-container">
+  <div *ngFor="let toast of toasts" class="toast-item" [ngClass]="'toast-' + toast.status + '-custom'"
+    (click)="removeToast(toast.id)">
+    <div class="toast-content">
+      <div class="toast-title" *ngIf="toast.title">{{ toast.title }}</div>
+      <div class="toast-message" [ngClass]="{'no-title': !toast.title}">{{ toast.message }}</div>
+    </div>
+  </div>
+</div>

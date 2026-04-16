@@ -58,7 +58,7 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/auction-platform/"
+              "baseHref": "/"
             },
             "development": {
               "optimization": false,

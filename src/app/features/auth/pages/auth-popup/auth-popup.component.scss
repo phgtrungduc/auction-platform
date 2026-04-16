@@ -1,0 +1,14 @@
+.auth-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 24, 40, 0.38);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 999;
+}
+
+.auth-popup-dialog {
+  width: min(100%, 1120px);
+}
