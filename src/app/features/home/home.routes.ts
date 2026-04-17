@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from '../../core/guards/auth.guard';
 
 export const HOME_ROUTES: Routes = [
   {
@@ -15,5 +16,11 @@ export const HOME_ROUTES: Routes = [
     path: 'product-detail/:id',
     loadComponent: () =>
       import('./pages/product-detail/product-detail.component').then(m => m.ProductDetailComponent)
+  },
+  {
+    path: 'favourites-notices',
+    canActivate: [authGuard],
+    loadChildren: () =>
+      import('../favourites-notices/favourites-notices.routes').then(m => m.FAVOURITES_NOTICES_ROUTES)
   }
 ];

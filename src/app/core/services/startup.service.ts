@@ -21,7 +21,25 @@ export class StartupService {
   }
 
   private restoreSession(): void {
-    const bearerToken = localStorage.getItem('BearerToken') ?? '';
+    const bearerToken = localStorage.getItem('BearerToken');
+    
+    if (!bearerToken) {
+      return;
+    }
+    
+    try {
+      const payload = JSON.parse(atob(bearerToken.split('.')[1]));
+      if (payload.exp && payload.exp * 1000 < Date.now()) {
+        localStorage.removeItem('BearerToken');
+        localStorage.removeItem('User');
+        return;
+      }
+    } catch {
+      localStorage.removeItem('BearerToken');
+      localStorage.removeItem('User');
+      return;
+    }
+
     this.store.dispatch(LoadBearerTokenAction({ bearerToken }));
 
     const rawUser = localStorage.getItem('User');

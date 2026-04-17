@@ -4,6 +4,11 @@ export const API_ENDPOINTS = {
         GET_DETAIL: '/marketplace',
         ADVANCED_SEARCH: '/marketplace/advanced-search'
     },
+    USER_FAVORITES: {
+        GET_LIST: '/user-favorites',
+        CREATE: '/user-favorites',
+        DELETE: '/user-favorites'
+    },
     CATEGORY: {
         GET_ASSET_CATEGORIES: '/categories/assets',
         GET_LEGAL_CATEGORIES: '/categories/legal'

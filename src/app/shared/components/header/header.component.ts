@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { BaseComponent } from '../../../core/base/base.component';
 import { Router } from '@angular/router';
 import { AuthPopupComponent } from '../../../features/auth/pages/auth-popup/auth-popup.component';
-import { getUsername } from '../../../store/app-state';
+import { selectIsLoggedIn, getUsername } from '../../../store/app-state';
 import { AuthService } from '../../../features/auth/services/auth.service';
 
 export interface CategoryItem {
@@ -25,6 +25,7 @@ export class HeaderComponent extends BaseComponent {
 
   isMenuOpen = false;
   username$ = this.store.select(getUsername);
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
 
   categories: CategoryItem[] = [];
 
@@ -44,5 +45,8 @@ export class HeaderComponent extends BaseComponent {
 
   logout(): void {
     this.authService.logout();
+  }
+  redirectToFavourites(){
+    this.router.navigate(['/favourites-notices']);
   }
 }
