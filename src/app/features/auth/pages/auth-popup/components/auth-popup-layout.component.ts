@@ -9,11 +9,16 @@ import { AuthBrandLogoComponent } from './auth-brand-logo.component';
   template: `
     <div class="layout-shell">
       <div class="layout-left">
-        <img src="assets/images/login-layout-img.png" alt="Login layout image" />
+        <img
+          src="assets/images/login-layout-img.png"
+          alt="Login layout image"
+        />
       </div>
 
       <div class="layout-right">
-        <button class="close-btn" type="button" (click)="closeRequested.emit()">&#215;</button>
+        <button class="close-btn" type="button" (click)="closeRequested.emit()">
+          &#215;
+        </button>
         <div class="brand-block">
           <app-auth-brand-logo />
         </div>
@@ -45,6 +50,13 @@ import { AuthBrandLogoComponent } from './auth-brand-logo.component';
       border-radius: 8px;
       overflow: hidden;
       background: #fff;
+      display: grid;
+      grid-template-columns: minmax(300px, 1fr) minmax(360px, 1fr);
+      gap: 18px;
+      padding: 14px;
+
+      width: 100%;
+      height: 100%; /* QUAN TRỌNG */
     }
 
     .layout-left img {
@@ -97,7 +109,7 @@ import { AuthBrandLogoComponent } from './auth-brand-logo.component';
       justify-items: stretch;
       padding-right: 8px;
     }
-
+    
     @media (max-width: 991px) {
       .layout-shell {
         grid-template-columns: 1fr;
@@ -110,6 +122,7 @@ import { AuthBrandLogoComponent } from './auth-brand-logo.component';
 
       .layout-right {
         padding-right: 0;
+        padding-bottom: 32px;
       }
     }
   `,

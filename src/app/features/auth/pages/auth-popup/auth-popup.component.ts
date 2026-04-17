@@ -9,6 +9,7 @@ import { AuthPopupLayoutComponent } from './components/auth-popup-layout.compone
 import { AuthRegisterContentComponent } from './components/auth-register-content.component';
 import { AuthService } from '../../services/auth.service';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { LoadingOverlayComponent } from '../../../../shared/components/loading-overlay/loading-overlay.component';
 
 type AuthPopupStep = 'email' | 'otp' | 'register' | 'password';
 
@@ -22,6 +23,7 @@ type AuthPopupStep = 'email' | 'otp' | 'register' | 'password';
     AuthOtpContentComponent,
     AuthRegisterContentComponent,
     AuthPasswordContentComponent,
+    LoadingOverlayComponent,
   ],
   templateUrl: './auth-popup.component.html',
   styleUrl: './auth-popup.component.scss',
@@ -30,7 +32,7 @@ export class AuthPopupComponent {
   isPopupOpen = false;
   currentStep: AuthPopupStep = 'email';
   submittedEmail = '';
-  remainingOtpSeconds = 56;
+  remainingOtpSeconds = 600;
   registrationToken = '';
   isSubmitting = false;
 
@@ -44,7 +46,7 @@ export class AuthPopupComponent {
     this.isPopupOpen = true;
     this.currentStep = 'email';
     this.submittedEmail = '';
-    this.remainingOtpSeconds = 56;
+    this.remainingOtpSeconds = 600;
     this.registrationToken = '';
     this.isSubmitting = false;
   }

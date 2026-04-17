@@ -1,40 +1,61 @@
 @if (isPopupOpen) {
   <div class="auth-popup-overlay" (click)="closePopup()">
     <div class="auth-popup-dialog" (click)="$event.stopPropagation()">
-      @if (currentStep === 'email') {
-        <app-auth-popup-layout [showBack]="false" (closeRequested)="closePopup()">
-          <app-auth-email-content (continueRequested)="handleEmailContinue($event)" />
+      @if (currentStep === "email") {
+        <app-auth-popup-layout
+          [showBack]="false"
+          (closeRequested)="closePopup()"
+        >
+          <app-loading-overlay [loading]="isSubmitting">
+            <app-auth-email-content
+              (continueRequested)="handleEmailContinue($event)"
+            />
+          </app-loading-overlay>
         </app-auth-popup-layout>
       }
 
-      @if (currentStep === 'otp') {
-        <app-auth-popup-layout [showBack]="true" (closeRequested)="closePopup()" (backRequested)="handleOtpBack()">
-          <app-auth-otp-content
-            [email]="submittedEmail"
-            [initialSeconds]="remainingOtpSeconds"
-            (verifyRequested)="handleOtpVerify($event)"
-            (resendRequested)="handleOtpResend()"
-          />
+      @if (currentStep === "otp") {
+        <app-auth-popup-layout
+          [showBack]="true"
+          (closeRequested)="closePopup()"
+          (backRequested)="handleOtpBack()"
+        >
+          <app-loading-overlay [loading]="isSubmitting">
+            <app-auth-otp-content
+              [email]="submittedEmail"
+              [initialSeconds]="remainingOtpSeconds"
+              (verifyRequested)="handleOtpVerify($event)"
+              (resendRequested)="handleOtpResend()"
+            />
+          </app-loading-overlay>
         </app-auth-popup-layout>
       }
 
-      @if (currentStep === 'register') {
+      @if (currentStep === "register") {
         <app-auth-popup-layout
           [showBack]="true"
           (closeRequested)="closePopup()"
           (backRequested)="handleRegisterBack()"
         >
-          <app-auth-register-content (registerRequested)="handleRegisterSubmit($event)" />
+          <app-loading-overlay [loading]="isSubmitting">
+            <app-auth-register-content
+              (registerRequested)="handleRegisterSubmit($event)"
+            />
+          </app-loading-overlay>
         </app-auth-popup-layout>
       }
 
-      @if (currentStep === 'password') {
+      @if (currentStep === "password") {
         <app-auth-popup-layout
           [showBack]="true"
           (closeRequested)="closePopup()"
           (backRequested)="handlePasswordBack()"
         >
-          <app-auth-password-content (submitRequested)="handlePasswordSubmit($event)" />
+          <app-loading-overlay [loading]="isSubmitting">
+            <app-auth-password-content
+              (submitRequested)="handlePasswordSubmit($event)"
+            />
+          </app-loading-overlay>
         </app-auth-popup-layout>
       }
     </div>

@@ -1,0 +1,9 @@
+<div class="loading-container" [class.is-loading]="loading">
+    <ng-content></ng-content>
+  
+    @if (loading) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+      </div>
+    }
+  </div>
