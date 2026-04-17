@@ -19,6 +19,8 @@ import { CommonModule } from '@angular/common';
         <input
           [(ngModel)]="email"
           type="email"
+          name="email"
+          autocomplete="email"
           placeholder="Nhập email"
           (blur)="emailTouched = true"
           (keydown.enter)="onEnter()"
