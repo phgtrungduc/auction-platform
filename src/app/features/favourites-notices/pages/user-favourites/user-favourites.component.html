@@ -1,0 +1,80 @@
+<div class="page">
+  <section class="page__content">
+    <h3 class="page__title">Tài sản quan tâm</h3>
+    <p class="page__subtitle">Tài sản đã quan tâm ({{ totalCount }})</p>
+
+    <div class="grid" *ngIf="isFilterLoading">
+      <div class="card card--skeleton" *ngFor="let _ of [1,2,3,4,5,6,7,8]">
+        <div class="skeleton-img"></div>
+        <div class="card__body">
+          <div class="skeleton-line w80"></div>
+          <div class="skeleton-line w50"></div>
+          <div class="skeleton-line w40"></div>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!isFilterLoading">
+      <ng-container *ngIf="notices.length > 0; else emptyState">
+        <div class="grid">
+          <div class="card" *ngFor="let item of notices">
+            <div class="card__image-wrap">
+              <div class="card__image-inner">
+                <img [src]="getNoticeImage(item)" alt="" />
+              </div>
+              <span class="card__badge badge" [ngClass]="getStatusClassByCode(item.status)">
+                {{ getNoticeStatusLabel(item.status) }}
+              </span>
+              <span class="endedauction-card__status_favourite">
+                <div class="heart-btn" [class.active]="item.isLiked" (click)="toggleFavorite(item, $event)">
+                  <svg viewBox="0 0 24 24" class="heart-icon">
+                    <path d="M12 21C12 21 4 16 4 10C4 7 6 5 8.5 5C10.3 5 11.4 6 12 7C12.6 6 13.7 5 15.5 5C18 5 20 7 20 10C20 16 12 21 12 21Z"/>
+                  </svg>
+                </div>
+              </span>
+            </div>
+
+            <div class="card__body" (click)="navToDetail(item.noticeId)">
+              <h4 class="card__title" [tooltip]="item.title" container="body" placement="bottom"
+              [adaptivePosition]="false" tooltipClass="similar-title-tooltip" tabindex="0">{{ formatNoticeTitle(item.title) }}</h4>
+
+              <div class="card__meta-row">
+                <span>Yêu thích lúc {{ item.createdAt | date: 'dd/MM/yyyy' }}</span>
+              </div>
+
+              <p class="card__price">{{ formatNoticePriceLine(item) }}</p>
+
+              <div class="card__divider" role="presentation"></div>
+
+              <div class="card__footer">
+                <div class="auction-card__owner">
+                  <span class="avatar">{{ getOwnerInitials(item.auctionOrgName) }}</span>
+                  <span class="card__org-name">{{ item.auctionOrgName || 'Không xác định' }}</span>
+                </div>
+                <button type="button" class="btn btn--detail"
+                  (click)="navToDetail(item.noticeId); $event.stopPropagation()">
+                  <span>Chi tiết</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <app-pagination *ngIf="totalPages > 1" [(page)]="currentPage" (pageChange)="onPageChange($event)" [totalPages]="totalPages">
+        </app-pagination>
+      </ng-container>
+
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <img src="assets/images/not-found-listing_V2.png" alt="Không tìm thấy" />
+          <p>Bạn chưa có tài sản yêu thích nào</p>
+        </div>
+      </ng-template>
+    </ng-container>
+  </section>
+</div>

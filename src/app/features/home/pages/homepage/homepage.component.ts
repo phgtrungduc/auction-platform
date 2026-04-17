@@ -17,6 +17,10 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CategoryStore } from '../../../../store/category/category.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AssetCategory } from '../../../../core/models/category.model';
+import { UserFavoriteStore } from '../../../../store/user-favorite/user-favorite.store';
+import { selectIsLoggedIn } from '../../../../store/app-state';
+import { LoggerService } from '../../../../core/services/logger.service';
+
 
 @Component({
   selector: 'app-homepage',
@@ -163,7 +167,10 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   private dvhcStore = inject(DvhcStore);
   private assetStore = inject(AssetStore);
   private categoryStore = inject(CategoryStore);
+  private userFavoriteStore = inject(UserFavoriteStore);
   private destroyRef = inject(DestroyRef);
+  private logger = inject(LoggerService);
+  //protected store = inject(Store);
 
   selectedLocationValue: any = null;
   optionsLocation: { label: string, value: any }[] = [];
@@ -206,6 +213,13 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       .subscribe((items) => {
         this.endedAuctions = (items ?? []).map((item) => this.mapNoticeToEndedItem(item));
       });
+
+    this.userFavoriteStore.lastMutation$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((m) => {
+        if (!m) return;
+        this.applyFavoriteMutationToLists(m.noticeId, m.isLiked, m.favoriteId);
+      });
   }
 
   private mapNoticeToAuctionItem(item: NoticeSearchDocument): AuctionItem {
@@ -221,6 +235,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       status: item.status,
       assetCount: item.assetCount,
       isLiked: false,
+      favoriteId: undefined,
     };
   }
 
@@ -237,6 +252,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       status: item.status,
       assetCount: item.assetCount,
       isLiked: false,
+      favoriteId: undefined,
     };
   }
 
@@ -444,10 +460,10 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   formatPrice(price: number | null | undefined): string {
     if (price == null) return 'Không xác định';
-    if (price < 100000000) {
-      return (price / 1000000).toFixed(2) + ' triệu';
+    if (price < 100_000_000) {
+      return (price / 1_000_000).toFixed(2) + ' triệu';
     }
-    return (price / 1000000000).toFixed(2) + ' tỷ';
+    return (price / 1_000_000_000).toFixed(2) + ' tỷ';
   }
 
   getNoticeStatusLabel(status: string | undefined): string {
@@ -472,6 +488,44 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       .map(w => w[0].toUpperCase())
       .join('');
   }
+
+  toggleFavorite(item: { id: number; isLiked: boolean; favoriteId?: number }, event?: Event): void {
+    event?.stopPropagation();
+    event?.preventDefault();
+
+    let isLoggedIn = false;
+    this.store.select(selectIsLoggedIn).subscribe(v => isLoggedIn = v).unsubscribe();
+
+    if (!isLoggedIn) {
+      this.logger.info('Vui lòng đăng nhập để thực hiện chức năng này!');
+      return;
+    }
+
+    const noticeId = item.id;
+    if (!noticeId) return;
+
+    item.isLiked = !item.isLiked;
+
+    if (!item.isLiked) {
+      this.userFavoriteStore.removeFavorite$({ noticeId, favoriteId: item.favoriteId });
+      return;
+    }
+
+    this.userFavoriteStore.addFavorite$(noticeId);
+  }
+
+  private applyFavoriteMutationToLists(noticeId: number, isLiked: boolean, favoriteId?: number): void {
+    this.auctionList = this.auctionList.map((it) =>
+      it.id === noticeId
+        ? { ...it, isLiked, favoriteId: isLiked ? favoriteId : undefined }
+        : it
+    );
+    this.endedAuctions = this.endedAuctions.map((it) =>
+      it.id === noticeId
+        ? { ...it, isLiked, favoriteId: isLiked ? favoriteId : undefined }
+        : it
+    );
+  }
 }
 interface AuctionItem {
   id: number;
@@ -485,6 +539,7 @@ interface AuctionItem {
   status: string;
   assetCount: number;
   isLiked: boolean;
+  favoriteId?: number;
 }
 
 interface EndedAuctionItem {
@@ -499,4 +554,5 @@ interface EndedAuctionItem {
   status: string;
   assetCount: number;
   isLiked: boolean;
+  favoriteId?: number;
 }

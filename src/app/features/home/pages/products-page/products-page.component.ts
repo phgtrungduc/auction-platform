@@ -15,6 +15,10 @@ import { Dvhc } from '../../../../core/models/dvhc.model';
 import { AssetCategory, LegalCategory } from '../../../../core/models/category.model';
 import { AssetService } from '../../../../core/services/asset.service';
 import { AdvancedSearchRequest, AdvancedTimeFilter, NoticeSearchDocument } from '../../../../core/models/asset.model';
+import { UserFavoriteStore } from '../../../../store/user-favorite/user-favorite.store';
+import { Store } from '@ngrx/store';
+import { selectIsLoggedIn } from '../../../../store/app-state';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 type NoticeStatusCode = 'UPCOMING' | 'ONGOING' | 'COMPLETED' | 'CANCELLED';
 
@@ -72,7 +76,10 @@ export class ProductsPageComponent implements OnInit {
   private categoryStore = inject(CategoryStore);
   private dvhcStore = inject(DvhcStore);
   private assetService = inject(AssetService);
+  private userFavoriteStore = inject(UserFavoriteStore);
   private destroyRef = inject(DestroyRef);
+  private logger = inject(LoggerService);
+  private store = inject(Store);
 
   @ViewChild('priceSliderTrack') priceSliderTrackRef?: ElementRef<HTMLElement>;
 
@@ -172,6 +179,7 @@ export class ProductsPageComponent implements OnInit {
   totalCount: number = 0;
   readonly pageSize = 20;
   notices: NoticeSearchDocument[] = [];
+  private favoriteIdByNoticeId: Record<number, number> = {};
 
   isAdvancedFilterOpen = false;
 
@@ -611,6 +619,13 @@ export class ProductsPageComponent implements OnInit {
 
     this.syncPriceInputStrings();
 
+    this.userFavoriteStore.lastMutation$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((m) => {
+        if (!m) return;
+        this.applyFavoriteMutation(m.noticeId, m.isLiked, m.favoriteId);
+      });
+
     this.fetchPage();
   }
 
@@ -800,5 +815,45 @@ export class ProductsPageComponent implements OnInit {
       .slice(0, 2)
       .map(w => w[0].toUpperCase())
       .join('');
+  }
+
+  toggleFavorite(item: NoticeSearchDocument, event?: Event): void {
+    event?.stopPropagation();
+    event?.preventDefault();
+
+    let isLoggedIn = false;
+    this.store.select(selectIsLoggedIn).subscribe(v => isLoggedIn = v).unsubscribe();
+
+    if (!isLoggedIn) {
+      this.logger.info('Vui lòng đăng nhập để thực hiện chức năng này!');
+      return;
+    }
+
+    const noticeId = item.noticeId;
+    if (!noticeId) return;
+    item.isLiked = !item.isLiked;
+
+    if (!item.isLiked) {
+      this.userFavoriteStore.removeFavorite$({
+        noticeId,
+        favoriteId: this.favoriteIdByNoticeId[noticeId]
+      });
+      return;
+    }
+
+    this.userFavoriteStore.addFavorite$(noticeId);
+  }
+
+  private applyFavoriteMutation(noticeId: number, isLiked: boolean, favoriteId?: number): void {
+    this.notices = (this.notices ?? []).map((it) => {
+      if (it.noticeId !== noticeId) return it;
+      return { ...it, isLiked };
+    });
+
+    if (isLiked && favoriteId) {
+      this.favoriteIdByNoticeId[noticeId] = favoriteId;
+      return;
+    }
+    delete this.favoriteIdByNoticeId[noticeId];
   }
 }

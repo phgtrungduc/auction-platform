@@ -2,9 +2,14 @@ import { HttpErrorResponse, HttpEvent, HttpEventType, HttpHandlerFn, HttpRequest
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { ServiceLocator } from '../base/service-locator';
 import { Router } from '@angular/router';
+import { LoggerService } from '@core/services/logger.service';
+import { Store } from '@ngrx/store';
+import { ClearSessionAction } from '../../store/session/session.action';
+import { ClearUserAction } from '../../store/user/user.action';
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   const router = ServiceLocator.injector.get(Router);
+  const logger = ServiceLocator.injector.get(LoggerService);
   const isAuthPublicEndpoint =
     req.url.includes('login') ||
     req.url.includes('register') ||
@@ -25,7 +30,12 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           localStorage.removeItem('BearerToken');
-          router.navigate(['/auth/login']);
+          localStorage.removeItem('User');
+          const store = ServiceLocator.injector.get(Store);
+          store.dispatch(ClearSessionAction());
+          store.dispatch(ClearUserAction());
+          logger.info("Cần đăng nhập để sử dụng chức năng này!");
+          //router.navigate(['/']);
         }
         return throwError(() => error);
       }),

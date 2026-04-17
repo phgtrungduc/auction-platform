@@ -7,7 +7,10 @@ import { AdvancedSearchRequest, MarketplaceNoticeDetail, NoticeSearchDocument } 
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ToastService } from '@core/services/toast.service';
 import { LoadingOverlayComponent } from '@shared/components/loading-overlay/loading-overlay.component';
-
+import { UserFavoriteStore } from '../../../../store/user-favorite/user-favorite.store';
+import { Store } from '@ngrx/store';
+import { selectIsLoggedIn } from '../../../../store/app-state';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -20,8 +23,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   public assetStore = inject(AssetStore);
+  private userFavoriteStore = inject(UserFavoriteStore);
   private toastService = inject(ToastService);
   private destroy$ = new Subject<void>();
+  private logger = inject(LoggerService);
+  private store = inject(Store);
 
   product: MarketplaceNoticeDetail | null = null;
   expandedAssets: boolean[] = [];
@@ -98,6 +104,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.similarProducts = (items ?? []).map((x) => this.mapNoticeToSimilarProduct(x));
       });
 
+    this.userFavoriteStore.lastMutation$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((m) => {
+        if (!m) return;
+        this.applyFavoriteMutationToSimilar(m.noticeId, m.isLiked, m.favoriteId);
+      });
+
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -163,15 +176,16 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       owner: item.auctionOrgName,
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       isLiked: false,
+      favoriteId: undefined,
     };
   }
 
   private formatToTy(value: number | null | undefined): string {
     if (value == null) return '—';
-    if (value < 100000000) {
-      return (value / 1000000).toFixed(2) + ' triệu';
+    if (value < 100_000_000) {
+      return (value / 1_000_000).toFixed(2) + ' triệu';
     }
-    return (value / 1000000000).toFixed(2) + ' tỷ';
+    return (value / 1_000_000_000).toFixed(2) + ' tỷ';
   }
 
   getStatusClass(status: string): string {
@@ -239,6 +253,38 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     if (id) {
       this.router.navigate(['/product-detail', id]);
     }
+  }
+
+  toggleFavorite(item: SimilarProductItem, event?: Event): void {
+    event?.stopPropagation();
+    event?.preventDefault();
+
+    let isLoggedIn = false;
+    this.store.select(selectIsLoggedIn).subscribe(v => isLoggedIn = v).unsubscribe();
+
+    if (!isLoggedIn) {
+      this.logger.info('Vui lòng đăng nhập để thực hiện chức năng này!');
+      return;
+    }
+
+    const noticeId = Number(item.id);
+    if (!Number.isFinite(noticeId) || noticeId <= 0) return;
+    item.isLiked = !item.isLiked;
+
+    if (!item.isLiked) {
+      this.userFavoriteStore.removeFavorite$({ noticeId, favoriteId: item.favoriteId });
+      return;
+    }
+
+    this.userFavoriteStore.addFavorite$(noticeId);
+  }
+
+  private applyFavoriteMutationToSimilar(noticeId: number, isLiked: boolean, favoriteId?: number): void {
+    this.similarProducts = (this.similarProducts ?? []).map((it) => {
+      const idNum = Number(it.id);
+      if (idNum !== noticeId) return it;
+      return { ...it, isLiked, favoriteId: isLiked ? favoriteId : undefined };
+    });
   }
 
   isDragging = false;
@@ -346,4 +392,5 @@ interface SimilarProductItem {
   owner: string;
   image: string;
   isLiked: boolean;
+  favoriteId?: number;
 }
