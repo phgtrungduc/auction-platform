@@ -176,8 +176,15 @@ export class AuthPopupComponent {
           //this.router.navigate(['/']);
           this.isSubmitting = false;
         },
-        error: () => {
-          this.logger.error('Đăng nhập thất bại. Vui lòng thử lại.');
+        error: (error: unknown) => {
+          const httpError = error as HttpErrorResponse | null;
+          const errorBody = (httpError?.error ?? {}) as { message?: string };
+          const apiMessage = errorBody.message?.trim() ?? '';
+          if (apiMessage === 'Email hoặc mật khẩu không đúng.') {
+            this.logger.error('Mật khẩu không chính xác');
+          } else {
+            this.logger.error('Đăng nhập thất bại. Vui lòng thử lại.');
+          }
           this.isSubmitting = false;
         },
       });

@@ -60,6 +60,10 @@ export class UserFavoriteStore extends ImmerComponentStore<UserFavoriteState> {
   mutateLoading$ = this.select((s) => s.mutateLoading);
   lastMutation$ = this.select((s) => s.lastMutation);
 
+  getFavoriteIdForNotice(noticeId: number): number | undefined {
+    return this.get((s) => s.favoriteIdByNoticeId[noticeId]);
+  }
+
   readonly getListData$ = this.effect<UserFavoritesQueryParams>(($) =>
     $.pipe(
       tap(() => {

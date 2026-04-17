@@ -234,8 +234,8 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       status: item.status,
       assetCount: item.assetCount,
-      isLiked: false,
-      favoriteId: undefined,
+      isLiked: item.isFavorite,
+      favoriteId: item.favoriteId ?? undefined,
     };
   }
 
@@ -251,8 +251,8 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       status: item.status,
       assetCount: item.assetCount,
-      isLiked: false,
-      favoriteId: undefined,
+      isLiked: item.isFavorite,
+      favoriteId: item.favoriteId ?? undefined,
     };
   }
 
@@ -504,7 +504,13 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     const noticeId = item.id;
     if (!noticeId) return;
 
+    console.log('item', item);
+    
+
     item.isLiked = !item.isLiked;
+
+    console.log('item.isLiked', item.isLiked);
+    
 
     if (!item.isLiked) {
       this.userFavoriteStore.removeFavorite$({ noticeId, favoriteId: item.favoriteId });
