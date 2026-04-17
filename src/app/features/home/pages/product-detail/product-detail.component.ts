@@ -6,12 +6,13 @@ import { Subject, takeUntil } from 'rxjs';
 import { AdvancedSearchRequest, MarketplaceNoticeDetail, NoticeSearchDocument } from '../../../../core/models/asset.model';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ToastService } from '@core/services/toast.service';
+import { LoadingOverlayComponent } from '@shared/components/loading-overlay/loading-overlay.component';
 
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, TooltipModule],
+  imports: [CommonModule, TooltipModule, LoadingOverlayComponent],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })
@@ -121,7 +122,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       price: `${this.formatToTy(item.minStartingPrice)} - ${this.formatToTy(item.maxStartingPrice)}`,
       status: item.status,
       owner: item.auctionOrgName,
-      image: 'assets/images/product-sample-1.jpg'
+      image: 'assets/images/product-sample-1.jpg',
+      isLiked: false,
     };
   }
 
@@ -293,4 +295,5 @@ interface SimilarProductItem {
   status: string;
   owner: string;
   image: string;
+  isLiked: boolean;
 }

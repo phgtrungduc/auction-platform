@@ -138,13 +138,20 @@
             }">
               {{getNoticeStatusLabel(item.status)}}
             </span>
+            <span class="endedauction-card__status_favourite">
+              <div class="heart-btn" [class.active]="item.isLiked" (click)="item.isLiked = !item.isLiked">
+                <svg viewBox="0 0 24 24" class="heart-icon">
+                  <path d="M12 21C12 21 4 16 4 10C4 7 6 5 8.5 5C10.3 5 11.4 6 12 7C12.6 6 13.7 5 15.5 5C18 5 20 7 20 10C20 16 12 21 12 21Z"/>
+                </svg>
+              </div>
+            </span>
           </div>
           <!-- <img class="ended-auction__image" [src]="item.image">
 
           <span class="auction-card__status">
             {{item.status}}
           </span> -->
-          <div class="auction-card__content">
+          <div class="auction-card__content" (click)="navToDetail(item.id)">
 
             <h3
               class="auction-card__title"
@@ -335,8 +342,15 @@
             }">
               {{getNoticeStatusLabel(item.status)}}
             </span>
+            <span class="endedauction-card__status_favourite">
+              <div class="heart-btn" [class.active]="item.isLiked" (click)="item.isLiked = !item.isLiked">
+                <svg viewBox="0 0 24 24" class="heart-icon">
+                  <path d="M12 21C12 21 4 16 4 10C4 7 6 5 8.5 5C10.3 5 11.4 6 12 7C12.6 6 13.7 5 15.5 5C18 5 20 7 20 10C20 16 12 21 12 21Z"/>
+                </svg>
+              </div>
+            </span>
           </div>
-          <div class="ended-auction__body">
+          <div class="ended-auction__body" (click)="navToDetail(item.id)">
 
             <div
               class="ended-auction__name"

@@ -304,7 +304,7 @@
 .badge {
   position: absolute;
   top: 8px;
-  right: 8px;
+  left: 8px;
   font-size: 11px;
   padding: 4px 8px;
   border-radius: 6px;
@@ -333,7 +333,7 @@
 .card .card__badge {
   position: absolute;
   top: 17px;
-  right: 17px;
+  left: 17px;
   z-index: 1;
   padding: 4px 8px;
   border-radius: 20px;
@@ -342,6 +342,50 @@
   line-height: 1.4;
   color: #fbfeff;
   white-space: nowrap;
+}
+
+.endedauction-card__status_favourite {
+  position: absolute;
+  top: 17px;
+  right: 17px;
+  
+  .heart-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #c7d6d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  
+    .heart-icon {
+      width: 16px;
+      height: 16px;
+      fill: transparent;
+      stroke: #000;
+      stroke-width: 1.8;
+      transition: all 0.2s ease;
+    }
+  
+    &.active {
+      background: #dfeaed;
+  
+      .heart-icon {
+        fill: #e53935;
+        stroke: #e53935;
+      }
+    }
+    &.active {
+      animation: pop 0.2s ease;
+    }
+    
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+  }
 }
 
 .card--skeleton {
