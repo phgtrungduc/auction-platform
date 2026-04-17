@@ -14,8 +14,8 @@ import {
   VerifyOtpResponse,
 } from '../models/auth.model';
 import { AppStates } from '../../../store/app-state';
-import { LoadBearerTokenAction } from '../../../store/session/session.action';
-import { SetUserAction } from '../../../store/user/user.action';
+import { ClearSessionAction, LoadBearerTokenAction } from '../../../store/session/session.action';
+import { ClearUserAction, SetUserAction } from '../../../store/user/user.action';
 
 @Injectable({
   providedIn: 'root',
@@ -79,6 +79,8 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('BearerToken');
     localStorage.removeItem('User');
+    this.store.dispatch(ClearSessionAction());
+    this.store.dispatch(ClearUserAction());
   }
 
   private persistAuthSession(token: string, user: { username: string; role: number }): void {

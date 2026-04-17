@@ -100,6 +100,7 @@ export interface NoticeSearchDocument {
   firstAssetCategoryId?: number;
   firstAssetCategoryName?: string;
   firstAssetCategoryRefId?: string;
+  isLiked : boolean;
 }
 
 export interface AdvancedSearchResponse {
