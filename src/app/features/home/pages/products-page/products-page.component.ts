@@ -712,17 +712,32 @@ export class ProductsPageComponent implements OnInit {
     const max = item.maxStartingPrice;
     const minOk = min != null && Number.isFinite(min);
     const maxOk = max != null && Number.isFinite(max);
-    const minS = minOk ? (min as number / 1_000_000_000).toFixed(2) : null;
-    const maxS = maxOk ? (max as number / 1_000_000_000).toFixed(2) : null;
-    if (minS && maxS && min !== max) {
-      return `${minS} - ${maxS} tỷ`;
+    if (min < 100_000_000) {
+      const minS = minOk ? (min as number / 1_000_000).toFixed(2) : null;
+      const maxS = maxOk ? (max as number / 1_000_000).toFixed(2) : null;
+      if (minS && maxS && min !== max) {
+        return `${minS} - ${maxS} triệu`;
+      }
+      if (minS) {
+        return `${minS} triệu`;
+      }
+      if (maxS) {
+        return `${maxS} triệu`;
+      }
+    } else {
+      const minS = minOk ? (min as number / 1_000_000_000).toFixed(2) : null;
+      const maxS = maxOk ? (max as number / 1_000_000_000).toFixed(2) : null;
+      if (minS && maxS && min !== max) {
+        return `${minS} - ${maxS} tỷ`;
+      }
+      if (minS) {
+        return `${minS} tỷ`;
+      }
+      if (maxS) {
+        return `${maxS} tỷ`;
+      }
     }
-    if (minS) {
-      return `${minS} tỷ`;
-    }
-    if (maxS) {
-      return `${maxS} tỷ`;
-    }
+
     return 'Không xác định';
   }
 

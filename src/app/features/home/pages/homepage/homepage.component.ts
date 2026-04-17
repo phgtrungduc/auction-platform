@@ -220,7 +220,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       status: item.status,
       assetCount: item.assetCount,
-      isLiked : false,
+      isLiked: false,
     };
   }
 
@@ -236,7 +236,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       status: item.status,
       assetCount: item.assetCount,
-      isLiked : false,
+      isLiked: false,
     };
   }
 
@@ -444,7 +444,10 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   formatPrice(price: number | null | undefined): string {
     if (price == null) return 'Không xác định';
-    return (price / 1000000000).toFixed(1) + ' tỷ';
+    if (price < 100000000) {
+      return (price / 1000000).toFixed(2) + ' triệu';
+    }
+    return (price / 1000000000).toFixed(2) + ' tỷ';
   }
 
   getNoticeStatusLabel(status: string | undefined): string {
@@ -481,7 +484,7 @@ interface AuctionItem {
   image: string;
   status: string;
   assetCount: number;
-  isLiked : boolean;
+  isLiked: boolean;
 }
 
 interface EndedAuctionItem {
@@ -495,5 +498,5 @@ interface EndedAuctionItem {
   image: string;
   status: string;
   assetCount: number;
-  isLiked : boolean;
+  isLiked: boolean;
 }

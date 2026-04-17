@@ -33,6 +33,45 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   countdownSeconds: string = '00';
   isDocSaleExpired: boolean = false;
   private timerInterval: any;
+  private readonly defaultNoticeImage = 'assets/images/product-sample-1.jpg';
+  private readonly categoryImageByRefId: Record<string, string> = {
+    REAL_ESTATE: 'assets/images/bds.png',
+    VEHICLE: 'assets/images/xeco.png',
+    MACHINERY: 'assets/images/maymoc.png',
+    GOODS: 'assets/images/hanghoa.png',
+    HOUSEHOLD: 'assets/images/dodung.png',
+
+    RE_DAT_O: 'assets/images/dato.png',
+    RE_DAT_NONG_NGHIEP: 'assets/images/datnongnghiep.png',
+    RE_NHA_PHO: 'assets/images/nhapho.png',
+    RE_CAN_HO: 'assets/images/canho.png',
+    RE_NHA_XUONG: 'assets/images/nhaxuong.png',
+    RE_SHOPHOUSE: 'assets/images/shopehouse.png',
+    VEH_OTO: 'assets/images/oto.png',
+    VEH_XE_TAI: 'assets/images/xeco.png',
+    VEH_XE_MAY: 'assets/images/xemay.png',
+    MAC_MAY_CONG_TRINH: 'assets/images/maycongtrinh.png',
+    MAC_MAY_NONG_NGHIEP: 'assets/images/maynongnghiep.png',
+    MAC_DAY_CHUYEN: 'assets/images/daychuyen.png',
+    GOODS_GACH_VAT_LIEU: 'assets/images/gach.png',
+    GOODS_SAT_THEP: 'assets/images/satthep.png',
+    GOODS_HANG_TON_KHO: 'assets/images/hangtonkho.png',
+    HH_NOI_THAT: 'assets/images/noithat.png',
+    HH_THIET_BI: 'assets/images/thietbi.png',
+    HH_CONG_CU: 'assets/images/congcu.png',
+
+    // Backward-compatible aliases
+    RE_BDS: 'assets/images/bds.png',
+    VHE_OTO: 'assets/images/oto.png',
+    VH_XE_MAY: 'assets/images/xemay.png',
+    VH_XE_CO: 'assets/images/xeco.png',
+    EQ_MAY_MOC: 'assets/images/maymoc.png',
+    EQ_MAY_CONG_TRINH: 'assets/images/maycongtrinh.png',
+    EQ_MAY_NONG_NGHIEP: 'assets/images/maynongnghiep.png',
+    GOODS_HANG_HOA: 'assets/images/hanghoa.png',
+    GOODS_DO_DUNG: 'assets/images/dodung.png',
+    OTHER: 'assets/images/khac.png',
+  };
 
   ngOnInit(): void {
     this.assetStore.detailData$.pipe(takeUntil(this.destroy$)).subscribe(data => {
@@ -122,14 +161,17 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       price: `${this.formatToTy(item.minStartingPrice)} - ${this.formatToTy(item.maxStartingPrice)}`,
       status: item.status,
       owner: item.auctionOrgName,
-      image: 'assets/images/product-sample-1.jpg',
+      image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       isLiked: false,
     };
   }
 
   private formatToTy(value: number | null | undefined): string {
     if (value == null) return '—';
-    return (value / 1000000000).toFixed(1) + ' tỷ';
+    if (value < 100000000) {
+      return (value / 1000000).toFixed(2) + ' triệu';
+    }
+    return (value / 1000000000).toFixed(2) + ' tỷ';
   }
 
   getStatusClass(status: string): string {
@@ -284,6 +326,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     //this.toastService.success('Đăng ký tham gia đấu giá thành công');
     //this.toastService.error('Đăng ký tham gia đấu giá thành công');
     //this.toastService.info('Đăng ký tham gia đấu giá thành công', 'Thông báo!');
+  }
+  private getNoticeImageByCategoryRefId(refId?: string): string {
+    if (!refId) {
+      return this.defaultNoticeImage;
+    }
+
+    const normalizedRefId = refId.trim().toUpperCase();
+    return this.categoryImageByRefId[normalizedRefId] ?? this.defaultNoticeImage;
   }
 }
 

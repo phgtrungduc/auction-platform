@@ -1,17 +1,8 @@
 <app-loading-overlay [loading]="!product">
   <div class="page" *ngIf="product">
     <div class="back-link" (click)="goBack()">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
       </svg>
@@ -22,39 +13,18 @@
       <div class="layout__main">
         <!-- Asset List (Tất cả gộp chung 1 card, có scroll) -->
         <div class="card detail-section assets-container">
-          <div
-            class="asset-item"
-            *ngFor="let asset of product.assets; let i = index; let last = last"
-          >
+          <div class="asset-item" *ngFor="let asset of product.assets; let i = index; let last = last">
             <div class="asset-header" (click)="toggleAsset(i)">
               <h3 class="section-title">{{ asset.title || product.title }}</h3>
 
-              <svg
-                *ngIf="expandedAssets[i]"
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
+              <svg *ngIf="expandedAssets[i]" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
                 <polyline points="18 15 12 9 6 15"></polyline>
               </svg>
-              <svg
-                *ngIf="!expandedAssets[i]"
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
+              <svg *ngIf="!expandedAssets[i]" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </div>
@@ -63,58 +33,21 @@
               {{ asset.description || "Chưa có mô tả" }}
             </div>
 
-            <div
-              class="asset-details-wrapper"
-              [class.expanded]="expandedAssets[i]"
-            >
+            <div class="asset-details-wrapper" [class.expanded]="expandedAssets[i]">
               <div class="asset-details">
                 <div class="meta-row">
                   <div class="meta-item">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <rect
-                        x="2"
-                        y="7"
-                        width="20"
-                        height="14"
-                        rx="2"
-                        ry="2"
-                      ></rect>
-                      <path
-                        d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"
-                      ></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
                     </svg>
                     Số lượng: <strong>1</strong>
                   </div>
                   <div class="meta-item">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <rect
-                        x="3"
-                        y="3"
-                        width="18"
-                        height="18"
-                        rx="2"
-                        ry="2"
-                      ></rect>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                       <line x1="3" y1="9" x2="21" y2="9"></line>
                       <line x1="9" y1="21" x2="9" y2="9"></line>
                     </svg>
@@ -145,419 +78,289 @@
                     <div class="p-label">Đặt trước</div>
                     <div class="p-val text-green">
                       {{
-                        asset.depositValue < 100
-                          ? asset.depositValue + "%"
-                          : formatCurrency(asset.depositValue)
-                      }}
+                      asset.depositValue < 100 ? asset.depositValue + "%" : formatCurrency(asset.depositValue) }} </div>
                     </div>
-                  </div>
-                  <div class="price-box">
-                    <div class="p-label">Bước giá</div>
-                    <div class="p-val text-green">
-                      {{ formatCurrency(asset.priceStep) }}
+                    <div class="price-box">
+                      <div class="p-label">Bước giá</div>
+                      <div class="p-val text-green">
+                        {{ formatCurrency(asset.priceStep) }}
+                      </div>
                     </div>
-                  </div>
-                  <div class="price-box">
-                    <div class="p-label">Giá trúng</div>
-                    <div class="p-val text-green">
-                      {{ formatCurrency(asset.winningPrice) }}
+                    <div class="price-box">
+                      <div class="p-label">Giá trúng</div>
+                      <div class="p-val text-green">
+                        {{ formatCurrency(asset.winningPrice) }}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <hr class="asset-separator" *ngIf="!last" />
-          </div>
-        </div>
-
-        <!-- Đơn vị tổ chức đấu giá -->
-        <div class="card detail-section mt-4">
-          <h3 class="section-title">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-            Đơn vị tổ chức đấu giá
-          </h3>
-          <table class="info-table">
-            <tr>
-              <td class="t-label">Đơn vị đấu giá:</td>
-              <td>{{ product.auctionOrgName }}</td>
-            </tr>
-            <tr>
-              <td class="t-label">Thông tin liên hệ:</td>
-              <td>
-                {{ product.contactPhone || "Đang cập nhật" }} -
-                {{ product.contactEmail || "Đang cập nhật" }}
-              </td>
-            </tr>
-            <tr>
-              <td class="t-label">Địa điểm đấu giá:</td>
-              <td>{{ product.auctionLocation || "Đang cập nhật" }}</td>
-            </tr>
-          </table>
-        </div>
-
-        <!-- Lịch trình đấu giá -->
-        <div class="card detail-section mt-4">
-          <h3 class="section-title">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            Lịch trình đấu giá
-          </h3>
-
-          <div class="timeline">
-            <div class="timeline-item">
-              <div class="t-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-                  ></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                  <line x1="16" y1="13" x2="8" y2="13"></line>
-                  <line x1="16" y1="17" x2="8" y2="17"></line>
-                  <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-              </div>
-              <div class="t-content">
-                <div class="t-title">Thời gian bán hồ sơ</div>
-                <div class="t-time">
-                  {{ product.docSaleStart | date: "HH:mm dd/MM/yyyy" }} →
-                  {{ product.docSaleEnd | date: "HH:mm dd/MM/yyyy" }}
-                </div>
-              </div>
-            </div>
-            <div class="timeline-item">
-              <div class="t-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-              </div>
-              <div class="t-content">
-                <div class="t-title">Thời gian xem tài sản</div>
-                <div class="t-time">
-                  {{
-                    product.viewingStart
-                      ? (product.viewingStart | date: "HH:mm dd/MM/yyyy")
-                      : ".........."
-                  }}
-                  →
-                  {{
-                    product.viewingEnd
-                      ? (product.viewingEnd | date: "HH:mm dd/MM/yyyy")
-                      : ".........."
-                  }}
-                </div>
-              </div>
-            </div>
-            <div class="timeline-item">
-              <div class="t-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
-                  ></path>
-                </svg>
-              </div>
-              <div class="t-content">
-                <div class="t-title">Thời gian đấu giá</div>
-                <div class="t-time">
-                  {{ product.auctionDatetime | date: "HH:mm dd/MM/yyyy" }}
-                </div>
-              </div>
+              <hr class="asset-separator" *ngIf="!last" />
             </div>
           </div>
-        </div>
 
-        <!-- File đính kèm -->
-        <div
-          class="card detail-section mt-4 mb-4"
-          *ngIf="product.attachments?.length"
-        >
-          <h3 class="section-title">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
-              ></path>
-            </svg>
-            File đính kèm
-          </h3>
-
-          <div class="attachment-list">
-            <div
-              class="attachment-item"
-              *ngFor="let file of product.attachments"
-            >
-              <div class="file-info">
-                <span class="file-icon pdf">PDF</span>
-                <span class="file-name">{{ file.fileName }}</span>
-              </div>
-              <a [href]="file.fileUrl" target="_blank" class="file-action">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Nguồn -->
-        <div class="source">
-          Nguồn:
-          <a [href]="product.sourceUrl" target="_blank">{{
-            product.sourceUrl
-          }}</a>
-        </div>
-      </div>
-
-      <!-- Right Sidebar -->
-      <div class="layout__sidebar">
-        <div class="summary-card">
-          <div class="badges">
-            <span class="badge {{ getNoticeStatusClass(product.status) }}">{{
-              getNoticeStatusLabel(product.status)
-            }}</span>
-            <span
-              class="badge badge--gray"
-              *ngFor="let cat of uniqueAssetCategories"
-              >{{ cat }}</span
-            >
-            <span
-              class="badge badge--gray"
-              *ngFor="let legal of uniqueLegalCategories"
-              >{{ legal }}</span
-            >
+          <!-- Đơn vị tổ chức đấu giá -->
+          <div class="card detail-section mt-4">
+            <h3 class="section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              Đơn vị tổ chức đấu giá
+            </h3>
+            <table class="info-table">
+              <tr>
+                <td class="t-label">Đơn vị đấu giá:</td>
+                <td>{{ product.auctionOrgName }}</td>
+              </tr>
+              <tr>
+                <td class="t-label">Thông tin liên hệ:</td>
+                <td>
+                  {{ product.contactPhone || "Đang cập nhật" }} -
+                  {{ product.contactEmail || "Đang cập nhật" }}
+                </td>
+              </tr>
+              <tr>
+                <td class="t-label">Địa điểm đấu giá:</td>
+                <td>{{ product.auctionLocation || "Đang cập nhật" }}</td>
+              </tr>
+            </table>
           </div>
 
-          <h2 class="summary-title">{{ product.title }}</h2>
-
-          <div class="summary-owner">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            {{ product.assetOwnerName }} - {{ product.assetOwnerAddress }}
-          </div>
-
-          <div class="summary-meta">
-            <span>{{ product.assets?.length || 1 }} tài sản</span> &bull;
-            <span>Trả giá lên</span>
-          </div>
-
-          <div class="timer-box">
-            <div
-              class="timer-title {{ isDocSaleExpired ? 'text-expired' : '' }}"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
+          <!-- Lịch trình đấu giá -->
+          <div class="card detail-section mt-4">
+            <h3 class="section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 16 14"></polyline>
               </svg>
-              {{ isDocSaleExpired ? "Đã hết hạn đăng ký" : "Thời hạn đăng ký" }}
-            </div>
-            <div class="timer-display">
-              <div class="t-block">
-                <div class="t-val">{{ countdownDays }}</div>
-                <div class="t-lbl">ngày</div>
-              </div>
-              <div class="t-sep">:</div>
-              <div class="t-block">
-                <div class="t-val">{{ countdownHours }}</div>
-                <div class="t-lbl">giờ</div>
-              </div>
-              <div class="t-sep">:</div>
-              <div class="t-block">
-                <div class="t-val">{{ countdownMinutes }}</div>
-                <div class="t-lbl">phút</div>
-              </div>
-              <div class="t-sep">:</div>
-              <div class="t-block">
-                <div class="t-val">{{ countdownSeconds }}</div>
-                <div class="t-lbl">giây</div>
-              </div>
-            </div>
-          </div>
-
-          <button
-            class="btn btn--block btn--green"
-            [disabled]="isDocSaleExpired"
-            [class.btn--disabled]="isDocSaleExpired"
-            (click)="registerForAuction()"
-          >
-            Đăng ký tham gia &rarr;
-          </button>
-        </div>
-
-        <div class="ad-banner">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-          >
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path
-              d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"
-            ></path>
-          </svg>
-          <span>Quảng cáo</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Similar Assets Section -->
-    <div class="similar-section">
-      <h2 class="similar-title">Tài sản tương tự</h2>
-      <div
-        class="similar-grid"
-        #similarScroll
-        (mousedown)="onMouseDown($event)"
-        (mousemove)="onMouseMove($event)"
-        (mouseup)="onMouseUp()"
-        (mouseleave)="onMouseUp()"
-      >
-        <div class="similar-card" *ngFor="let item of similarProducts">
-          <div class="similar-card__image">
-            <img [src]="item.image" alt="Product Image" />
-            <span
-              class="similar-card__badge"
-              [ngClass]="getStatusClass(item.status)"
-              >{{ getNoticeStatusLabel(item.status) }}</span
-            >
-            <span class="endedauction-card__status_favourite">
-              <div
-                class="heart-btn"
-                [class.active]="item.isLiked"
-                (click)="item.isLiked = !item.isLiked"
-              >
-                <svg viewBox="0 0 24 24" class="heart-icon">
-                  <path
-                    d="M12 21C12 21 4 16 4 10C4 7 6 5 8.5 5C10.3 5 11.4 6 12 7C12.6 6 13.7 5 15.5 5C18 5 20 7 20 10C20 16 12 21 12 21Z"
-                  />
-                </svg>
-              </div>
-            </span>
-          </div>
-          <div class="similar-card__body" (click)="navToDetail(item.id)">
-            <h3
-              class="similar-card__title"
-              [tooltip]="item.title"
-              container="body"
-              placement="bottom"
-              [adaptivePosition]="false"
-              tooltipClass="similar-title-tooltip"
-              tabindex="0"
-            >
-              <span class="similar-card__title-text">{{ item.title }}</span>
+              Lịch trình đấu giá
             </h3>
-            <p class="similar-card__meta">{{ item.desc }}</p>
-            <div
-              class="similar-card__price"
-              [ngClass]="getPriceClass(item.status)"
-            >
-              {{ item.price }}
+
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="t-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                </div>
+                <div class="t-content">
+                  <div class="t-title">Thời gian bán hồ sơ</div>
+                  <div class="t-time">
+                    {{ product.docSaleStart | date: "HH:mm dd/MM/yyyy" }} →
+                    {{ product.docSaleEnd | date: "HH:mm dd/MM/yyyy" }}
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="t-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </div>
+                <div class="t-content">
+                  <div class="t-title">Thời gian xem tài sản</div>
+                  <div class="t-time">
+                    {{
+                    product.viewingStart
+                    ? (product.viewingStart | date: "HH:mm dd/MM/yyyy")
+                    : ".........."
+                    }}
+                    →
+                    {{
+                    product.viewingEnd
+                    ? (product.viewingEnd | date: "HH:mm dd/MM/yyyy")
+                    : ".........."
+                    }}
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="t-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                </div>
+                <div class="t-content">
+                  <div class="t-title">Thời gian đấu giá</div>
+                  <div class="t-time">
+                    {{ product.auctionDatetime | date: "HH:mm dd/MM/yyyy" }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File đính kèm -->
+          <div class="card detail-section mt-4 mb-4" *ngIf="product.attachments?.length">
+            <h3 class="section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48">
+                </path>
+              </svg>
+              File đính kèm
+            </h3>
+
+            <div class="attachment-list">
+              <div class="attachment-item" *ngFor="let file of product.attachments">
+                <div class="file-info">
+                  <span class="file-icon pdf">PDF</span>
+                  <span class="file-name">{{ file.fileName }}</span>
+                </div>
+                <a [href]="file.fileUrl" target="_blank" class="file-action">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nguồn -->
+          <div class="source">
+            Nguồn:
+            <a [href]="product.sourceUrl" target="_blank">{{
+              product.sourceUrl
+              }}</a>
+          </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="layout__sidebar">
+          <div class="summary-card">
+            <div class="badges">
+              <span class="badge {{ getNoticeStatusClass(product.status) }}">{{
+                getNoticeStatusLabel(product.status)
+                }}</span>
+              <span class="badge badge--gray" *ngFor="let cat of uniqueAssetCategories">{{ cat }}</span>
+              <span class="badge badge--gray" *ngFor="let legal of uniqueLegalCategories">{{ legal }}</span>
             </div>
 
-            <div class="similar-card__footer">
-              <div class="similar-card__owner">
-                <span class="similar-card__avatar">{{
-                  getOwnerInitials(item.owner)
-                }}</span>
-                {{ item.owner }}
+            <h2 class="summary-title">{{ product.title }}</h2>
+
+            <div class="summary-owner">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              {{ product.assetOwnerName }} - {{ product.assetOwnerAddress }}
+            </div>
+
+            <div class="summary-meta">
+              <span>{{ product.assets?.length || 1 }} tài sản</span> &bull;
+              <span>Trả giá lên</span>
+            </div>
+
+            <div class="timer-box">
+              <div class="timer-title {{ isDocSaleExpired ? 'text-expired' : '' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                {{ isDocSaleExpired ? "Đã hết hạn đăng ký" : "Thời hạn đăng ký" }}
               </div>
-              <button class="similar-card__btn" (click)="navToDetail(item.id)">
-                Chi tiết &rarr;
-              </button>
+              <div class="timer-display">
+                <div class="t-block">
+                  <div class="t-val">{{ countdownDays }}</div>
+                  <div class="t-lbl">ngày</div>
+                </div>
+                <div class="t-sep">:</div>
+                <div class="t-block">
+                  <div class="t-val">{{ countdownHours }}</div>
+                  <div class="t-lbl">giờ</div>
+                </div>
+                <div class="t-sep">:</div>
+                <div class="t-block">
+                  <div class="t-val">{{ countdownMinutes }}</div>
+                  <div class="t-lbl">phút</div>
+                </div>
+                <div class="t-sep">:</div>
+                <div class="t-block">
+                  <div class="t-val">{{ countdownSeconds }}</div>
+                  <div class="t-lbl">giây</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn--block btn--green" [disabled]="isDocSaleExpired"
+              [class.btn--disabled]="isDocSaleExpired" (click)="registerForAuction()">
+              Đăng ký tham gia &rarr;
+            </button>
+          </div>
+
+          <div class="ad-banner">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <span>Quảng cáo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Similar Assets Section -->
+      <div class="similar-section">
+        <h2 class="similar-title">Tài sản tương tự</h2>
+        <div class="similar-grid" #similarScroll (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
+          (mouseup)="onMouseUp()" (mouseleave)="onMouseUp()">
+          <div class="similar-card" *ngFor="let item of similarProducts">
+            <div class="similar-card__image">
+              <img [src]="item.image" alt="Product Image" />
+              <span class="similar-card__badge" [ngClass]="getStatusClass(item.status)">{{
+                getNoticeStatusLabel(item.status) }}</span>
+              <span class="endedauction-card__status_favourite">
+                <div class="heart-btn" [class.active]="item.isLiked" (click)="item.isLiked = !item.isLiked">
+                  <svg viewBox="0 0 24 24" class="heart-icon">
+                    <path
+                      d="M12 21C12 21 4 16 4 10C4 7 6 5 8.5 5C10.3 5 11.4 6 12 7C12.6 6 13.7 5 15.5 5C18 5 20 7 20 10C20 16 12 21 12 21Z" />
+                  </svg>
+                </div>
+              </span>
+            </div>
+            <div class="similar-card__body">
+              <h3 class="similar-card__title" [tooltip]="item.title" container="body" placement="bottom"
+                [adaptivePosition]="false" tooltipClass="similar-title-tooltip" tabindex="0">
+                <span class="similar-card__title-text">{{ item.title }}</span>
+              </h3>
+              <p class="similar-card__meta">{{ item.desc }}</p>
+              <div class="similar-card__price" [ngClass]="getPriceClass(item.status)">
+                {{ item.price }}
+              </div>
+
+              <div class="similar-card__footer">
+                <div class="similar-card__owner">
+                  <span class="similar-card__avatar">{{
+                    getOwnerInitials(item.owner)
+                    }}</span>
+                  {{ item.owner }}
+                </div>
+                <button class="similar-card__btn" (click)="navToDetail(item.id)">
+                  Chi tiết &rarr;
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 </app-loading-overlay>
 <!-- <div class="page" *ngIf="!product">
   <p>Đang tải thông tin sản phẩm...</p>
