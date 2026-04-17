@@ -51,7 +51,7 @@ import { AuthBrandLogoComponent } from './auth-brand-logo.component';
       overflow: hidden;
       background: #fff;
       display: grid;
-      grid-template-columns: minmax(300px, 1fr) minmax(360px, 1fr);
+      //grid-template-columns: minmax(300px, 1fr) minmax(360px, 1fr);
       gap: 18px;
       padding: 14px;
 
