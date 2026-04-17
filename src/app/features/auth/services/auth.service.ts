@@ -21,7 +21,7 @@ import { SetUserAction } from '../../../store/user/user.action';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly loginUrl = `${environment.apiUrl}/user/login`;
+  private readonly loginUrl = `${environment.apiUrl}/auth/login`;
   private readonly requestOtpUrl = `${environment.apiUrl}/auth/request-otp`;
   private readonly verifyOtpUrl = `${environment.apiUrl}/auth/verify-otp`;
   private readonly registerUrl = `${environment.apiUrl}/auth/register`;
@@ -31,16 +31,19 @@ export class AuthService {
     private readonly store: Store<AppStates>,
   ) {}
 
-  login(request: LoginRequest): Observable<LoginResponse> {
+  login(request: LoginRequest): Observable<RegisterResponse> {
     return this.http
-      .post<LoginResponse>(this.loginUrl, {
-        Username: request.username,
-        Password: request.password,
+      .post<RegisterResponse>(this.loginUrl, {
+        email: request.email,
+        password: request.password,
       })
       .pipe(
         tap(response => {
-          if (response.isSuccess) {
-            this.persistAuthSession(response.jwt, response.user);
+          if (response.accessToken) {
+            this.persistAuthSession(response.accessToken, {
+              username: response.email,
+              role: 0,
+            });
           }
         }),
       );

@@ -11,7 +11,10 @@ import { CommonModule } from '@angular/common';
       <h2>Đăng nhập</h2>
       <p>Nhập email để tiếp tục</p>
 
-      <label class="input-wrap" [class.has-error]="emailTouched && !isValidEmail()">
+      <label
+        class="input-wrap"
+        [class.has-error]="emailTouched && !isValidEmail()"
+      >
         <span class="icon"><i class="fa-regular fa-user"></i></span>
         <input
           [(ngModel)]="email"
@@ -25,9 +28,15 @@ import { CommonModule } from '@angular/common';
         Email không đúng định dạng (ví dụ: example&#64;email.com)
       </p>
 
-      <button type="button" [disabled]="!isValidEmail()" (click)="continueRequested.emit(email)">
+      <!-- <app-loading-overlay [loading]="isLoading"> -->
+      <button
+        type="button"
+        [disabled]="!isValidEmail()"
+        (click)="continueRequested.emit(email)"
+      >
         Tiếp tục
       </button>
+      <!-- </app-loading-overlay> -->
     </div>
   `,
   styles: `
@@ -35,6 +44,9 @@ import { CommonModule } from '@angular/common';
       width: min(100%, 520px);
       justify-self: center;
       margin-top: 60px;
+      @media (max-width: 991px) {
+        margin-top: 0;
+      }
     }
     h2 {
       text-align: center;
@@ -46,7 +58,7 @@ import { CommonModule } from '@angular/common';
     p {
       margin: 4px 0 12px;
       text-align: center;
-      color: #5F788B;
+      color: #5f788b;
       font-size: 12px;
       word-break: break-all;
       font-weight: 400;
