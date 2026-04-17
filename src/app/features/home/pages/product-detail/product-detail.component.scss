@@ -184,6 +184,218 @@
   }
 }
 
+/* --- Đơn vị tổ chức đấu giá — Figma 4800:8402 (màu / type / icon solar linear) --- */
+.auction-org-card {
+  --org-green: #367639;
+  --org-text: #151515;
+  --org-muted: #5f788b;
+  --org-surface: #fbfeff;
+  --org-border: #edf1f4;
+}
+
+.auction-org-card.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--org-surface);
+  border-color: var(--org-border);
+  box-shadow:
+    0 66px 18px rgba(0, 0, 0, 0),
+    0 42px 17px rgba(0, 0, 0, 0),
+    0 24px 14px rgba(0, 0, 0, 0.01),
+    0 11px 11px rgba(0, 0, 0, 0.02),
+    0 3px 6px rgba(0, 0, 0, 0.02);
+}
+
+/* Figma 8402: gap 16px giữa header — Frame 237 — nút; bỏ margin section-title */
+.auction-org-card .auction-org-card__heading.section-title {
+  margin-bottom: 0;
+  min-height: 22px;
+  color: var(--org-text);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  gap: 8px;
+  align-items: center;
+
+  .auction-org-icon {
+    color: var(--org-green);
+  }
+
+  svg {
+    color: var(--org-green);
+  }
+}
+
+.auction-org-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--org-green);
+
+  svg {
+    display: block;
+  }
+}
+
+/* Figma Frame 237: gap 12px giữa hàng logo+text và từng dòng KV */
+.auction-org-card__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Figma Frame 522: logo 64 + gap 8 + cột text */
+.auction-org-brand {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.auction-org-brand__logo {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid var(--org-border);
+  overflow: hidden;
+  background: #fff;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.auction-org-brand__col {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Figma 8414: Semibold 16, line ~22 */
+.auction-org-brand__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  color: var(--org-text);
+}
+
+/* Figma Frame 519 / 520: hàng cao 16px, icon–text gap 4 (text bắt đầu x=20) */
+.auction-org-brand__meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 16px;
+  line-height: 14px;
+
+  &--sessions,
+  &--map {
+    .auction-org-icon {
+      color: var(--org-green);
+    }
+  }
+}
+
+.auction-org-brand__sessions-text {
+  margin: 0;
+  padding: 0;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+.auction-org-brand__sessions-num {
+  color: var(--org-text);
+}
+
+.auction-org-brand__sessions-suffix {
+  color: var(--org-muted);
+}
+
+.auction-org-brand__map-text {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--org-muted);
+  line-height: 14px;
+}
+
+/* Figma Frame 231 / 232: h 20, label w 128, value từ x=136 → gap 8 */
+.auction-org-kv {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.auction-org-kv__label {
+  flex: 0 0 128px;
+  width: 128px;
+  max-width: 128px;
+  color: var(--org-muted);
+}
+
+.auction-org-kv__value {
+  flex: 1 1 0;
+  min-width: 0;
+  color: var(--org-text);
+}
+
+/* Figma Frame 109: 127×36, pl 16 pr 8, gap 4 */
+.auction-org-profile-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  height: 36px;
+  min-height: 36px;
+  padding: 4px 8px 4px 16px;
+  border-radius: 8px;
+  background: var(--org-green);
+  color: #fbfeff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration: none;
+  width: fit-content;
+  flex-shrink: 0;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #2d622f;
+    color: #fbfeff;
+  }
+
+  &:hover .auction-org-profile-btn__arrow {
+    color: #fbfeff;
+  }
+}
+
+.auction-org-profile-btn__arrow {
+  display: inline-flex;
+  color: #fbfeff;
+}
+
 /* Info Table */
 .info-table {
   width: 100%;
@@ -815,6 +1027,19 @@
     width: 100%;
     font-weight: 600;
     padding-bottom: 0;
+  }
+
+  .auction-org-kv {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-height: 0;
+  }
+
+  .auction-org-kv__label {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
   }
 }
 

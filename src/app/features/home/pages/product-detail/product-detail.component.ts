@@ -40,6 +40,16 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   isDocSaleExpired: boolean = false;
   private timerInterval: any;
   private readonly defaultNoticeImage = 'assets/images/product-sample-1.jpg';
+
+  /**
+   * Tạm thời: API chi tiết chưa có logo đơn vị, số phiên đấu giá, URL hồ sơ.
+   * Gỡ mock khi backend bổ sung field tương ứng.
+   */
+  readonly auctionOrgProfileMock = {
+    logoUrl: 'assets/images/product-sample-1.jpg',
+    sessionCount: 151,
+    profileUrl: 'https://example.com',
+  } as const;
   private readonly categoryImageByRefId: Record<string, string> = {
     REAL_ESTATE: 'assets/images/bds.png',
     VEHICLE: 'assets/images/xeco.png',
@@ -373,6 +383,21 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     //this.toastService.error('Đăng ký tham gia đấu giá thành công');
     //this.toastService.info('Đăng ký tham gia đấu giá thành công', 'Thông báo!');
   }
+
+  /** Dòng tiêu đề đơn vị: tên + địa chỉ (theo layout Figma). */
+  getAuctionOrgHeadline(p: MarketplaceNoticeDetail): string {
+    const addr = p.auctionOrgAddress || p.auctionLocation;
+    if (addr) {
+      return `${p.auctionOrgName} - ${addr}`;
+    }
+    return p.auctionOrgName;
+  }
+
+  /** Địa chỉ dòng phụ (icon bản đồ). */
+  getAuctionOrgMapLine(p: MarketplaceNoticeDetail): string {
+    return p.auctionLocation || p.auctionOrgAddress || 'Đang cập nhật';
+  }
+
   private getNoticeImageByCategoryRefId(refId?: string): string {
     if (!refId) {
       return this.defaultNoticeImage;
