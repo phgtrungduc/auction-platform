@@ -471,13 +471,16 @@ export class ProductsPageComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
-          this.notices = res.items ?? [];
+          const items = res.items ?? [];
+          this.rebuildFavoriteIdMapFromNotices(items);
+          this.notices = items;
           this.totalPages = res.totalPages;
           this.totalCount = res.totalCount;
           this.isFilterLoading = false;
         },
         error: (err) => {
           console.error('[AdvancedFilter] Error:', err);
+          this.rebuildFavoriteIdMapFromNotices([]);
           this.notices = [];
           this.isFilterLoading = false;
         },
@@ -831,29 +834,55 @@ export class ProductsPageComponent implements OnInit {
 
     const noticeId = item.noticeId;
     if (!noticeId) return;
-    item.isLiked = !item.isLiked;
 
-    if (!item.isLiked) {
-      this.userFavoriteStore.removeFavorite$({
-        noticeId,
-        favoriteId: this.favoriteIdByNoticeId[noticeId]
-      });
+    if (item.isFavorite) {
+      const favoriteId =
+        item.favoriteId ??
+        this.favoriteIdByNoticeId[noticeId] ??
+        this.userFavoriteStore.getFavoriteIdForNotice(noticeId);
+      item.isFavorite = false;
+      item.favoriteId = undefined;
+      this.userFavoriteStore.removeFavorite$({ noticeId, favoriteId });
       return;
     }
 
+    item.isFavorite = true;
     this.userFavoriteStore.addFavorite$(noticeId);
   }
 
-  private applyFavoriteMutation(noticeId: number, isLiked: boolean, favoriteId?: number): void {
+  private applyFavoriteMutation(noticeId: number, isFavorite: boolean, favoriteId?: number): void {
     this.notices = (this.notices ?? []).map((it) => {
       if (it.noticeId !== noticeId) return it;
-      return { ...it, isLiked };
+      return {
+        ...it,
+        isFavorite,
+        favoriteId: isFavorite && favoriteId != null ? favoriteId : undefined,
+      };
     });
 
-    if (isLiked && favoriteId) {
+    if (isFavorite && favoriteId != null) {
       this.favoriteIdByNoticeId[noticeId] = favoriteId;
       return;
     }
     delete this.favoriteIdByNoticeId[noticeId];
+  }
+
+  /**
+   * Map noticeId → favoriteId cho trang hiện tại (từ API + fallback store khi API chỉ có isFavorite).
+   */
+  private rebuildFavoriteIdMapFromNotices(items: NoticeSearchDocument[]): void {
+    const m: Record<number, number> = {};
+    for (const it of items) {
+      if (!it.isFavorite) continue;
+      if (typeof it.favoriteId === 'number') {
+        m[it.noticeId] = it.favoriteId;
+        continue;
+      }
+      const sid = this.userFavoriteStore.getFavoriteIdForNotice(it.noticeId);
+      if (sid != null) {
+        m[it.noticeId] = sid;
+      }
+    }
+    this.favoriteIdByNoticeId = m;
   }
 }
