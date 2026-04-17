@@ -9,6 +9,7 @@ import { AuthPopupLayoutComponent } from './components/auth-popup-layout.compone
 import { AuthRegisterContentComponent } from './components/auth-register-content.component';
 import { AuthService } from '../../services/auth.service';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { LoadingOverlayComponent } from '../../../../shared/components/loading-overlay/loading-overlay.component';
 
 type AuthPopupStep = 'email' | 'otp' | 'register' | 'password';
 
@@ -22,6 +23,7 @@ type AuthPopupStep = 'email' | 'otp' | 'register' | 'password';
     AuthOtpContentComponent,
     AuthRegisterContentComponent,
     AuthPasswordContentComponent,
+    LoadingOverlayComponent,
   ],
   templateUrl: './auth-popup.component.html',
   styleUrl: './auth-popup.component.scss',
@@ -30,7 +32,7 @@ export class AuthPopupComponent {
   isPopupOpen = false;
   currentStep: AuthPopupStep = 'email';
   submittedEmail = '';
-  remainingOtpSeconds = 56;
+  remainingOtpSeconds = 600;
   registrationToken = '';
   isSubmitting = false;
 
@@ -44,7 +46,7 @@ export class AuthPopupComponent {
     this.isPopupOpen = true;
     this.currentStep = 'email';
     this.submittedEmail = '';
-    this.remainingOtpSeconds = 56;
+    this.remainingOtpSeconds = 600;
     this.registrationToken = '';
     this.isSubmitting = false;
   }
@@ -150,8 +152,35 @@ export class AuthPopupComponent {
     this.currentStep = 'register';
   }
 
-  handlePasswordSubmit(): void {
-    this.closePopup();
+  handlePasswordSubmit(password: string): void {
+    if (!password || this.isSubmitting) {
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.authService
+      .login({
+        email: this.submittedEmail,
+        password,
+      })
+      .subscribe({
+        next: response => {
+          if (!response.accessToken) {
+            this.logger.error('Đăng nhập không thành công. Vui lòng thử lại.');
+            this.isSubmitting = false;
+            return;
+          }
+
+          this.logger.success('Đăng nhập thành công!');
+          this.closePopup();
+          this.router.navigate(['/']);
+          this.isSubmitting = false;
+        },
+        error: () => {
+          this.logger.error('Đăng nhập thất bại. Vui lòng thử lại.');
+          this.isSubmitting = false;
+        },
+      });
   }
 
   private handleRequestOtpResponse(
@@ -165,15 +194,16 @@ export class AuthPopupComponent {
 
     if (response.userId != null) {
       this.logger.info('Email đã có tài khoản. Tạm thời chuyển sang màn hình đăng nhập.');
-      this.closePopup();
-      this.router.navigate(['/auth/login']);
+      //this.closePopup();
+      //this.router.navigate(['/auth/login']);
+      this.currentStep = 'password';
       this.isSubmitting = false;
       return;
     }
 
     if (response.success || hasRecentOtpMessage) {
       this.currentStep = 'otp';
-      this.remainingOtpSeconds = 60;
+      this.remainingOtpSeconds = 600;
 
       if (hasRecentOtpMessage) {
         this.logger.info(response.message || 'Bạn đã yêu cầu OTP gần đây. Vui lòng tiếp tục nhập mã OTP.');
@@ -202,7 +232,7 @@ export class AuthPopupComponent {
 
     if (httpError?.status === 400 && isRecentOtpMessage) {
       this.currentStep = 'otp';
-      this.remainingOtpSeconds = 60;
+      this.remainingOtpSeconds = 600;
       this.logger.info(message || 'Bạn đã yêu cầu OTP gần đây. Vui lòng tiếp tục nhập mã OTP.');
       this.isSubmitting = false;
       return;
