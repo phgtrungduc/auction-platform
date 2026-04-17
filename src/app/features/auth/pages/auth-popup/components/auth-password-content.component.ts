@@ -1,13 +1,17 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-auth-password-content',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   template: `
-    <div class="content">
+    <form class="content" (ngSubmit)="onSubmit($event)">
       <h2>Nhập mật khẩu</h2>
+      <!-- Thêm trường username ẩn để trình duyệt biết lưu mật khẩu cho tài khoản nào -->
+      <input type="text" [value]="email" name="username" autocomplete="username" style="display: none;" />
+      
       <p>Nhập mật khẩu đăng nhập của bạn</p>
 
       <label class="input-wrap">
@@ -37,25 +41,67 @@ import { FormsModule } from '@angular/forms';
             />
           </svg>
         </span>
-        <input [(ngModel)]="password" type="password" placeholder="Mật khẩu" (keydown.enter)="onEnter()" />
+        <input
+          name="password"
+          autocomplete="current-password"
+          [(ngModel)]="password"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Mật khẩu"
+        />
+        <span class="eye" (click)="togglePassword()">
+          <svg
+            *ngIf="!showPassword"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="#667085"
+          >
+            <path
+              stroke-width="2"
+              d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"
+            />
+            <circle cx="12" cy="12" r="3" stroke-width="2" />
+          </svg>
+
+          <svg
+            *ngIf="showPassword"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="#667085"
+          >
+            <path stroke-width="2" d="M3 3l18 18" />
+            <path
+              stroke-width="2"
+              d="M10.58 10.58A3 3 0 0012 15a3 3 0 002.42-4.42"
+            />
+            <path
+              stroke-width="2"
+              d="M9.88 5.09A10.94 10.94 0 0112 5c6 0 10 7 10 7a17.73 17.73 0 01-5.06 5.94M6.1 6.1A17.73 17.73 0 002 12s4 7 10 7c1.61 0 3.09-.38 4.41-1.06"
+            />
+          </svg>
+        </span>
       </label>
 
       <div class="row">
         <label class="remember">
-          <input type="checkbox" [(ngModel)]="remember" />
-          <span>Nhớ mật khẩu</span>
+          <!-- <input type="checkbox" [(ngModel)]="remember" name="remember" />
+          <span>Nhớ mật khẩu</span> -->
         </label>
-        <button class="forgot-btn">Quên mật khẩu?</button>
+        <button type="button" class="forgot-btn">Quên mật khẩu?</button>
       </div>
 
       <button
-        type="button"
+        type="submit"
         [disabled]="password.length < 8"
-        (click)="submitRequested.emit(password)" 
       >
         Đăng nhập
       </button>
-    </div>
+    </form>
   `,
   styles: `
     .content {
@@ -92,6 +138,13 @@ import { FormsModule } from '@angular/forms';
       font-size: 15px;
     }
     input[type='password'] {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      outline: none;
+      color: #1f2937;
+    }
+    input[type='text'] {
       flex: 1;
       border: 0;
       background: transparent;
@@ -140,11 +193,20 @@ import { FormsModule } from '@angular/forms';
   `,
 })
 export class AuthPasswordContentComponent {
+  @Input() email = '';
   @Output() submitRequested = new EventEmitter<string>();
   password = '';
   remember = false;
+  showPassword = false;
 
-  onEnter(): void {
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  onSubmit(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
     if (this.password.length >= 8) {
       this.submitRequested.emit(this.password);
     }
