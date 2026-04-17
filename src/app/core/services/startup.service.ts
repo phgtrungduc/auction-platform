@@ -28,7 +28,14 @@ export class StartupService {
     if (rawUser) {
       try {
         const parsed = JSON.parse(rawUser);
-        this.store.dispatch(SetUserAction({ user: { username: parsed.Username, role: parsed.Role } }));
+        this.store.dispatch(
+          SetUserAction({
+            user: {
+              username: parsed.username ?? parsed.Username ?? '',
+              role: parsed.role ?? parsed.Role ?? 0,
+            },
+          }),
+        );
       } catch {
         localStorage.removeItem('User');
       }

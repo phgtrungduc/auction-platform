@@ -537,7 +537,7 @@
 .similar-card__badge {
   position: absolute;
   top: 10px;
-  right: 10px;
+  left: 10px;
   color: #fff;
   font-size: 11px;
   font-weight: 500;
@@ -562,6 +562,50 @@
 
   &.badge--dark {
     background: #5F788B;
+  }
+}
+
+.endedauction-card__status_favourite {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  
+  .heart-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #c7d6d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  
+    .heart-icon {
+      width: 16px;
+      height: 16px;
+      fill: transparent;
+      stroke: #000;
+      stroke-width: 1.8;
+      transition: all 0.2s ease;
+    }
+  
+    &.active {
+      background: #dfeaed;
+  
+      .heart-icon {
+        fill: #e53935;
+        stroke: #e53935;
+      }
+    }
+    &.active {
+      animation: pop 0.2s ease;
+    }
+    
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
   }
 }
 

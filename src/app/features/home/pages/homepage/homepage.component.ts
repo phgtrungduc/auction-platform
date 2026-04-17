@@ -219,7 +219,8 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       owner: item.auctionOrgName,
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       status: item.status,
-      assetCount: item.assetCount
+      assetCount: item.assetCount,
+      isLiked : false,
     };
   }
 
@@ -234,7 +235,8 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       company: item.auctionOrgName,
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       status: item.status,
-      assetCount: item.assetCount
+      assetCount: item.assetCount,
+      isLiked : false,
     };
   }
 
@@ -251,7 +253,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   navToDetail(id: number | undefined) {
     if (id) {
-      this.router.navigate(['/products-listing', id]);
+      this.router.navigate(['/product-detail', id]);
     }
   }
 
@@ -479,6 +481,7 @@ interface AuctionItem {
   image: string;
   status: string;
   assetCount: number;
+  isLiked : boolean;
 }
 
 interface EndedAuctionItem {
@@ -492,4 +495,5 @@ interface EndedAuctionItem {
   image: string;
   status: string;
   assetCount: number;
+  isLiked : boolean;
 }
