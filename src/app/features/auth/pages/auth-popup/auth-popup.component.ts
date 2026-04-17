@@ -138,7 +138,7 @@ export class AuthPopupComponent {
 
           this.logger.success('Đăng ký thành công!');
           this.closePopup();
-          this.router.navigate(['/']);
+          //this.router.navigate(['/']);
           this.isSubmitting = false;
         },
         error: () => {
@@ -173,7 +173,7 @@ export class AuthPopupComponent {
 
           this.logger.success('Đăng nhập thành công!');
           this.closePopup();
-          this.router.navigate(['/']);
+          //this.router.navigate(['/']);
           this.isSubmitting = false;
         },
         error: () => {
@@ -193,7 +193,7 @@ export class AuthPopupComponent {
       normalizedMessage.includes('vui lòng đợi trước khi gửi lại');
 
     if (response.userId != null) {
-      this.logger.info('Email đã có tài khoản. Tạm thời chuyển sang màn hình đăng nhập.');
+      //this.logger.info('Email đã có tài khoản. Tạm thời chuyển sang màn hình đăng nhập.');
       //this.closePopup();
       //this.router.navigate(['/auth/login']);
       this.currentStep = 'password';
