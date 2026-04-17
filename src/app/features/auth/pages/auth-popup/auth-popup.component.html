@@ -53,6 +53,7 @@
         >
           <app-loading-overlay [loading]="isSubmitting">
             <app-auth-password-content
+              [email]="submittedEmail"
               (submitRequested)="handlePasswordSubmit($event)"
             />
           </app-loading-overlay>
