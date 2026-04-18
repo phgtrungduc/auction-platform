@@ -39,6 +39,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   countdownSeconds: string = '00';
   isDocSaleExpired: boolean = false;
   private timerInterval: any;
+  private readonly fallbackAuctionSessionCount = this.randomInt(100, 1000);
   private readonly defaultNoticeImage = 'assets/images/product-sample-1.jpg';
   private readonly categoryImageByRefId: Record<string, string> = {
     REAL_ESTATE: 'assets/images/bds.png',
@@ -130,6 +131,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  get auctionSessionCount(): number {
+    const v = (this.product as any)?.auctionSessionCount ?? (this.product as any)?.auctionSessionTotal;
+    const num = typeof v === 'string' ? Number(v) : v;
+    return Number.isFinite(num) && num > 0 ? num : this.fallbackAuctionSessionCount;
+  }
+
   toggleAsset(index: number): void {
     this.expandedAssets[index] = !this.expandedAssets[index];
   }
@@ -141,6 +148,23 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     window.history.back();
+  }
+
+  goToAuctionOrgProfile(): void {
+    const auctionOrgName = this.product?.auctionOrgName || '';
+    const auctionLocation = this.product?.auctionLocation || this.product?.auctionOrgAddress || '';
+    const contactPhone = this.product?.contactPhone || '';
+    const contactEmail = this.product?.contactEmail || '';
+
+    this.router.navigate(['/auction-org-detail'], {
+      state: {
+        auctionOrgName,
+        auctionLocation,
+        contactPhone,
+        contactEmail,
+        auctionSessionCount: this.auctionSessionCount,
+      }
+    });
   }
 
   private buildSimilarSearchRequest(product: MarketplaceNoticeDetail | null): AdvancedSearchRequest | null {
@@ -175,8 +199,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       status: item.status,
       owner: item.auctionOrgName,
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
-      isLiked: false,
-      favoriteId: undefined,
+      isLiked: item.isFavorite,
+      favoriteId: item.favoriteId,
     };
   }
 
@@ -366,6 +390,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     this.countdownHours = hours < 10 ? '0' + hours : hours.toString();
     this.countdownMinutes = minutes < 10 ? '0' + minutes : minutes.toString();
     this.countdownSeconds = seconds < 10 ? '0' + seconds : seconds.toString();
+  }
+
+  private randomInt(min: number, max: number): number {
+    const a = Math.ceil(min);
+    const b = Math.floor(max);
+    return Math.floor(Math.random() * (b - a + 1)) + a;
   }
 
   registerForAuction() {

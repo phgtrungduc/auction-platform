@@ -18,6 +18,16 @@ export const HOME_ROUTES: Routes = [
       import('./pages/product-detail/product-detail.component').then(m => m.ProductDetailComponent)
   },
   {
+    path: 'auction-org-detail',
+    loadComponent: () =>
+      import('./pages/auction-org-detail/auction-org-detail.component').then(m => m.AuctionOrgDetailComponent),
+  },
+  {
+    path: 'auction-org-detail/:id',
+    loadComponent: () =>
+      import('./pages/auction-org-detail/auction-org-detail.component').then(m => m.AuctionOrgDetailComponent),
+  },
+  {
     path: 'favourites-notices',
     canActivate: [authGuard],
     loadChildren: () =>

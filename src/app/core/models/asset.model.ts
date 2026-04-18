@@ -100,7 +100,7 @@ export interface NoticeSearchDocument {
   firstAssetCategoryId?: number;
   firstAssetCategoryName?: string;
   firstAssetCategoryRefId?: string;
-  isFavorite : boolean;
+  isFavorite: boolean;
   favoriteId?: number;
 }
 

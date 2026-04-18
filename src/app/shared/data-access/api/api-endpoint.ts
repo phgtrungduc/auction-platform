@@ -17,5 +17,8 @@ export const API_ENDPOINTS = {
         GET_WARDS: '/dvhcs/wards',
         GET_DISTRICTS: '/dvhcs/districts',
         GET_PROVINCES: '/dvhcs/provinces',
+    },
+    ORG: {
+        SEARCH: '/auction-org',
     }
 }
