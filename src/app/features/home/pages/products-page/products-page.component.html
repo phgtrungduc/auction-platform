@@ -16,21 +16,13 @@
         <!-- Search bar -->
         <div class="search-wrapper">
           <i class="fa fa-search search-icon" style="cursor:pointer" (click)="onSearch()"></i>
-          <input
-            class="search search--text"
-            placeholder="Nhập từ khoá cần tìm..."
-            [(ngModel)]="searchQuery"
-            (keyup.enter)="onSearch()"
-          />
+          <input class="search search--text" placeholder="Nhập từ khoá cần tìm..." [(ngModel)]="searchQuery"
+            (keyup.enter)="onSearch()" />
         </div>
 
         <!-- Category Dropdown -->
-        <app-category-dropdown
-          class="dropdown-category"
-          [categories]="categories"
-          [(value)]="selectedCategory"
-          (valueChange)="onCategoryChange($event)"
-        >
+        <app-category-dropdown class="dropdown-category" [categories]="categories" [(value)]="selectedCategory"
+          (valueChange)="onCategoryChange($event)">
         </app-category-dropdown>
 
         <!-- Status -->
@@ -48,13 +40,21 @@
         </div>
 
         <!-- Date Range -->
-        <div class="date-range">
+        <!-- <div class="date-range">
           <app-date-picker class="date-picker" [(value)]="selectedFromDate" [placeholder]="'Từ ngày'"
             (valueChange)="onChangeFromDate($event)"></app-date-picker>
           <span class="date-arrow">→</span>
           <app-date-picker class="date-picker" [(value)]="selectedToDate" [placeholder]="'Đến ngày'"
             (valueChange)="onChangeToDate($event)"></app-date-picker>
+        </div> -->
+
+        <!-- Sort -->
+        <div class="sort-select">
+          <app-custom-select [options]="optionsOrder" [placeholder]="'Sắp xếp'" [(value)]="selectedOrderValue"
+            (valueChange)="onChangeOrder($event)">
+          </app-custom-select>
         </div>
+
         <!-- Filter action button -->
         <button class="btn-filter" (click)="toggleAdvancedFilter()">
           <svg style="color: white; padding-top: 2px" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
@@ -109,7 +109,8 @@
               <span class="endedauction-card__status_favourite">
                 <div class="heart-btn" [class.active]="item.isFavorite" (click)="toggleFavorite(item, $event)">
                   <svg viewBox="0 0 24 24" class="heart-icon">
-                    <path d="M12 21C12 21 4 16 4 10C4 7 6 5 8.5 5C10.3 5 11.4 6 12 7C12.6 6 13.7 5 15.5 5C18 5 20 7 20 10C20 16 12 21 12 21Z"/>
+                    <path
+                      d="M12 21C12 21 4 16 4 10C4 7 6 5 8.5 5C10.3 5 11.4 6 12 7C12.6 6 13.7 5 15.5 5C18 5 20 7 20 10C20 16 12 21 12 21Z" />
                   </svg>
                 </div>
               </span>
@@ -141,7 +142,8 @@
                   (click)="navToDetail(item.noticeId); $event.stopPropagation()">
                   <span>Chi tiết</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    aria-hidden="true">
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />
                   </svg>
@@ -238,12 +240,8 @@
     <div class="filter-group">
       <h4 class="filter-title">Trạng thái</h4>
       <div class="pill-container">
-        <button
-          *ngFor="let status of optionsStatus"
-          class="btn-pill"
-          [class.active]="isStatusActive(status.value)"
-          (click)="toggleStatus(status.value)"
-        >
+        <button *ngFor="let status of optionsStatus" class="btn-pill" [class.active]="isStatusActive(status.value)"
+          (click)="toggleStatus(status.value)">
           {{ status.label }}
         </button>
       </div>
@@ -253,58 +251,45 @@
     <div class="filter-group">
       <h4 class="filter-title">Giá khởi điểm</h4>
       <label class="custom-radio">
-        <input type="radio" name="startPrice" [checked]="isStartPricePreset('all')" (change)="selectStartPricePreset('all')">
+        <input type="radio" name="startPrice" [checked]="isStartPricePreset('all')"
+          (change)="selectStartPricePreset('all')">
         <span class="radio-mark"></span>
         Tất cả mức giá
       </label>
       <label class="custom-radio">
-        <input type="radio" name="startPrice" [checked]="isStartPricePreset('lt1b')" (change)="selectStartPricePreset('lt1b')">
+        <input type="radio" name="startPrice" [checked]="isStartPricePreset('lt1b')"
+          (change)="selectStartPricePreset('lt1b')">
         <span class="radio-mark"></span>
         Dưới 1 tỷ
       </label>
       <label class="custom-radio">
-        <input type="radio" name="startPrice" [checked]="isStartPricePreset('1_5')" (change)="selectStartPricePreset('1_5')">
+        <input type="radio" name="startPrice" [checked]="isStartPricePreset('1_5')"
+          (change)="selectStartPricePreset('1_5')">
         <span class="radio-mark"></span>
         1 - 5 tỷ
       </label>
       <label class="custom-radio">
-        <input type="radio" name="startPrice" [checked]="isStartPricePreset('5_10')" (change)="selectStartPricePreset('5_10')">
+        <input type="radio" name="startPrice" [checked]="isStartPricePreset('5_10')"
+          (change)="selectStartPricePreset('5_10')">
         <span class="radio-mark"></span>
         5 - 10 tỷ
       </label>
       <label class="custom-radio">
-        <input type="radio" name="startPrice" [checked]="isStartPricePreset('gt10')" (change)="selectStartPricePreset('gt10')">
+        <input type="radio" name="startPrice" [checked]="isStartPricePreset('gt10')"
+          (change)="selectStartPricePreset('gt10')">
         <span class="radio-mark"></span>
         Trên 10 tỷ
       </label>
 
       <div class="price-slider">
-        <div
-          #priceSliderTrack
-          class="slider-track"
-          (pointerdown)="onPriceTrackPointerDown($event)"
-        >
-          <div
-            class="slider-range"
-            [style.left.%]="sliderPctMin"
-            [style.width.%]="sliderPctWidth"
-          ></div>
-          <div
-            class="slider-thumb"
-            [style.left.%]="sliderPctMin"
-            (pointerdown)="onMinThumbPointerDown($event)"
-            (pointermove)="onPriceThumbPointerMove($event)"
-            (pointerup)="onPriceThumbPointerUp($event)"
-            (pointercancel)="onPriceThumbPointerUp($event)"
-          ></div>
-          <div
-            class="slider-thumb"
-            [style.left.%]="sliderPctMax"
-            (pointerdown)="onMaxThumbPointerDown($event)"
-            (pointermove)="onPriceThumbPointerMove($event)"
-            (pointerup)="onPriceThumbPointerUp($event)"
-            (pointercancel)="onPriceThumbPointerUp($event)"
-          ></div>
+        <div #priceSliderTrack class="slider-track" (pointerdown)="onPriceTrackPointerDown($event)">
+          <div class="slider-range" [style.left.%]="sliderPctMin" [style.width.%]="sliderPctWidth"></div>
+          <div class="slider-thumb" [style.left.%]="sliderPctMin" (pointerdown)="onMinThumbPointerDown($event)"
+            (pointermove)="onPriceThumbPointerMove($event)" (pointerup)="onPriceThumbPointerUp($event)"
+            (pointercancel)="onPriceThumbPointerUp($event)"></div>
+          <div class="slider-thumb" [style.left.%]="sliderPctMax" (pointerdown)="onMaxThumbPointerDown($event)"
+            (pointermove)="onPriceThumbPointerMove($event)" (pointerup)="onPriceThumbPointerUp($event)"
+            (pointercancel)="onPriceThumbPointerUp($event)"></div>
         </div>
         <div class="slider-labels">
           <span>{{ formatVndLabel(0) }}</span>
@@ -312,29 +297,15 @@
         </div>
         <div class="slider-inputs">
           <div class="input-wrap">
-            <input
-              type="text"
-              name="advPriceMin"
-              [(ngModel)]="priceMinStr"
-              (ngModelChange)="onPriceMinStrChange($event)"
-              (blur)="commitPriceMinStr()"
-              (keydown.enter)="commitPriceMinStr()"
-              autocomplete="off"
-              inputmode="numeric"
-            />
+            <input type="text" name="advPriceMin" [(ngModel)]="priceMinStr"
+              (ngModelChange)="onPriceMinStrChange($event)" (blur)="commitPriceMinStr()"
+              (keydown.enter)="commitPriceMinStr()" autocomplete="off" inputmode="numeric" />
             <span class="unit">VNĐ</span>
           </div>
           <div class="input-wrap">
-            <input
-              type="text"
-              name="advPriceMax"
-              [(ngModel)]="priceMaxStr"
-              (ngModelChange)="onPriceMaxStrChange($event)"
-              (blur)="commitPriceMaxStr()"
-              (keydown.enter)="commitPriceMaxStr()"
-              autocomplete="off"
-              inputmode="numeric"
-            />
+            <input type="text" name="advPriceMax" [(ngModel)]="priceMaxStr"
+              (ngModelChange)="onPriceMaxStrChange($event)" (blur)="commitPriceMaxStr()"
+              (keydown.enter)="commitPriceMaxStr()" autocomplete="off" inputmode="numeric" />
             <span class="unit">VNĐ</span>
           </div>
         </div>
@@ -346,12 +317,12 @@
 
       <ng-template #timeFilterCheckIconTpl>
         <span class="time-filter-row__check" aria-hidden="true">
-          <svg class="time-filter-row__check-svg time-filter-row__check-svg--off" width="24" height="24" viewBox="0 0 24 24"
-            fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="time-filter-row__check-svg time-filter-row__check-svg--off" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="#5F788B" stroke-width="1.5" />
           </svg>
-          <svg class="time-filter-row__check-svg time-filter-row__check-svg--on" width="24" height="24" viewBox="0 0 24 24"
-            fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="time-filter-row__check-svg time-filter-row__check-svg--on" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="#367639" stroke="#367639" stroke-width="1.5" />
             <path d="M7.5 12.2 L10.8 15.5 L16.9 8.5" stroke="white" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" fill="none" />
@@ -369,9 +340,11 @@
 
           <div class="time-filter-row__cell-trailing">
             <div class="time-filter-row__dates" *ngIf="timeFilter.DOC_SALE.enabled" (click)="$event.stopPropagation()">
-              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.DOC_SALE.from" [placeholder]="'Từ ngày'"></app-date-picker>
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.DOC_SALE.from"
+                [placeholder]="'Từ ngày'"></app-date-picker>
               <span class="time-filter-row__arrow">→</span>
-              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.DOC_SALE.to" [placeholder]="'Đến ngày'"></app-date-picker>
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.DOC_SALE.to"
+                [placeholder]="'Đến ngày'"></app-date-picker>
             </div>
           </div>
         </div>
@@ -384,26 +357,33 @@
           </label>
 
           <div class="time-filter-row__cell-trailing">
-            <div class="time-filter-row__dates" *ngIf="timeFilter.ASSET_VIEW.enabled" (click)="$event.stopPropagation()">
-              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.ASSET_VIEW.from" [placeholder]="'Từ ngày'"></app-date-picker>
+            <div class="time-filter-row__dates" *ngIf="timeFilter.ASSET_VIEW.enabled"
+              (click)="$event.stopPropagation()">
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.ASSET_VIEW.from"
+                [placeholder]="'Từ ngày'"></app-date-picker>
               <span class="time-filter-row__arrow">→</span>
-              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.ASSET_VIEW.to" [placeholder]="'Đến ngày'"></app-date-picker>
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.ASSET_VIEW.to"
+                [placeholder]="'Đến ngày'"></app-date-picker>
             </div>
           </div>
         </div>
 
         <div class="time-filter-row" [class.time-filter-row--expanded]="timeFilter.AUCTION_TIME.enabled">
           <label class="time-filter-row__box time-filter-row__box--label">
-            <input type="checkbox" [checked]="timeFilter.AUCTION_TIME.enabled" (change)="toggleTimeKey('AUCTION_TIME')" />
+            <input type="checkbox" [checked]="timeFilter.AUCTION_TIME.enabled"
+              (change)="toggleTimeKey('AUCTION_TIME')" />
             <ng-container *ngTemplateOutlet="timeFilterCheckIconTpl"></ng-container>
             <span class="time-filter-row__label-text">Thời điểm tổ chức phiến đấu giá</span>
           </label>
 
           <div class="time-filter-row__cell-trailing">
-            <div class="time-filter-row__dates" *ngIf="timeFilter.AUCTION_TIME.enabled" (click)="$event.stopPropagation()">
-              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.AUCTION_TIME.from" [placeholder]="'Từ ngày'"></app-date-picker>
+            <div class="time-filter-row__dates" *ngIf="timeFilter.AUCTION_TIME.enabled"
+              (click)="$event.stopPropagation()">
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.AUCTION_TIME.from"
+                [placeholder]="'Từ ngày'"></app-date-picker>
               <span class="time-filter-row__arrow">→</span>
-              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.AUCTION_TIME.to" [placeholder]="'Đến ngày'"></app-date-picker>
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.AUCTION_TIME.to"
+                [placeholder]="'Đến ngày'"></app-date-picker>
             </div>
           </div>
         </div>
@@ -416,10 +396,13 @@
           </label>
 
           <div class="time-filter-row__cell-trailing">
-            <div class="time-filter-row__dates" *ngIf="timeFilter.RESULT_TIME.enabled" (click)="$event.stopPropagation()">
-              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.RESULT_TIME.from" [placeholder]="'Từ ngày'"></app-date-picker>
+            <div class="time-filter-row__dates" *ngIf="timeFilter.RESULT_TIME.enabled"
+              (click)="$event.stopPropagation()">
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.RESULT_TIME.from"
+                [placeholder]="'Từ ngày'"></app-date-picker>
               <span class="time-filter-row__arrow">→</span>
-              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.RESULT_TIME.to" [placeholder]="'Đến ngày'"></app-date-picker>
+              <app-date-picker class="time-filter-row__picker" [inline]="true" [(value)]="timeFilter.RESULT_TIME.to"
+                [placeholder]="'Đến ngày'"></app-date-picker>
             </div>
           </div>
         </div>
@@ -430,21 +413,18 @@
     <div class="filter-group">
       <h4 class="filter-title">Danh mục pháp lý</h4>
       <div class="pill-container">
-        <button *ngFor="let item of visibleLegalCategories" class="btn-pill" [class.active]="isLegalCategoryActive(item.id)"
-          (click)="toggleLegalCategory(item.id)">
+        <button *ngFor="let item of visibleLegalCategories" class="btn-pill"
+          [class.active]="isLegalCategoryActive(item.id)" (click)="toggleLegalCategory(item.id)">
           {{ item.name }}
         </button>
       </div>
-      <button
-        *ngIf="shouldShowLegalCategoryToggle"
-        type="button"
-        class="pill-see-more-btn"
-        (click)="toggleLegalCategoryExpand()"
-      >
+      <button *ngIf="shouldShowLegalCategoryToggle" type="button" class="pill-see-more-btn"
+        (click)="toggleLegalCategoryExpand()">
         <span>{{ isLegalCategoryExpanded ? 'Thu gọn' : 'Xem thêm' }}</span>
-        <svg class="pill-see-more-icon" [class.is-expanded]="isLegalCategoryExpanded" width="12" height="12" viewBox="0 0 24 24" fill="none"
-          xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <svg class="pill-see-more-icon" [class.is-expanded]="isLegalCategoryExpanded" width="12" height="12"
+          viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
       </button>
     </div>
@@ -455,38 +435,21 @@
       <div class="auction-location__stack">
         <div class="auction-location__field">
           <span class="auction-location__label">Tỉnh/Thành phố</span>
-          <app-custom-select
-            class="auction-location__select"
-            [options]="optionsAdvProvince"
-            [placeholder]="'Chọn Tỉnh/Thành phố'"
-            [value]="selectedAdvProvinceId"
-            (valueChange)="onAdvProvincePick($event)"
-            [searchable]="true"
-          />
+          <app-custom-select class="auction-location__select" [options]="optionsAdvProvince"
+            [placeholder]="'Chọn Tỉnh/Thành phố'" [value]="selectedAdvProvinceId"
+            (valueChange)="onAdvProvincePick($event)" [searchable]="true" />
         </div>
         <div class="auction-location__field">
           <span class="auction-location__label">Quận/Huyện</span>
-          <app-custom-select
-            class="auction-location__select"
-            [options]="optionsAdvDistrict"
-            [placeholder]="'Chọn Quận/Huyện'"
-            [value]="selectedAdvDistrictId"
-            (valueChange)="onAdvDistrictPick($event)"
-            [searchable]="true"
-            [disabled]="!selectedAdvProvinceId"
-          />
+          <app-custom-select class="auction-location__select" [options]="optionsAdvDistrict"
+            [placeholder]="'Chọn Quận/Huyện'" [value]="selectedAdvDistrictId" (valueChange)="onAdvDistrictPick($event)"
+            [searchable]="true" [disabled]="!selectedAdvProvinceId" />
         </div>
         <div class="auction-location__field">
           <span class="auction-location__label">Phường/Xã</span>
-          <app-custom-select
-            class="auction-location__select"
-            [options]="optionsAdvWard"
-            [placeholder]="'Chọn Phường/ Xã'"
-            [value]="selectedAdvWardId"
-            (valueChange)="onAdvWardPick($event)"
-            [searchable]="true"
-            [disabled]="!selectedAdvDistrictId"
-          />
+          <app-custom-select class="auction-location__select" [options]="optionsAdvWard"
+            [placeholder]="'Chọn Phường/ Xã'" [value]="selectedAdvWardId" (valueChange)="onAdvWardPick($event)"
+            [searchable]="true" [disabled]="!selectedAdvDistrictId" />
         </div>
       </div>
     </div>

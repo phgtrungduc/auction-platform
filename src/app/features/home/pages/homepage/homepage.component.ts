@@ -73,12 +73,12 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   // ── Banner Slideshow ──────────────────────────────────────────────────────
   readonly bannersPerView = 4;          // số banner hiển thị cùng lúc
   banners = [
-    { src: 'assets/images/banner/banner_bds.png', alt: 'Bất động sản' },
-    { src: 'assets/images/banner/banner_xe_co.png', alt: 'Xe cộ' },
-    { src: 'assets/images/banner/banner_may_moc.png', alt: 'Máy móc' },
-    { src: 'assets/images/banner/banner_hang_hoa.png', alt: 'Hàng hoá' },
-    { src: 'assets/images/banner/banner_do_dung.png', alt: 'Đồ dùng' },
-    { src: 'assets/images/banner/banner_khac.png', alt: 'Khác' },
+    { src: 'assets/images/banner/banner_bds.png', alt: 'Bất động sản', categoryId: 1 },
+    { src: 'assets/images/banner/banner_xe_co.png', alt: 'Xe cộ', categoryId: 2 },
+    { src: 'assets/images/banner/banner_may_moc.png', alt: 'Máy móc', categoryId: 3 },
+    { src: 'assets/images/banner/banner_hang_hoa.png', alt: 'Hàng hoá', categoryId: 4 },
+    { src: 'assets/images/banner/banner_do_dung.png', alt: 'Đồ dùng', categoryId: 5 },
+    { src: 'assets/images/banner/banner_khac.png', alt: 'Khác', categoryId: null },
   ];
 
   currentBannerIndex = 0;
@@ -106,7 +106,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
         this.listCategories = this.assetCategories.map((item) => ({
           label: item.name,
           value: item.id.toString(),
-          children: (item.children ?? []).map((child) => ({ label: child.name }))
+          children: (item.children ?? []).map((child) => ({ label: child.name, value: child.id.toString() }))
         }));
       });
     this.categoryStore.getAssetCategories$();
@@ -273,8 +273,20 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     }
   }
 
-  navToListings() {
-    this.router.navigate(['/products-listing']);
+  navToListings(status?: string) {
+    const queryParams: any = {};
+    if (status) {
+      queryParams.status = status;
+    }
+    this.router.navigate(['/products-listing'], { queryParams });
+  }
+
+  navToListingsByCategory(categoryId: number | null) {
+    const queryParams: any = {};
+    if (categoryId) {
+      queryParams.category = categoryId;
+    }
+    this.router.navigate(['/products-listing'], { queryParams });
   }
 
   keyword = '';
@@ -313,8 +325,9 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     }
   ];
 
-  categories: { name: string; image: string; svgIcon: SafeHtml }[] = [
+  categories: { categoryId: number; name: string; image: string; svgIcon: SafeHtml }[] = [
     {
+      categoryId: 1,
       name: 'Bất động sản',
       image: 'assets/images/menu-images/menu-bds.png',
       svgIcon: this.svg(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -325,6 +338,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 </svg>`)
     },
     {
+      categoryId: 6,
       name: 'Đất ở',
       image: 'assets/images/menu-images/menu-dat-o.png',
       svgIcon: this.svg(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -333,6 +347,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 </svg>`)
     },
     {
+      categoryId: 7,
       name: 'Đất nông nghiệp',
       image: 'assets/images/menu-images/menu-dnn.png',
       svgIcon: this.svg(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -342,6 +357,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 </svg>`)
     },
     {
+      categoryId: 8,
       name: 'Nhà phố',
       image: 'assets/images/menu-images/menu-nha.png',
       svgIcon: this.svg(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -350,6 +366,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 </svg>`)
     },
     {
+      categoryId: 9,
       name: 'Căn hộ',
       image: 'assets/images/menu-images/menu-can-ho.png',
       svgIcon: this.svg(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -360,6 +377,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 </svg>`)
     },
     {
+      categoryId: 10,
       name: 'Nhà xưởng',
       image: 'assets/images/menu-images/menu-xuong.png',
       svgIcon: this.svg(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -367,6 +385,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 </svg>`)
     },
     {
+      categoryId: 11,
       name: 'Shophouse',
       image: 'assets/images/menu-images/menu-shophouse.png',
       svgIcon: this.svg(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -427,12 +446,12 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   ];
 
   onSearch() {
-    console.log({
-      keyword: this.keyword,
-      city: this.selectedLocationValue,
-      category: this.selectedCategory,
-    });
-    this.router.navigate(['/products-listing']);
+    const queryParams: any = {};
+    if (this.keyword) queryParams.keyword = this.keyword;
+    if (this.selectedLocationValue) queryParams.location = this.selectedLocationValue;
+    if (this.selectedCategory) queryParams.category = this.selectedCategory;
+
+    this.router.navigate(['/products-listing'], { queryParams });
   }
 
   draggedElement: HTMLElement | null = null;
