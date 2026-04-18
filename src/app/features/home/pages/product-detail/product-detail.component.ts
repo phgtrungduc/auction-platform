@@ -175,8 +175,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       status: item.status,
       owner: item.auctionOrgName,
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
-      isLiked: false,
-      favoriteId: undefined,
+      isLiked: item.isFavorite,
+      favoriteId: item.favoriteId,
     };
   }
 
