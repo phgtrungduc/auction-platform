@@ -32,6 +32,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   product: MarketplaceNoticeDetail | null = null;
   expandedAssets: boolean[] = [];
   similarProducts: SimilarProductItem[] = [];
+  isProductFavorited: boolean = false;
+  productFavoriteId: number | undefined = undefined;
 
   countdownDays: string = '0';
   countdownHours: string = '00';
@@ -89,6 +91,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.expandedAssets = [];
       }
 
+      this.isProductFavorited = !!this.product?.isFavorite;
+      this.productFavoriteId = this.product?.favoriteId;
+
       if (this.product?.docSaleEnd) {
         this.startCountdown(this.product.docSaleEnd);
       }
@@ -110,6 +115,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       .subscribe((m) => {
         if (!m) return;
         this.applyFavoriteMutationToSimilar(m.noticeId, m.isLiked, m.favoriteId);
+        this.applyFavoriteMutationToProduct(m.noticeId, m.isLiked, m.favoriteId);
       });
 
     this.route.paramMap.subscribe(params => {
@@ -195,7 +201,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       id: String(item.noticeId),
       title: item.title,
       desc: `${item.provinceName || 'Không xác định'} · ${item.assetCount ?? 0} tài sản`,
-      price: `${this.formatToTy(item.minStartingPrice)} - ${this.formatToTy(item.maxStartingPrice)}`,
+      price: this.formatStartingPriceRange(item.minStartingPrice, item.maxStartingPrice),
       status: item.status,
       owner: item.auctionOrgName,
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
@@ -210,6 +216,27 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       return (value / 1_000_000).toFixed(2) + ' triệu';
     }
     return (value / 1_000_000_000).toFixed(2) + ' tỷ';
+  }
+
+  private formatStartingPriceRange(
+    min: number | null | undefined,
+    max: number | null | undefined
+  ): string {
+    const minOk = min != null && Number.isFinite(min);
+    const maxOk = max != null && Number.isFinite(max);
+    if (!minOk && !maxOk) {
+      return '—';
+    }
+    if (minOk && maxOk && Number(min) === Number(max)) {
+      return this.formatToTy(min);
+    }
+    if (minOk && maxOk) {
+      return `${this.formatToTy(min)} - ${this.formatToTy(max)}`;
+    }
+    if (minOk) {
+      return this.formatToTy(min);
+    }
+    return this.formatToTy(max);
   }
 
   getStatusClass(status: string): string {
@@ -309,6 +336,36 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       if (idNum !== noticeId) return it;
       return { ...it, isLiked, favoriteId: isLiked ? favoriteId : undefined };
     });
+  }
+
+  private applyFavoriteMutationToProduct(noticeId: number, isLiked: boolean, favoriteId?: number): void {
+    if (!this.product || Number(this.product.id) !== noticeId) return;
+    this.isProductFavorited = isLiked;
+    this.productFavoriteId = isLiked ? favoriteId : undefined;
+  }
+
+  toggleProductFavorite(): void {
+    if (!this.product) return;
+
+    let isLoggedIn = false;
+    this.store.select(selectIsLoggedIn).subscribe(v => isLoggedIn = v).unsubscribe();
+
+    if (!isLoggedIn) {
+      this.logger.info('Vui lòng đăng nhập để thực hiện chức năng này!');
+      return;
+    }
+
+    const noticeId = Number(this.product.id);
+    if (!Number.isFinite(noticeId) || noticeId <= 0) return;
+
+    this.isProductFavorited = !this.isProductFavorited;
+
+    if (!this.isProductFavorited) {
+      this.userFavoriteStore.removeFavorite$({ noticeId, favoriteId: this.productFavoriteId });
+      return;
+    }
+
+    this.userFavoriteStore.addFavorite$(noticeId);
   }
 
   isDragging = false;

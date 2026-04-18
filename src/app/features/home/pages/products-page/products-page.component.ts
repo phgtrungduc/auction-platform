@@ -19,6 +19,7 @@ import { UserFavoriteStore } from '../../../../store/user-favorite/user-favorite
 import { Store } from '@ngrx/store';
 import { selectIsLoggedIn } from '../../../../store/app-state';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { formatNoticeTitle as formatNoticeTitleUtil } from '@core/utils/format-notice-title.util';
 
 type NoticeStatusCode = 'UPCOMING' | 'ONGOING' | 'COMPLETED' | 'CANCELLED';
 
@@ -95,7 +96,6 @@ export class ProductsPageComponent implements OnInit {
   priceMaxStr = '100000000000';
   private draggingThumb: 'min' | 'max' | null = null;
 
-  selectedCategory: number | null = null;
   assetCategories: AssetCategory[] = [];
   legalCategories: LegalCategory[] = [];
   categories: CategoryItem[] = [];
@@ -105,6 +105,9 @@ export class ProductsPageComponent implements OnInit {
   selectedLegalCategoryIds = new Set<number>();
   readonly defaultVisibleLegalCategoryCount = 8;
   isLegalCategoryExpanded = false;
+
+  /** ID category cần áp khi categories chưa load xong (từ query param). */
+  private pendingCategoryIdFromUrl: number | null = null;
 
   timeFilter = {
     DOC_SALE: { enabled: false, from: null as Date | null, to: null as Date | null },
@@ -145,6 +148,24 @@ export class ProductsPageComponent implements OnInit {
   selectedAdvDistrictId: string | null = null;
   selectedAdvWardId: string | null = null;
 
+  /** Top bar = lớp tỉnh của bộ lọc nâng cao (single source of truth). */
+  get selectedLocationValue(): string | null {
+    return this.selectedAdvProvinceId;
+  }
+
+  /** Top bar category = sub nếu có, ngược lại = parent. */
+  get topBarCategoryValue(): number | null {
+    return this.selectedAssetSubCategoryId ?? this.selectedAssetCategoryId;
+  }
+
+  /** Top bar status = giá trị duy nhất khi advanced chỉ chọn 1 status; ngược lại null (đa). */
+  get topBarStatusValue(): NoticeStatusCode | null {
+    if (this.selectedStatusValues.size === 1) {
+      return this.selectedStatusValues.values().next().value as NoticeStatusCode;
+    }
+    return null;
+  }
+
   private dvhcToSelectOptions(list: Dvhc[]): SelectOption[] {
     return list.map((d) => ({ label: d.nameWithType, value: d.code }));
   }
@@ -158,14 +179,8 @@ export class ProductsPageComponent implements OnInit {
   /** Từ khoá tìm kiếm (search bar) */
   searchQuery = '';
 
-  /** Category ID từ dropdown search bar (không liên quan advanced filter) */
-  selectedSearchCategoryId: number | null = null;
-
-  selectedStatusValue: NoticeStatusCode | null = null;
+  /** Trạng thái: dùng chung cho cả top bar (đơn) và bộ lọc nâng cao (đa). */
   selectedStatusValues = new Set<NoticeStatusCode>();
-
-  /** Province code từ location dropdown search bar */
-  selectedLocationValue: string | null = null;
 
   /** Sort value trực tiếp từ option (ví dụ: 'newest', 'price_asc') */
   selectedOrderValue: string | null = null;
@@ -409,24 +424,16 @@ export class ProductsPageComponent implements OnInit {
     // query từ search bar
     if (this.searchQuery.trim()) req.query = this.searchQuery.trim();
 
-    // assetCategoryId: ưu tiên advanced filter, fallback sang search bar category
     const assetCategoryId =
-      this.selectedAssetSubCategoryId ??
-      this.selectedAssetCategoryId ??
-      this.selectedSearchCategoryId ?? this.selectedCategory;
+      this.selectedAssetSubCategoryId ?? this.selectedAssetCategoryId;
     if (assetCategoryId != null) req.assetCategoryId = assetCategoryId;
 
-    // Statuses: merge advanced filter (Set) + search bar single value
-    const mergedStatuses = new Set<string>(this.selectedStatusValues);
-    if (this.selectedStatusValue) mergedStatuses.add(this.selectedStatusValue);
-    if (mergedStatuses.size > 0) req.statuses = [...mergedStatuses];
+    if (this.selectedStatusValues.size > 0) req.statuses = [...this.selectedStatusValues];
 
     if (advTimeFilters.length > 0) req.timeFilters = advTimeFilters;
     if (this.selectedLegalCategoryIds.size > 0) req.legalCategoryIds = [...this.selectedLegalCategoryIds];
 
-    // provinceCode: ưu tiên advanced filter 3 cấp, fallback sang location bar
-    const provinceCode = this.selectedAdvProvinceId || this.selectedLocationValue;
-    if (provinceCode) req.provinceCode = provinceCode;
+    if (this.selectedAdvProvinceId) req.provinceCode = this.selectedAdvProvinceId;
     if (this.selectedAdvDistrictId) req.districtCode = this.selectedAdvDistrictId;
 
     // sortBy: giá trị string trực tiếp từ option
@@ -448,11 +455,36 @@ export class ProductsPageComponent implements OnInit {
     this.fetchPage();
   }
 
-  /** Thay đổi category từ dropdown search bar */
+  /** Top bar dropdown đổi category — đồng bộ vào state advanced filter. */
   onCategoryChange(value: number | null) {
-    this.selectedSearchCategoryId = value;
+    this.applyCategorySelection(value);
     this.currentPage = 1;
     this.fetchPage();
+  }
+
+  /** Tìm trong assetCategories xem id là parent hay child rồi set cả 2 trường. */
+  private applyCategorySelection(id: number | null): void {
+    if (id == null) {
+      this.selectedAssetCategoryId = null;
+      this.selectedAssetSubCategoryId = null;
+      return;
+    }
+    for (const parent of this.assetCategories) {
+      if (parent.id === id) {
+        this.selectedAssetCategoryId = parent.id;
+        this.selectedAssetSubCategoryId = null;
+        return;
+      }
+      const child = parent.children?.find((c) => c.id === id);
+      if (child) {
+        this.selectedAssetCategoryId = parent.id;
+        this.selectedAssetSubCategoryId = child.id;
+        this.expandedAssetCategoryIds.add(parent.id);
+        return;
+      }
+    }
+    this.selectedAssetCategoryId = id;
+    this.selectedAssetSubCategoryId = null;
   }
 
   applyAdvancedFilters() {
@@ -471,7 +503,7 @@ export class ProductsPageComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
-          const items = res.items ?? [];
+          const items = (res.items ?? []).map((it) => this.fillEngagementMock(it));
           this.rebuildFavoriteIdMapFromNotices(items);
           this.notices = items;
           this.totalPages = res.totalPages;
@@ -511,6 +543,7 @@ export class ProductsPageComponent implements OnInit {
     this.syncPriceInputStrings();
 
     console.log('[AdvancedFilter] All filters cleared');
+    this.fetchPage();
     this.closeAdvancedFilter();
   }
 
@@ -519,14 +552,18 @@ export class ProductsPageComponent implements OnInit {
     this.fetchPage();
   }
 
+  /** Top bar status — single select; ghi đè toàn bộ Set của advanced filter. */
   onChangeStatus(value: any) {
-    this.selectedStatusValue = (value as NoticeStatusCode | null) ?? null;
+    const v = (value as NoticeStatusCode | null) ?? null;
+    this.selectedStatusValues = new Set();
+    if (v) this.selectedStatusValues.add(v);
     this.currentPage = 1;
     this.fetchPage();
   }
 
+  /** Top bar location — đồng bộ vào lớp tỉnh của bộ lọc nâng cao 3 cấp. */
   onChangeLocation(value: any) {
-    this.selectedLocationValue = (value as string | null) ?? null;
+    this.onAdvProvincePick((value as string | null) ?? null);
     this.currentPage = 1;
     this.fetchPage();
   }
@@ -583,6 +620,10 @@ export class ProductsPageComponent implements OnInit {
           value: item.id.toString(),
           children: (item.children ?? []).map((child) => ({ label: child.name, value: child.id.toString() }))
         }));
+        if (this.pendingCategoryIdFromUrl != null && this.assetCategories.length > 0) {
+          this.applyCategorySelection(this.pendingCategoryIdFromUrl);
+          this.pendingCategoryIdFromUrl = null;
+        }
       });
     this.categoryStore.getAssetCategories$();
     this.categoryStore.legalList$
@@ -617,11 +658,30 @@ export class ProductsPageComponent implements OnInit {
       });
 
     this.route.queryParams.subscribe(params => {
-      this.selectedCategory = params['category'] ? Number(params['category']) : null;
+      const categoryId = params['category'] ? Number(params['category']) : null;
+      if (categoryId != null) {
+        if (this.assetCategories.length > 0) {
+          this.applyCategorySelection(categoryId);
+        } else {
+          this.pendingCategoryIdFromUrl = categoryId;
+        }
+      } else {
+        this.applyCategorySelection(null);
+      }
+
       this.searchQuery = params['keyword'] || '';
-      this.selectedLocationValue = params['location'] || null;
-      this.selectedStatusValue = params['status'] || null;
-      this.selectedSearchCategoryId = params['category'] ? Number(params['category']) : null;
+
+      const provinceCode = params['location'] || null;
+      this.selectedAdvProvinceId = provinceCode;
+      this.selectedAdvDistrictId = null;
+      this.selectedAdvWardId = null;
+      if (provinceCode) {
+        this.dvhcStore.getDistricts$({ parentCode: provinceCode });
+      }
+
+      const status = (params['status'] as NoticeStatusCode | undefined) || null;
+      this.selectedStatusValues = new Set();
+      if (status) this.selectedStatusValues.add(status);
 
       this.currentPage = 1;
       this.fetchPage();
@@ -773,21 +833,9 @@ export class ProductsPageComponent implements OnInit {
     return this.categoryImageByRefId[normalizedRefId] ?? this.defaultNoticeImage;
   }
 
-  private static readonly noticeTitlePrefix =
-    'Thông báo việc đấu giá đối với danh mục tài sản:';
-
   /** Bỏ tiền tố chuẩn của thông báo đấu giá để title ngắn gọn trên card. */
   formatNoticeTitle(title: string | undefined | null): string {
-    const t = title?.trim() ?? '';
-    if (!t) {
-      return '—';
-    }
-    const p = ProductsPageComponent.noticeTitlePrefix;
-    if (t.startsWith(p)) {
-      const rest = t.slice(p.length).trim();
-      return rest || '—';
-    }
-    return t;
+    return formatNoticeTitleUtil(title);
   }
 
   getNoticeStatusLabel(status: string | undefined): string {
@@ -889,5 +937,20 @@ export class ProductsPageComponent implements OnInit {
       }
     }
     this.favoriteIdByNoticeId = m;
+  }
+
+  /** Random integer trong [min, max] (inclusive). */
+  private randInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  /** API chưa trả viewCount/favoriteCount → fake để UI không trống (100–300 / 0–50). */
+  private fillEngagementMock(item: NoticeSearchDocument): NoticeSearchDocument {
+    const viewCount = item.viewCount != null ? item.viewCount : this.randInt(100, 300);
+    const favoriteCount = item.favoriteCount != null ? item.favoriteCount : this.randInt(0, 50);
+    if (viewCount === item.viewCount && favoriteCount === item.favoriteCount) {
+      return item;
+    }
+    return { ...item, viewCount, favoriteCount };
   }
 }

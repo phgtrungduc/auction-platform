@@ -20,6 +20,7 @@ import { AssetCategory } from '../../../../core/models/category.model';
 import { UserFavoriteStore } from '../../../../store/user-favorite/user-favorite.store';
 import { selectIsLoggedIn } from '../../../../store/app-state';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { formatNoticeTitle } from '@core/utils/format-notice-title.util';
 
 
 @Component({
@@ -225,24 +226,25 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   private mapNoticeToAuctionItem(item: NoticeSearchDocument): AuctionItem {
     return {
       id: item.noticeId,
-      title: item.title,
+      title: formatNoticeTitle(item.title),
       type: '',
       location: item.provinceName || 'Không xác định',
-      minPrice: item.minStartingPrice ? this.formatPrice(item.minStartingPrice) : 'Không xác định',
-      maxPrice: item.maxStartingPrice ? this.formatPrice(item.maxStartingPrice) : 'Không xác định',
+      startingPriceDisplay: this.formatStartingPriceRange(item.minStartingPrice, item.maxStartingPrice),
       owner: item.auctionOrgName,
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       status: item.status,
       assetCount: item.assetCount,
       isLiked: item.isFavorite,
       favoriteId: item.favoriteId ?? undefined,
+      viewCount: this.resolveViewCount(item.viewCount),
+      favoriteCount: this.resolveFavoriteCount(item.favoriteCount),
     };
   }
 
   private mapNoticeToEndedItem(item: NoticeSearchDocument): EndedAuctionItem {
     return {
       id: item.noticeId,
-      title: item.title,
+      title: formatNoticeTitle(item.title),
       location: item.provinceName || 'Không xác định',
       price: item.maxStartingPrice ? this.formatPrice(item.maxStartingPrice) : '—',
       increase: '',
@@ -253,7 +255,24 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       assetCount: item.assetCount,
       isLiked: item.isFavorite,
       favoriteId: item.favoriteId ?? undefined,
+      viewCount: this.resolveViewCount(item.viewCount),
+      favoriteCount: this.resolveFavoriteCount(item.favoriteCount),
     };
+  }
+
+  /** Random integer trong [min, max] (inclusive). */
+  private randInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  /** API chưa trả viewCount → fake 100–300 cho UI mock. */
+  private resolveViewCount(v: number | null | undefined): number {
+    return v != null ? v : this.randInt(100, 300);
+  }
+
+  /** API chưa trả favoriteCount → fake 0–50 cho UI mock. */
+  private resolveFavoriteCount(v: number | null | undefined): number {
+    return v != null ? v : this.randInt(0, 50);
   }
 
   private getNoticeImageByCategoryRefId(refId?: string): string {
@@ -485,6 +504,28 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     return (price / 1_000_000_000).toFixed(2) + ' tỷ';
   }
 
+  /** Khởi điểm: min — max; nếu min = max chỉ hiển thị một mức. */
+  private formatStartingPriceRange(
+    min: number | null | undefined,
+    max: number | null | undefined
+  ): string {
+    const minOk = min != null && Number.isFinite(min);
+    const maxOk = max != null && Number.isFinite(max);
+    if (!minOk && !maxOk) {
+      return 'Không xác định';
+    }
+    if (minOk && maxOk && Number(min) === Number(max)) {
+      return this.formatPrice(min);
+    }
+    if (minOk && maxOk) {
+      return `${this.formatPrice(min)} - ${this.formatPrice(max)}`;
+    }
+    if (minOk) {
+      return this.formatPrice(min);
+    }
+    return this.formatPrice(max);
+  }
+
   getNoticeStatusLabel(status: string | undefined): string {
     if (!status) return 'Chưa rõ';
     switch (status) {
@@ -557,14 +598,15 @@ interface AuctionItem {
   title: string;
   type: string;
   location: string;
-  minPrice: string;
-  maxPrice: string;
+  startingPriceDisplay: string;
   owner: string;
   image: string;
   status: string;
   assetCount: number;
   isLiked: boolean;
   favoriteId?: number;
+  viewCount: number;
+  favoriteCount: number;
 }
 
 interface EndedAuctionItem {
@@ -580,4 +622,6 @@ interface EndedAuctionItem {
   assetCount: number;
   isLiked: boolean;
   favoriteId?: number;
+  viewCount: number;
+  favoriteCount: number;
 }

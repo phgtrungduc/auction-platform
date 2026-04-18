@@ -344,6 +344,54 @@
   white-space: nowrap;
 }
 
+/* Engagement row: 👁 view count · ♥ favorite count (Figma node 4900:6296) */
+.card .card__engagement {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 6px;
+}
+
+.card .card__engagement-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #5f788b;
+
+  svg {
+    color: #5f788b;
+    flex-shrink: 0;
+  }
+}
+
+/* Badge "Ảnh minh hoạ" overlay góc phải dưới của ảnh (Figma node 4689:1702) */
+.card .card__illustration-badge {
+  position: absolute;
+  right: 17px;
+  bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: rgba(251, 254, 255, 0.45);
+  border: 1px solid #edf1f4;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.02),
+    0 11px 11px rgba(0, 0, 0, 0.02),
+    0 24px 14px rgba(0, 0, 0, 0.01);
+  color: #151515;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
+}
+
 .endedauction-card__status_favourite {
   position: absolute;
   top: 12px;

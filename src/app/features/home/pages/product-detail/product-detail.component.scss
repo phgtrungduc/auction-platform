@@ -946,6 +946,61 @@
   font-size: 12px;
 }
 
+/* Favorite Asset Button (Figma node 4800:5129) */
+.favorite-asset-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin: 16px 0;
+  padding: 16px;
+  background: #fbfeff;
+  border: 1px solid #edf1f4;
+  border-radius: 8px;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.02),
+    0 11px 11px rgba(0, 0, 0, 0.02),
+    0 24px 14px rgba(0, 0, 0, 0.01);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &__icon {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  &__label {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #151515;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    background: #f6fafc;
+    border-color: #d8e1e8;
+
+    .favorite-asset-btn__icon {
+      transform: scale(1.08);
+    }
+  }
+
+  &--active {
+    background: #fff5f5;
+    border-color: #f8c8c8;
+
+    .favorite-asset-btn__label {
+      color: #e53935;
+      font-weight: 500;
+    }
+  }
+}
+
 .text-expired {
   color: #cf5555;
 }

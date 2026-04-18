@@ -102,6 +102,8 @@ export interface NoticeSearchDocument {
   firstAssetCategoryRefId?: string;
   isFavorite: boolean;
   favoriteId?: number;
+  viewCount?: number;
+  favoriteCount?: number;
 }
 
 export interface AdvancedSearchResponse {
@@ -172,5 +174,7 @@ export interface MarketplaceNoticeDetail {
   fingerprint: string;
   attachments: Attachment[];
   assets: NoticeAsset[];
+  isFavorite?: boolean;
+  favoriteId?: number;
   created: string;
 }

@@ -20,22 +20,22 @@
             (keyup.enter)="onSearch()" />
         </div>
 
-        <!-- Category Dropdown -->
-        <app-category-dropdown class="dropdown-category" [categories]="categories" [(value)]="selectedCategory"
+        <!-- Category Dropdown (đồng bộ với "Loại tài sản" trong bộ lọc nâng cao) -->
+        <app-category-dropdown class="dropdown-category" [categories]="categories" [value]="topBarCategoryValue"
           (valueChange)="onCategoryChange($event)">
         </app-category-dropdown>
 
-        <!-- Status -->
+        <!-- Status (đồng bộ với "Trạng thái" trong bộ lọc nâng cao) -->
         <div class="status-select">
-          <app-custom-select [options]="optionsStatus" [placeholder]="'Trạng thái'" [(value)]="selectedStatusValue"
+          <app-custom-select [options]="optionsStatus" [placeholder]="'Trạng thái'" [value]="topBarStatusValue"
             (valueChange)="onChangeStatus($event)">
           </app-custom-select>
         </div>
 
-        <!-- Location -->
+        <!-- Location (đồng bộ với "Tỉnh/Thành phố" trong bộ lọc nâng cao) -->
         <div class="location-select">
           <app-custom-select [options]="optionsLocation" [placeholder]="'Địa điểm đấu giá'"
-            [(value)]="selectedLocationValue" (valueChange)="onChangeLocation($event)" [searchable]="true">
+            [value]="selectedAdvProvinceId" (valueChange)="onChangeLocation($event)" [searchable]="true">
           </app-custom-select>
         </div>
 
@@ -107,10 +107,27 @@
                   </svg>
                 </div>
               </span>
+              <span class="card__illustration-badge">Ảnh minh hoạ</span>
             </div>
 
             <div class="card__body" (click)="navToDetail(item.noticeId)">
               <h4 class="card__title">{{ formatNoticeTitle(item.title) }}</h4>
+
+              <div class="card__engagement">
+                <span class="card__engagement-item" aria-label="Lượt xem">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M1.6375 7.648C1.2125 7.096 1 6.8195 1 6C1 5.18 1.2125 4.9045 1.6375 4.352C2.486 3.25 3.909 2 6 2C8.091 2 9.514 3.25 10.3625 4.352C10.7875 4.905 11 5.1805 11 6C11 6.82 10.7875 7.0955 10.3625 7.648C9.514 8.75 8.091 10 6 10C3.909 10 2.486 8.75 1.6375 7.648Z" stroke="#5F788B" stroke-width="0.75"/>
+                    <path d="M7.5 6C7.5 6.39782 7.34196 6.77936 7.06066 7.06066C6.77936 7.34196 6.39782 7.5 6 7.5C5.60218 7.5 5.22064 7.34196 4.93934 7.06066C4.65804 6.77936 4.5 6.39782 4.5 6C4.5 5.60218 4.65804 5.22064 4.93934 4.93934C5.22064 4.65804 5.60218 4.5 6 4.5C6.39782 4.5 6.77936 4.65804 7.06066 4.93934C7.34196 5.22064 7.5 5.60218 7.5 6Z" stroke="#5F788B" stroke-width="0.75"/>
+                  </svg>
+                  {{ item.viewCount ?? 0 }}
+                </span>
+                <span class="card__engagement-item" aria-label="Lượt quan tâm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M6 2.75048L5.73 3.01048C5.76498 3.04677 5.80692 3.07564 5.85331 3.09536C5.8997 3.11508 5.94959 3.12524 6 3.12524C6.05041 3.12524 6.1003 3.11508 6.14669 3.09536C6.19308 3.07564 6.23502 3.04677 6.27 3.01048L6 2.75048ZM4.713 9.16148C3.955 8.56398 3.1265 7.98048 2.469 7.24048C1.825 6.51448 1.375 5.66798 1.375 4.56898H0.625C0.625 5.90198 1.18 6.91898 1.9085 7.73848C2.6235 8.54348 3.5355 9.18848 4.2485 9.75048L4.713 9.16148ZM1.375 4.56898C1.375 3.49398 1.9825 2.59198 2.812 2.21248C3.618 1.84398 4.701 1.94148 5.73 3.01048L6.27 2.49098C5.05 1.22248 3.632 1.01298 2.5 1.53048C1.393 2.03698 0.625 3.21298 0.625 4.56898H1.375ZM4.2485 9.75048C4.505 9.95248 4.78 10.1675 5.0585 10.3305C5.337 10.4935 5.655 10.6255 6 10.6255V9.87548C5.845 9.87548 5.663 9.81548 5.437 9.68298C5.2105 9.55098 4.976 9.36898 4.713 9.16148L4.2485 9.75048ZM7.7515 9.75048C8.4645 9.18798 9.3765 8.54398 10.0915 7.73848C10.82 6.91848 11.375 5.90198 11.375 4.56898H10.625C10.625 5.66798 10.175 6.51448 9.531 7.24048C8.8735 7.98048 8.045 8.56398 7.287 9.16148L7.7515 9.75048ZM11.375 4.56898C11.375 3.21298 10.6075 2.03698 9.5 1.53048C8.368 1.01298 6.951 1.22248 5.73 2.49048L6.27 3.01048C7.299 1.94198 8.382 1.84398 9.188 2.21248C10.0175 2.59198 10.625 3.49348 10.625 4.56898H11.375ZM7.287 9.16148C7.024 9.36898 6.7895 9.55098 6.563 9.68298C6.3365 9.81498 6.155 9.87548 6 9.87548V10.6255C6.345 10.6255 6.663 10.493 6.9415 10.3305C7.2205 10.1675 7.495 9.95248 7.7515 9.75048L7.287 9.16148Z" fill="#E24141"/>
+                  </svg>
+                  {{ item.favoriteCount ?? 0 }}
+                </span>
+              </div>
 
               <div class="card__meta-row">
                 <!-- <span>Trả giá lên</span>
