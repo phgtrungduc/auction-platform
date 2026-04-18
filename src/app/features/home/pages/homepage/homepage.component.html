@@ -74,7 +74,8 @@
     <div class="banner-slider__track-wrapper">
       <div class="banner-slider__track"
         [style.transform]="'translateX(' + (-currentBannerIndex * (100 / bannersPerView)) + '%)'">
-        <div class="banner-slider__slide" *ngFor="let banner of banners">
+        <div class="banner-slider__slide" *ngFor="let banner of banners"
+          (click)="navToListingsByCategory(banner.categoryId)" style="cursor:pointer">
           <div class="banner-slider__card">
             <div class="banner-slider__img-wrap">
               <img [src]="banner.src" [alt]="banner.alt" />
@@ -116,7 +117,7 @@
           CÁC BẤT ĐỘNG SẢN ĐANG MỞ ĐĂNG KÝ VỚI GIÁ TỐT NHẤT
         </p>
 
-        <button class="homepage-section__link" (click)="navToListings()">
+        <button class="homepage-section__link" (click)="navToListings('UPCOMING')">
           Xem tất cả
           <i class="fa-solid fa-arrow-right"></i>
         </button>
@@ -238,7 +239,7 @@
     <!-- Hàng 2: 4 card nhỏ hơn -->
     <div class="category-grid category-grid--row2">
       <div class="category-card" *ngFor="let item of categories">
-        <div class="category-card__info">
+        <div class="category-card__info" (click)="navToListingsByCategory(item.categoryId)">
           <span [innerHTML]="item.svgIcon"></span>
           <span>{{item.name}}</span>
         </div>
@@ -314,7 +315,7 @@
           CÁC BẤT ĐỘNG SẢN ĐANG MỞ ĐĂNG KÝ VỚI GIÁ TỐT NHẤT
         </p>
 
-        <button class="homepage-section__link" (click)="navToListings()">
+        <button class="homepage-section__link" (click)="navToListings('COMPLETED')">
           Xem tất cả
           <i class="fa-solid fa-arrow-right"></i>
         </button>

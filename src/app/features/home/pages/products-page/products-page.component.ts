@@ -617,7 +617,14 @@ export class ProductsPageComponent implements OnInit {
       });
 
     this.route.queryParams.subscribe(params => {
-      this.selectedCategory = params['category'] || null;
+      this.selectedCategory = params['category'] ? Number(params['category']) : null;
+      this.searchQuery = params['keyword'] || '';
+      this.selectedLocationValue = params['location'] || null;
+      this.selectedStatusValue = params['status'] || null;
+      this.selectedSearchCategoryId = params['category'] ? Number(params['category']) : null;
+
+      this.currentPage = 1;
+      this.fetchPage();
     });
 
     this.syncPriceInputStrings();
@@ -628,8 +635,6 @@ export class ProductsPageComponent implements OnInit {
         if (!m) return;
         this.applyFavoriteMutation(m.noticeId, m.isLiked, m.favoriteId);
       });
-
-    this.fetchPage();
   }
 
   selectAllAssetCategories() {
