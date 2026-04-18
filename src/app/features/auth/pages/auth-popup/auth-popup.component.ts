@@ -149,7 +149,7 @@ export class AuthPopupComponent {
   }
 
   handlePasswordBack(): void {
-    this.currentStep = 'register';
+    this.currentStep = 'email';
   }
 
   handlePasswordSubmit(password: string): void {
