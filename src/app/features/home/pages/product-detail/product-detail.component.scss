@@ -144,7 +144,7 @@
   overflow: hidden;
 }
 
-.asset-details>.meta-row {
+.asset-details > .meta-row {
   margin-top: 16px;
 }
 
@@ -199,6 +199,128 @@
     color: #718096;
     width: 160px;
     vertical-align: top;
+  }
+}
+
+/* Auction org (design like screenshot) */
+.auction-org {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auction-org__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.auction-org__logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  border: 1px solid #edf1f4;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.auction-org__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.auction-org__name {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 590;
+  line-height: 140%;
+  color: var(--Black, #151515);
+}
+
+.auction-org__stats {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  color: #5f788b;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+}
+
+.auction-org__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+
+  svg {
+    color: #2e7d32;
+    flex-shrink: 0;
+  }
+}
+
+.auction-org__stat-value {
+  color: #151515;
+}
+
+.auction-org__stat-label {
+  color: #5f788b;
+}
+
+.auction-org__contact {
+  font-size: 13px;
+  color: #5f788b;
+}
+
+.auction-org__contact-value {
+  color: #1a202c;
+  font-weight: 500;
+}
+
+.auction-org__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.auction-org__btn {
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.auction-org__btn--outline {
+  border-color: #b7d4b8;
+  color: #2e7d32;
+  background: #f6fff7;
+
+  &:hover {
+    background: #effcf1;
+  }
+}
+
+.auction-org__btn--primary {
+  border-color: #2e7d32;
+  color: #fff;
+  background: #2e7d32;
+
+  &:hover {
+    background: #256628;
   }
 }
 
@@ -343,7 +465,7 @@
   }
 
   &.badge--dark {
-    background: #5F788B;
+    background: #5f788b;
   }
 }
 
@@ -509,7 +631,9 @@
   overflow: visible;
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
 
   &:hover {
     z-index: 60;
@@ -561,7 +685,7 @@
   }
 
   &.badge--dark {
-    background: #5F788B;
+    background: #5f788b;
   }
 }
 

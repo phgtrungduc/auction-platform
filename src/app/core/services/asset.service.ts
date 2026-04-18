@@ -11,6 +11,55 @@ import {
 import { environment } from '@env/environment';
 import { API_ENDPOINTS } from '@shared/data-access/api/api-endpoint';
 
+export type AuctionOrgListResponse = {
+  items: Array<{
+    id: number;
+    mojOrgId: number;
+    fullName: string;
+    address: string;
+    phone: string;
+    fax: string;
+    email: string;
+    websiteUrl: string;
+    legalRepresentative: string;
+    practicingCertificateNumber: string;
+    totalAuctioneers: number;
+    orgTypeCode: number;
+    categoryLabel: string;
+    categorySlug: string;
+    createdAt: string;
+    updatedAt: string;
+  }>;
+  totalCount: number;
+  limit: number;
+  offset: number;
+  hasMore: boolean;
+};
+
+export type AuctionOrgDetailResponse = {
+  id: number;
+  sourceId: string;
+  mojOrgId: number;
+  sourceDetailUrl?: string | null;
+  orgTypeCode?: number | null;
+  parentMojOrgId?: number | null;
+  fullName: string;
+  address?: string | null;
+  cityId?: number | null;
+  districtId?: number | null;
+  phone?: string | null;
+  fax?: string | null;
+  email?: string | null;
+  websiteUrl?: string | null;
+  legalRepresentative?: string | null;
+  practicingCertificateNumber?: string | null;
+  totalAuctioneers?: number | null;
+  categoryLabel?: string | null;
+  categorySlug?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -42,5 +91,18 @@ export class AssetService {
   advancedSearch(request?: AdvancedSearchRequest): Observable<AdvancedSearchResponse> {
     const url = `${this.API_URL}${API_ENDPOINTS.ASSET.ADVANCED_SEARCH}`;
     return this.http.post<AdvancedSearchResponse>(url, request ?? {});
+  }
+
+  getAuctionOrgs(params: { limit: number; offset: number }): Observable<AuctionOrgListResponse> {
+    const url = `${this.API_URL}${API_ENDPOINTS.ORG.SEARCH}`;
+    const httpParams = new HttpParams()
+      .set('Limit', String(params.limit))
+      .set('Offset', String(params.offset));
+    return this.http.get<AuctionOrgListResponse>(url, { params: httpParams });
+  }
+
+  getAuctionOrgDetail(id: number | string): Observable<AuctionOrgDetailResponse> {
+    const url = `${this.API_URL}${API_ENDPOINTS.ORG.SEARCH}/${id}`;
+    return this.http.get<AuctionOrgDetailResponse>(url);
   }
 }

@@ -12,6 +12,7 @@ import {
     MarketplaceNoticeDetail,
     NoticeSearchDocument
 } from "../../core/models/asset.model";
+import { AuctionOrgListResponse } from "../../core/services/asset.service";
 
 export interface AssetState {
     loading: boolean;
@@ -22,6 +23,14 @@ export interface AssetState {
     endedListData: NoticeSearchDocument[];
     similarListData: NoticeSearchDocument[];
     detailData: MarketplaceNoticeDetail | null;
+    auctionOrgsLoading: boolean;
+    auctionOrgs: AuctionOrgListResponse['items'];
+    auctionOrgsMeta: {
+        totalCount: number;
+        limit: number;
+        offset: number;
+        hasMore: boolean;
+    };
     meta: {
         totalElements: number;
         pageSize: number;
@@ -55,6 +64,14 @@ const initialState: AssetState = {
     endedListData: [],
     similarListData: [],
     detailData: null,
+    auctionOrgsLoading: false,
+    auctionOrgs: [],
+    auctionOrgsMeta: {
+        totalCount: 0,
+        limit: 4,
+        offset: 1,
+        hasMore: false,
+    },
     meta: {
         totalElements: 0,
         pageSize: 10,
@@ -111,6 +128,9 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
     similarLoading$ = this.select((s) => s.similarLoading);
     detailData$ = this.select((s) => s.detailData);
     detailLoading$ = this.select((s) => s.detailLoading);
+    auctionOrgs$ = this.select((s) => s.auctionOrgs);
+    auctionOrgsLoading$ = this.select((s) => s.auctionOrgsLoading);
+    auctionOrgsMeta$ = this.select((s) => s.auctionOrgsMeta);
 
     readonly getListData$ = this.effect<AdvancedSearchRequest>(($) =>
         $.pipe(
@@ -247,6 +267,43 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
                         (e: HttpErrorResponse) => {
                             this.patchState({
                                 detailLoading: false,
+                                error: e.message
+                            });
+                            this.toastr.error(e.message || "Đã có lỗi xảy ra", "Lỗi");
+                        }
+                    )
+                );
+            })
+        )
+    );
+
+    readonly getAuctionOrgs$ = this.effect<{ limit: number; offset: number }>(($) =>
+        $.pipe(
+            tap(() => {
+                this.patchState({
+                    auctionOrgsLoading: true,
+                    error: "",
+                    auctionOrgs: []
+                });
+            }),
+            switchMap((req) => {
+                return this.service.getAuctionOrgs(req).pipe(
+                    tapResponse(
+                        (response: AuctionOrgListResponse) => {
+                            this.patchState({
+                                auctionOrgsLoading: false,
+                                auctionOrgs: response.items ?? [],
+                                auctionOrgsMeta: {
+                                    totalCount: response.totalCount,
+                                    limit: response.limit,
+                                    offset: response.offset,
+                                    hasMore: response.hasMore
+                                }
+                            });
+                        },
+                        (e: HttpErrorResponse) => {
+                            this.patchState({
+                                auctionOrgsLoading: false,
                                 error: e.message
                             });
                             this.toastr.error(e.message || "Đã có lỗi xảy ra", "Lỗi");

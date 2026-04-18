@@ -110,23 +110,62 @@
               </svg>
               Đơn vị tổ chức đấu giá
             </h3>
-            <table class="info-table">
-              <tr>
-                <td class="t-label">Đơn vị đấu giá:</td>
-                <td>{{ product.auctionOrgName }}</td>
-              </tr>
-              <tr>
-                <td class="t-label">Thông tin liên hệ:</td>
-                <td>
+            <div class="auction-org">
+              <div class="auction-org__header">
+                <div class="auction-org__logo">
+                  <img src="assets/images/logo-cty-default.png" alt="Auction org logo" />
+                </div>
+
+                <div class="auction-org__main">
+                  <div class="auction-org__name">
+                    {{ product.auctionOrgName || "Đơn vị đấu giá" }}  {{product.auctionLocation ? " - " + product.auctionLocation : "" }}
+                  </div>
+
+                  <div class="auction-org__stats">
+                    <div class="auction-org__stat">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <g clip-path="url(#clip0_4800_8416)">
+                        <path d="M1.33398 8.00065C1.33398 4.85798 1.33398 3.28665 2.30998 2.30998C3.28732 1.33398 4.85798 1.33398 8.00065 1.33398C11.1433 1.33398 12.7147 1.33398 13.6907 2.30998C14.6673 3.28732 14.6673 4.85798 14.6673 8.00065C14.6673 11.1433 14.6673 12.7147 13.6907 13.6907C12.7153 14.6673 11.1433 14.6673 8.00065 14.6673C4.85798 14.6673 3.28665 14.6673 2.30998 13.6907C1.33398 12.7153 1.33398 11.1433 1.33398 8.00065Z" stroke="#367639"/>
+                        <path d="M4.66797 12V6M8.0013 12V4M11.3346 12V8.66667" stroke="#367639" stroke-linecap="round"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_4800_8416">
+                        <rect width="16" height="16" fill="white"/>
+                        </clipPath>
+                        </defs>
+                        </svg>
+                      <span class="auction-org__stat-value">{{ auctionSessionCount }}</span>
+                      <span class="auction-org__stat-label">phiên đấu giá</span>
+                    </div>
+                    <div class="auction-org__stat">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M12 5.33398L12.6327 5.54465C13.2927 5.76465 13.6227 5.87465 13.8113 6.13665C14 6.39865 14 6.74665 14 7.44198V11.22C14 12.08 14 12.5107 13.7733 12.7873C13.6967 12.8807 13.6033 12.9607 13.498 13.0207C13.188 13.1987 12.7633 13.1273 11.9147 12.9867C11.0773 12.8467 10.6587 12.7773 10.2433 12.812C10.0971 12.824 9.95267 12.8455 9.81 12.8767C9.40333 12.966 9.02 13.1573 8.254 13.5407C7.254 14.0407 6.754 14.2907 6.222 14.3673C6.062 14.3904 5.90067 14.402 5.738 14.402C5.2 14.4007 4.67467 14.2253 3.62333 13.8753L3.36733 13.79C2.70733 13.57 2.37733 13.46 2.18867 13.198C2 12.936 2 12.5873 2 11.8927V8.60598C2 7.49998 2 6.94732 2.32533 6.64998C2.38234 6.59779 2.4452 6.55237 2.51267 6.51465C2.898 6.29998 3.42267 6.47465 4.47133 6.82465" stroke="#367639"/>
+                        <path d="M4 5.13398C4 3.03532 5.79067 1.33398 8 1.33398C10.2093 1.33398 12 3.03532 12 5.13398C12 7.21665 10.7233 9.64665 8.73133 10.5153C8.50048 10.6153 8.25158 10.6669 8 10.6669C7.74842 10.6669 7.49952 10.6153 7.26867 10.5153C5.27667 9.64732 4 7.21665 4 5.13398Z" stroke="#367639"/>
+                        <path d="M7.99935 6.66667C8.73573 6.66667 9.33268 6.06971 9.33268 5.33333C9.33268 4.59695 8.73573 4 7.99935 4C7.26297 4 6.66602 4.59695 6.66602 5.33333C6.66602 6.06971 7.26297 6.66667 7.99935 6.66667Z" stroke="#367639"/>
+                        </svg>
+                      <span>{{ product.auctionLocation || "Đang cập nhật" }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="auction-org__contact">
+                Thông tin liên hệ:
+                <span class="auction-org__contact-value">
                   {{ product.contactPhone || "Đang cập nhật" }} -
                   {{ product.contactEmail || "Đang cập nhật" }}
-                </td>
-              </tr>
-              <tr>
-                <td class="t-label">Địa điểm đấu giá:</td>
-                <td>{{ product.auctionLocation || "Đang cập nhật" }}</td>
-              </tr>
-            </table>
+                </span>
+              </div>
+
+              <div class="auction-org__actions">
+                <button type="button" class="auction-org__btn auction-org__btn--outline">
+                  Lịch sử đấu giá
+                </button>
+                <button type="button" class="auction-org__btn auction-org__btn--primary" (click)="goToAuctionOrgProfile()">
+                  Hồ sơ đơn vị &rarr;
+                </button>
+              </div>
+            </div>
           </div>
 
           <!-- Lịch trình đấu giá -->
