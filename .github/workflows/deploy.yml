@@ -82,7 +82,7 @@ jobs:
           fi
 
           
-          MESSAGE="[CI/CD] Auction Platform FrontEnd\nStatus: $STATUS\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.event.head_commit.message }}\n$AUTHOR_TITLE: ${{ github.actor }}"
+          MESSAGE="[CI/CD] **Auction Platform FrontEnd**\nStatus: **$STATUS**\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.event.head_commit.message }}\n$AUTHOR_TITLE: ${{ github.actor }}"
 
           curl --location --request POST 'https://api.clickup.com/api/v3/workspaces/90182510745/chat/channels/2kzmqu4t-1538/messages' \
           --header "Authorization: ${{ secrets.CLICKUP_TOKEN }}" \
