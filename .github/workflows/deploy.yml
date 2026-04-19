@@ -90,5 +90,5 @@ jobs:
           --data-raw "{
               \"type\": \"message\",
               \"content\": \"$MESSAGE\",
-              \"content_format\": \"text/plain\"
+              \"content_format\": \"text/md\"
             }"
