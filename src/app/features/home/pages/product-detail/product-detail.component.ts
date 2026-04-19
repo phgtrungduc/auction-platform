@@ -502,5 +502,3 @@ interface SimilarProductItem {
   viewCount: number;
   favoriteCount: number;
 }
-
-/tests
