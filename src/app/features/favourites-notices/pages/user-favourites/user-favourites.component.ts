@@ -40,7 +40,11 @@ export class UserFavouritesComponent implements OnInit {
     this.favoriteStore.listData$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((items) => {
-        this.notices = items ?? [];
+        this.notices = (items ?? []).map(item => ({
+          ...item,
+          viewCount: item.viewCount ? item.viewCount : this.randInt(100, 300),
+          favoriteCount: item.favoriteCount ? item.favoriteCount : this.randInt(3, 50)
+        }));
       });
 
     this.favoriteStore.meta$
@@ -177,5 +181,50 @@ export class UserFavouritesComponent implements OnInit {
         }
         : x
     );
+  }
+
+  /** Khởi điểm: min — max; nếu min = max chỉ hiển thị một mức. */
+  formatStartingPriceRange(
+    min: number | null | undefined,
+    max: number | null | undefined
+  ): string {
+    const minOk = min != null && Number.isFinite(min);
+    const maxOk = max != null && Number.isFinite(max);
+    if (!minOk && !maxOk) {
+      return 'Không xác định';
+    }
+    if (minOk && maxOk && Number(min) === Number(max)) {
+      return this.formatPrice(min);
+    }
+    if (minOk && maxOk) {
+      return `${this.formatPrice(min)} - ${this.formatPrice(max)}`;
+    }
+    if (minOk) {
+      return this.formatPrice(min);
+    }
+    return this.formatPrice(max);
+  }
+
+  formatPrice(price: number | null | undefined): string {
+    if (price == null) return 'Không xác định';
+    if (price < 100_000_000) {
+      return (price / 1_000_000).toFixed(2) + ' triệu';
+    }
+    return (price / 1_000_000_000).toFixed(2) + ' tỷ';
+  }
+
+  /** Random integer trong [min, max] (inclusive). */
+  randInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  /** API chưa trả viewCount → fake 100–300 cho UI mock. */
+  resolveViewCount(v: number | null | undefined): number {
+    return v != null ? v : this.randInt(100, 300);
+  }
+
+  /** API chưa trả favoriteCount → fake 0–50 cho UI mock. */
+  resolveFavoriteCount(v: number | null | undefined): number {
+    return v != null ? v : this.randInt(0, 50);
   }
 }

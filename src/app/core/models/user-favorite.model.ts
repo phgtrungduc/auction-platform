@@ -9,6 +9,15 @@ export interface UserFavoriteItem {
   sourceUrl: string;
   createdAt: string;
   isLiked?: boolean;
+  viewCount: number;
+  favoriteCount: number;
+  provinceNames: string;
+  assetCount: number;
+  assetCategoryId: number;
+  minStartingPrice: number;
+  maxStartingPrice: number;
+  assetCategoryName: string;
+  assetCategoryRefId: string;
 }
 
 export interface UserFavoritesResponse {

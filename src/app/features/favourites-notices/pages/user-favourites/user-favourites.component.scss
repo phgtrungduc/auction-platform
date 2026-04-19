@@ -120,6 +120,9 @@
     gap: 8px;
     margin-top: auto;
     min-width: 0;
+    border-top: solid 1px #EDF1F4;
+    padding: 8px 0 4px 0;
+
   }
 
   &__org-name {
@@ -366,4 +369,60 @@
     color: #5f788b;
     margin: 0;
   }
+}
+
+/* Engagement row: 👁 view count · ♥ favorite count (Figma node 4900:6296) */
+.auction-card__engagement {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  //margin: 4px 0 6px;
+}
+
+.auction-card__engagement-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #5f788b;
+
+  svg {
+    color: #5f788b;
+    flex-shrink: 0;
+  }
+}
+
+.auction-card__meta {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 18px;
+}
+
+/* PRICE */
+
+.auction-card__price {
+  margin-top: auto;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.auction-card__price .price {
+  color: #2f7a3d;
+  font-weight: 600;
+}
+
+.auction-card__price .label {
+  font-size: 13px;
+  color: #6b7280;
+  margin-left: 6px;
+}
+
+.auction-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0 4px 0;
+  margin-top: 0;
 }

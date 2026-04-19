@@ -34,6 +34,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   similarProducts: SimilarProductItem[] = [];
   isProductFavorited: boolean = false;
   productFavoriteId: number | undefined = undefined;
+  countView = this.randomInt(100, 300);
+  countFavourite = this.randomInt(0, 50);
 
   countdownDays: string = '0';
   countdownHours: string = '00';
@@ -207,6 +209,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       image: this.getNoticeImageByCategoryRefId(item.firstAssetCategoryRefId),
       isLiked: item.isFavorite,
       favoriteId: item.favoriteId,
+      viewCount: this.resolveViewCount(item.viewCount),
+      favoriteCount: this.resolveFavoriteCount(item.favoriteCount),
     };
   }
 
@@ -468,6 +472,21 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     const normalizedRefId = refId.trim().toUpperCase();
     return this.categoryImageByRefId[normalizedRefId] ?? this.defaultNoticeImage;
   }
+
+  /** Random integer trong [min, max] (inclusive). */
+  randInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  /** API chưa trả viewCount → fake 100–300 cho UI mock. */
+  resolveViewCount(v: number | null | undefined): number {
+    return v != null ? v : this.randInt(100, 300);
+  }
+
+  /** API chưa trả favoriteCount → fake 0–50 cho UI mock. */
+  resolveFavoriteCount(v: number | null | undefined): number {
+    return v != null ? v : this.randInt(0, 50);
+  }
 }
 
 interface SimilarProductItem {
@@ -480,4 +499,6 @@ interface SimilarProductItem {
   image: string;
   isLiked: boolean;
   favoriteId?: number;
+  viewCount: number;
+  favoriteCount: number;
 }

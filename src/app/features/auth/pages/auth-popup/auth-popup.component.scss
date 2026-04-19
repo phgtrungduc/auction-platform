@@ -16,8 +16,12 @@
 .auth-popup-dialog {
   //width: min(100%, 1120px);
   width: min(92vw, 1120px);
-  height: min(92vh, 720px); /* giới hạn chiều cao */
+  height: min(92vh, 720px);
+  /* giới hạn chiều cao */
   position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+  //top: 50%;
+  //transform: translateY(-50%);
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
