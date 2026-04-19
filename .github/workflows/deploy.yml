@@ -45,23 +45,50 @@ jobs:
   # ======================
   # 2. DEPLOY JOB
   # ======================
-  deploy:
-    name: 🌍 Deploy to GitHub Pages
+  # deploy:
+  #   name: 🌍 Deploy to GitHub Pages
+  #   needs: build
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout repo loz
+  #       uses: actions/checkout@v4
+
+  #     - name: 📥 Download artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: angular-build
+  #         path: dist/auction-platform/browser
+
+  #     - name: 🚀 Deploy
+  #       uses: JamesIves/github-pages-deploy-action@v4
+  #       with:
+  #         branch: gh-pages
+  #         folder: dist/auction-platform/browser
+
+  notify:
     needs: build
     runs-on: ubuntu-latest
-
+    if: always() # Luôn chạy để báo cả tin vui lẫn tin buồn
     steps:
-      - name: Checkout repo loz
-        uses: actions/checkout@v4
+      - name: 🔔 Notify ClickUp Chat
+        run: |
+          AUTHOR_TITLE="Author"
+          if [[ "${{ needs.build.result }}" == "success" ]]; then
+            STATUS="SUCCESS ✅"
+          else
+            AUTHOR_TITLE = "Thằng ngu"
+            STATUS="FAILED ❌"
+          fi
 
-      - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: angular-build
-          path: dist/auction-platform/browser
+          
+          MESSAGE="[CI/CD] Auction Platform FrontEnd\nStatus: $STATUS\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.event.head_commit.message }}\n${{ AUTHOR_TITLE }}: ${{ github.actor }}"
 
-      - name: 🚀 Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: dist/auction-platform/browser
+          curl --location --request POST 'https://api.clickup.com/api/v3/workspaces/90182510745/chat/channels/2kzmqu4t-1538/messages' \
+          --header "Authorization: ${{ secrets.CLICKUP_TOKEN }}" \
+          --header 'Content-Type: application/json' \
+          --data-raw "{
+              \"type\": \"message\",
+              \"content\": \"$MESSAGE\",
+              \"content_format\": \"text/plain\"
+            }"
