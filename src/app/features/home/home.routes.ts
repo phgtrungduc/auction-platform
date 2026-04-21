@@ -32,5 +32,11 @@ export const HOME_ROUTES: Routes = [
     canActivate: [authGuard],
     loadChildren: () =>
       import('../favourites-notices/favourites-notices.routes').then(m => m.FAVOURITES_NOTICES_ROUTES)
+  },
+  {
+    path: 'user-profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('../auth/pages/user-profile/user-profile.component').then(m => m.UserProfileComponent)
   }
 ];

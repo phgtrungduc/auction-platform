@@ -49,4 +49,8 @@ export class HeaderComponent extends BaseComponent {
   redirectToFavourites(){
     this.router.navigate(['/favourites-notices']);
   }
+
+  redirectToProfile(): void {
+    this.router.navigate(['/user-profile']);
+  }
 }

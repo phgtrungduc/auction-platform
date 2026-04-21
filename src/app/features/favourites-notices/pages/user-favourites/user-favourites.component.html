@@ -3,6 +3,33 @@
     <h3 class="page__title">Tài sản quan tâm</h3>
     <p class="page__subtitle">Tài sản đã quan tâm ({{ totalCount }})</p>
 
+    <!-- Section "Nhận thông báo" -->
+    <div class="notify-banner" *ngIf="showNotificationBanner">
+      <div class="notify-banner__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 16V11C18 7.686 15.314 5 12 5C8.686 5 6 7.686 6 11V16L4 18V19H20V18L18 16Z"
+                stroke="#367639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M10 21C10.5 21.6 11.2 22 12 22C12.8 22 13.5 21.6 14 21"
+                stroke="#367639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="12" cy="4" r="1" fill="#367639" />
+        </svg>
+      </div>
+      <h4 class="notify-banner__title">Nhận thông báo cập nhật</h4>
+      <p class="notify-banner__desc">
+        Bật thông báo để nhận tin mới nhất về lịch đấu giá, giá khởi điểm và trạng thái phiên của tài sản bạn quan tâm
+      </p>
+      <button type="button" class="notify-banner__btn" (click)="enableNotification()"
+        [disabled]="isEnablingNotification">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M18 16V11C18 7.686 15.314 5 12 5C8.686 5 6 7.686 6 11V16L4 18V19H20V18L18 16Z"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M10 21C10.5 21.6 11.2 22 12 22C12.8 22 13.5 21.6 14 21"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        {{ isEnablingNotification ? 'Đang bật...' : 'Bật thông báo' }}
+      </button>
+    </div>
+
     <div class="grid" *ngIf="isFilterLoading">
       <div class="card card--skeleton" *ngFor="let _ of [1,2,3,4,5,6,7,8]">
         <div class="skeleton-img"></div>
