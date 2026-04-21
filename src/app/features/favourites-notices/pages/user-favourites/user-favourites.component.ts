@@ -6,6 +6,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { UserFavoriteStore } from '../../../../store/user-favorite/user-favorite.store';
 import { UserFavoriteItem } from '../../../../core/models/user-favorite.model';
+import { AuthService } from '../../../auth/services/auth.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 type NoticeStatusCode = 'UPCOMING' | 'ONGOING' | 'COMPLETED' | 'CANCELLED';
 
@@ -20,6 +22,8 @@ export class UserFavouritesComponent implements OnInit {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private favoriteStore = inject(UserFavoriteStore);
+  private authService = inject(AuthService);
+  private logger = inject(LoggerService);
 
   private readonly defaultNoticeImage = 'assets/images/product-sample-1.jpg';
 
@@ -29,6 +33,9 @@ export class UserFavouritesComponent implements OnInit {
   totalPages = 1;
   totalCount = 0;
   readonly pageSize = 20;
+
+  showNotificationBanner = false;
+  isEnablingNotification = false;
 
   ngOnInit(): void {
     this.favoriteStore.loading$
@@ -63,6 +70,41 @@ export class UserFavouritesComponent implements OnInit {
       });
 
     this.fetchPage();
+    this.fetchNotificationStatus();
+  }
+
+  private fetchNotificationStatus(): void {
+    this.authService.getCurrentUser().subscribe({
+      next: (profile) => {
+        this.showNotificationBanner = !profile?.isNotificated;
+      },
+      error: () => {
+        this.showNotificationBanner = false;
+      },
+    });
+  }
+
+  enableNotification(): void {
+    if (this.isEnablingNotification) return;
+
+    this.isEnablingNotification = true;
+    this.authService
+      .updateNotificationStatus({ statusReceiveNotification: true })
+      .subscribe({
+        next: (response) => {
+          this.isEnablingNotification = false;
+          if (response.success) {
+            this.showNotificationBanner = false;
+            this.logger.success(response.message || 'Đã bật thông báo.');
+          } else {
+            this.logger.error(response.message || 'Không thể bật thông báo.');
+          }
+        },
+        error: () => {
+          this.isEnablingNotification = false;
+          this.logger.error('Không thể bật thông báo. Vui lòng thử lại.');
+        },
+      });
   }
 
   fetchPage(): void {
