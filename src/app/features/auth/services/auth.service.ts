@@ -4,12 +4,19 @@ import { Observable, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { environment } from '../../../../environments/environment';
 import {
+  ChangePasswordRequest,
+  ChangePasswordResponse,
   LoginRequest,
   LoginResponse,
   RegisterRequest,
   RegisterResponse,
   RequestOtpRequest,
   RequestOtpResponse,
+  UpdateDisplayNameRequest,
+  UpdateDisplayNameResponse,
+  UpdateNotificationStatusRequest,
+  UpdateNotificationStatusResponse,
+  UserProfileResponse,
   VerifyOtpRequest,
   VerifyOtpResponse,
 } from '../models/auth.model';
@@ -25,6 +32,10 @@ export class AuthService {
   private readonly requestOtpUrl = `${environment.apiUrl}/auth/request-otp`;
   private readonly verifyOtpUrl = `${environment.apiUrl}/auth/verify-otp`;
   private readonly registerUrl = `${environment.apiUrl}/auth/register`;
+  private readonly currentUserUrl = `${environment.apiUrl}/users/me`;
+  private readonly changePasswordUrl = `${environment.apiUrl}/users/change-password`;
+  private readonly updateDisplayNameUrl = `${environment.apiUrl}/users/display-name`;
+  private readonly updateNotificationStatusUrl = `${environment.apiUrl}/users/status-notificated`;
 
   constructor(
     private readonly http: HttpClient,
@@ -74,6 +85,24 @@ export class AuthService {
         }
       }),
     );
+  }
+
+  getCurrentUser(): Observable<UserProfileResponse> {
+    return this.http.get<UserProfileResponse>(this.currentUserUrl);
+  }
+
+  changePassword(request: ChangePasswordRequest): Observable<ChangePasswordResponse> {
+    return this.http.post<ChangePasswordResponse>(this.changePasswordUrl, request);
+  }
+
+  updateDisplayName(request: UpdateDisplayNameRequest): Observable<UpdateDisplayNameResponse> {
+    return this.http.put<UpdateDisplayNameResponse>(this.updateDisplayNameUrl, request);
+  }
+
+  updateNotificationStatus(
+    request: UpdateNotificationStatusRequest,
+  ): Observable<UpdateNotificationStatusResponse> {
+    return this.http.put<UpdateNotificationStatusResponse>(this.updateNotificationStatusUrl, request);
   }
 
   logout(): void {

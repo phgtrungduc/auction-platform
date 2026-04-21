@@ -19,7 +19,7 @@ export interface UserFavoriteState {
   listData: UserFavoriteItem[];
   favoriteIdByNoticeId: Record<number, number>;
   mutateLoading: boolean;
-  lastMutation: { noticeId: number; isLiked: boolean; favoriteId?: number } | null;
+  lastMutation: { noticeId: number; isLiked: boolean; favoriteId?: number; isFirstTime?: boolean } | null;
   meta: {
     totalElements: number;
     pageSize: number;
@@ -125,7 +125,8 @@ export class UserFavoriteStore extends ImmerComponentStore<UserFavoriteState> {
                 lastMutation: {
                   noticeId: res.noticeId,
                   isLiked: true,
-                  favoriteId: res.favoriteId
+                  favoriteId: res.favoriteId,
+                  isFirstTime: res.isFirstTime
                 }
               }));
             },

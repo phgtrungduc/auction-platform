@@ -47,3 +47,42 @@ export interface RegisterResponse {
   accessToken: string;
   expiresInSeconds: number;
 }
+
+export interface UserProfileResponse {
+  id: number;
+  email: string;
+  displayName: string;
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt: string;
+  isNotificated: boolean;
+}
+
+export interface ChangePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+}
+
+export interface ChangePasswordResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface UpdateDisplayNameRequest {
+  displayName: string;
+}
+
+export interface UpdateDisplayNameResponse {
+  success: boolean;
+  message: string;
+  displayName: string;
+}
+
+export interface UpdateNotificationStatusRequest {
+  statusReceiveNotification: boolean;
+}
+
+export interface UpdateNotificationStatusResponse {
+  success: boolean;
+  message: string;
+}

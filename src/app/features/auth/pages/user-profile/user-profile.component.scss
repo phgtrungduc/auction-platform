@@ -1,0 +1,297 @@
+.profile-page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
+.profile-page__title {
+  text-align: center;
+  color: #367639;
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0 0 24px;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input-wrap input[readonly] {
+  cursor: text;
+  background: transparent;
+}
+
+.profile-block {
+  background: #fff;
+  border: 1px solid #edf1f4;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(17, 24, 39, 0.05);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.profile-header__avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #f4f7f8;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.profile-header__name {
+  margin: 0;
+  color: #111827;
+  font-weight: 600;
+}
+
+.profile-header__email {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.name-row {
+  display: flex;
+  gap: 8px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #367639;
+}
+
+.btn-save,
+.btn-primary {
+  border: none;
+  border-radius: 8px;
+  background: #367639;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn-save {
+  min-width: 88px;
+  height: 40px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.section-title {
+  margin: 0 0 6px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.section-caption {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.section-notification {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background: #c7d2da;
+  border-radius: 999px;
+  transition: 0.2s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.switch input:checked + .slider {
+  background: #367639;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+.password-field {
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  height: 40px;
+  min-width: 132px;
+  padding: 0 16px;
+}
+
+.btn-logout {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #fca5a5;
+  color: #e11d48;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.profile-block--state {
+  text-align: center;
+}
+
+.profile-block--error p {
+  margin-top: 0;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #d5dbe2;
+  border-radius: 8px;
+  background: #eff2f4;
+  padding: 0 12px;
+  height: 42px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+
+.input-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #d5dbe2;
+  border-radius: 8px;
+  background: #eff2f4;
+  padding: 0 12px;
+  height: 40px;
+  margin-bottom: 4px;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.input-wrap.has-error {
+  border-color: #e53935;
+  background: #fff5f5;
+}
+.icon {
+  color: #367639;
+  font-size: 15px;
+}
+.eye {
+  cursor: pointer;
+  display: inline-flex;
+}
+input[type="password"] {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  outline: none;
+  color: #1f2937;
+}
+
+.error-text {
+  margin: 2px 0 8px;
+  text-align: left;
+  color: #e53935;
+  font-size: 11.5px;
+  font-weight: 400;
+}
+
+.strength-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 8px;
+}
+
+.strength-label {
+  font-size: 12px;
+  color: #667085;
+  white-space: nowrap;
+}
+
+.bars {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+}
+
+.bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: #bfd0e2;
+  transition: background 0.3s;
+}
+input[type="text"] {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  outline: none;
+  color: #1f2937;
+}
+
+.masked-input.is-masked {
+  -webkit-text-security: disc;
+  -moz-text-security: disc;
+  text-security: disc;
+  //font-family: text-security-disc, 'Arial', sans-serif;
+  //letter-spacing: 2px;
+}
+
+.btn-wrap{
+  height: 40px;
+  max-width: 132px;
+  //padding: 0 16px;
+}
