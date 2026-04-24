@@ -11,11 +11,13 @@ import { UserFavoriteStore } from '../../../../store/user-favorite/user-favorite
 import { Store } from '@ngrx/store';
 import { selectIsLoggedIn } from '../../../../store/app-state';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { AuctionHistoryChartComponent, AuctionHistoryChartPoint } from '@shared/components/auction-history-chart/auction-history-chart.component';
+import { AuthPopupComponent } from '../../../auth/pages/auth-popup/auth-popup.component';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, TooltipModule, LoadingOverlayComponent],
+  imports: [CommonModule, TooltipModule, LoadingOverlayComponent, AuctionHistoryChartComponent, AuthPopupComponent],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })
@@ -28,6 +30,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private logger = inject(LoggerService);
   private store = inject(Store);
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
 
   product: MarketplaceNoticeDetail | null = null;
   expandedAssets: boolean[] = [];
@@ -45,6 +48,38 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   private timerInterval: any;
   private readonly fallbackAuctionSessionCount = this.randomInt(100, 1000);
   private readonly defaultNoticeImage = 'assets/images/product-sample-1.jpg';
+  selectedAuctionHistoryPeriod: AuctionHistoryPeriod = 6;
+  isAuctionHistoryUnlocked = false;
+  readonly auctionHistoryPeriods: AuctionHistoryPeriod[] = [3, 6, 12];
+  readonly auctionHistoryDataByPeriod: Record<AuctionHistoryPeriod, AuctionHistoryChartPoint[]> = {
+    3: [
+      { label: 'T1/26', high: 12, low: 4, median: 7, opening: 6 },
+      { label: 'T2/26', high: 13, low: 6, median: 8, opening: 7 },
+      { label: 'T3/26', high: 16, low: 8, median: 11, opening: 10 }
+    ],
+    6: [
+      { label: 'T1/26', high: 9, low: 2, median: 3, opening: 4 },
+      { label: 'T2/26', high: 12, low: 3, median: 7, opening: 5 },
+      { label: 'T3/26', high: 15, low: 7, median: 10, opening: 8 },
+      { label: 'T4/26', high: 14, low: 6, median: 12, opening: 10 },
+      { label: 'T5/26', high: 17, low: 13, median: 15, opening: 14 },
+      { label: 'T6/26', high: 20, low: 17, median: 17, opening: 17 }
+    ],
+    12: [
+      { label: 'T7/25', high: 7, low: 2, median: 3, opening: 3 },
+      { label: 'T8/25', high: 8, low: 3, median: 4, opening: 4 },
+      { label: 'T9/25', high: 9, low: 4, median: 5, opening: 5 },
+      { label: 'T10/25', high: 10, low: 5, median: 6, opening: 6 },
+      { label: 'T11/25', high: 11, low: 6, median: 7, opening: 7 },
+      { label: 'T12/25', high: 12, low: 6, median: 8, opening: 8 },
+      { label: 'T1/26', high: 13, low: 7, median: 9, opening: 9 },
+      { label: 'T2/26', high: 14, low: 8, median: 10, opening: 10 },
+      { label: 'T3/26', high: 16, low: 9, median: 12, opening: 11 },
+      { label: 'T4/26', high: 16, low: 10, median: 13, opening: 12 },
+      { label: 'T5/26', high: 17, low: 13, median: 15, opening: 14 },
+      { label: 'T6/26', high: 20, low: 17, median: 17, opening: 17 }
+    ]
+  };
   private readonly categoryImageByRefId: Record<string, string> = {
     REAL_ESTATE: 'assets/images/bds.png',
     VEHICLE: 'assets/images/xeco.png',
@@ -171,6 +206,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         contactPhone,
         contactEmail,
         auctionSessionCount: this.auctionSessionCount,
+      }
+    });
+  }
+
+  goToAssetOwnerProfile(): void {
+    const ownerName = this.product?.assetOwnerName || '';
+    const ownerAddress = this.product?.assetOwnerAddress || '';
+
+    this.router.navigate(['/asset-owner-detail'], {
+      state: {
+        ownerName,
+        ownerAddress
       }
     });
   }
@@ -487,6 +534,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   resolveFavoriteCount(v: number | null | undefined): number {
     return v != null ? v : this.randInt(0, 50);
   }
+
+  onAuctionHistoryPeriodChange(period: AuctionHistoryPeriod): void {
+    this.selectedAuctionHistoryPeriod = period;
+  }
+
+  unlockAuctionHistory(): void {
+    this.isAuctionHistoryUnlocked = true;
+  }
+
+  get auctionHistoryChartPoints(): AuctionHistoryChartPoint[] {
+    return this.auctionHistoryDataByPeriod[this.selectedAuctionHistoryPeriod] ?? [];
+  }
 }
 
 interface SimilarProductItem {
@@ -502,3 +561,5 @@ interface SimilarProductItem {
   viewCount: number;
   favoriteCount: number;
 }
+
+type AuctionHistoryPeriod = 3 | 6 | 12;
