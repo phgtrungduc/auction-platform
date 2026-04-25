@@ -28,6 +28,11 @@ export const HOME_ROUTES: Routes = [
       import('./pages/auction-org-detail/auction-org-detail.component').then(m => m.AuctionOrgDetailComponent),
   },
   {
+    path: 'asset-owner-detail',
+    loadComponent: () =>
+      import('./pages/asset-owner-detail/asset-owner-detail.component').then(m => m.AssetOwnerDetailComponent),
+  },
+  {
     path: 'favourites-notices',
     canActivate: [authGuard],
     loadChildren: () =>
