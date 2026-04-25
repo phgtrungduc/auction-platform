@@ -1,0 +1,164 @@
+.history-chart {
+  width: 100%;
+  height: 290px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5f788b;
+    border: 1px dashed #d4dde5;
+    border-radius: 8px;
+    background: #f8fafc;
+  }
+}
+
+.history-chart__canvas {
+  position: relative;
+  flex: 1;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}
+
+.axis-line {
+  stroke: #8aa0b2;
+  stroke-width: 1.5;
+}
+
+.grid-line {
+  stroke: #edf1f4;
+  stroke-width: 1;
+}
+
+.y-label,
+.x-label {
+  fill: #5f788b;
+  font-size: 12px;
+}
+
+.series {
+  fill: none;
+  stroke-width: 2;
+}
+
+.series--high {
+  stroke: #2f9c3c;
+}
+
+.series--low {
+  stroke: #f5a623;
+}
+
+.series--median {
+  stroke: #2a8cff;
+}
+
+.series--opening {
+  stroke: #f15b5b;
+}
+
+.last-opening-guide {
+  stroke: #f15b5b;
+  stroke-width: 1.5;
+  opacity: 0.6;
+}
+
+.chart-node {
+  fill: #ffffff;
+  stroke-width: 1.8;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+
+  &:hover,
+  &--active {
+    //transform: scale(1.2);
+    //stroke-width: 2.2;
+  }
+}
+
+.chart-node--high {
+  stroke: #2f9c3c;
+}
+
+.chart-node--low {
+  stroke: #f5a623;
+}
+
+.chart-node--median {
+  stroke: #2a8cff;
+}
+
+.chart-node--opening {
+  stroke: #f15b5b;
+}
+
+.history-chart__tooltip {
+  position: absolute;
+  min-width: 168px;
+  border: 1px solid #e3e9ef;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 8px 20px rgba(22, 36, 50, 0.12);
+  transform: translate(-50%, calc(-100% - 12px));
+  pointer-events: none;
+}
+
+.history-chart__tooltip-title {
+  color: #151515;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.history-chart__tooltip-line {
+  font-size: 13px;
+  color: #5f788b;
+  line-height: 1.5;
+}
+
+.history-chart__legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.history-chart__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #52687a;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.dot--high {
+  background: #2f9c3c;
+}
+
+.dot--low {
+  background: #f5a623;
+}
+
+.dot--median {
+  background: #2a8cff;
+}
+
+.dot--opening {
+  background: #f15b5b;
+}

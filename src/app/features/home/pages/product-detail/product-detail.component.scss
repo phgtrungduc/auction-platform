@@ -144,7 +144,7 @@
   overflow: hidden;
 }
 
-.asset-details>.meta-row {
+.asset-details > .meta-row {
   margin-top: 16px;
 }
 
@@ -324,6 +324,124 @@
   }
 }
 
+/* Auction history */
+.auction-history {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auction-history__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  .section-title {
+    margin: 0;
+  }
+}
+
+.auction-history__periods {
+  display: inline-flex;
+  border: 1px solid #edf1f4;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.auction-history__period-btn {
+  border: none;
+  padding: 8px 14px;
+  font-size: 14px;
+  color: #5f788b;
+  background: #fff;
+  cursor: pointer;
+
+  &--active {
+    background: #2f7d33;
+    color: #fff;
+    font-weight: 600;
+  }
+}
+
+.auction-history__desc {
+  margin: 0;
+  font-size: 14px;
+  color: #5f788b;
+}
+
+.auction-history__chart-shell {
+  margin-top: 10px;
+  border: 1px solid #edf1f4;
+  border-radius: 12px;
+  padding: 12px 12px 4px;
+  background: #fbfdff;
+  transition: filter 0.2s ease;
+}
+
+.auction-history__chart-shell--masked {
+  filter: blur(3px) saturate(0.8);
+}
+
+.auction-history__cta-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: -48px;
+  z-index: 1;
+}
+
+.auction-history__cta {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  color: #fff;
+  background: #2f7d33;
+  cursor: pointer;
+}
+
+.auction-history__unlock {
+  margin-top: 10px;
+  border: 1px solid #9bb3c8;
+  background: #eef2f6;
+  border-radius: 8px;
+  padding: 14px;
+  //display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.auction-history__unlock-title,
+.auction-history__insight-title {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 590;
+  line-height: 140%;
+  color: #000;
+  margin: 8px 0;
+  //text-align: center;
+}
+
+.auction-history__insight {
+  margin-top: 10px;
+  border: 1px solid #edf1f4;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 14px 16px;
+
+  ul {
+    margin: 10px 0 0;
+    padding-left: 18px;
+    color: #151515;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+  }
+}
+
 /* Timeline */
 .timeline {
   display: flex;
@@ -474,7 +592,7 @@
   font-weight: 600;
   color: #1a202c;
   line-height: 1.4;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .summary-owner {
@@ -903,6 +1021,12 @@
 }
 
 @media (max-width: 768px) {
+  .auction-history__head,
+  .auction-history__unlock {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .meta-row {
     flex-direction: column;
     gap: 8px;
@@ -1025,4 +1149,25 @@
     color: #5f788b;
     flex-shrink: 0;
   }
+}
+
+.assets-container__title {
+  display: flex;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 590;
+  line-height: 140%;
+  align-items: center;
+  gap: 8px;
+  color: #151515;
+  margin-bottom: 8px;
+}
+
+.summary-owner-link {
+  color: #36abff;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 590;
+  line-height: 140%;
+  margin-bottom: 4px;
 }
