@@ -473,14 +473,14 @@
               <img [src]="item.image" alt="Product Image" />
               <span class="similar-card__badge" [ngClass]="getStatusClass(item.status)">{{
                 getNoticeStatusLabel(item.status) }}</span>
-              <!-- <span class="endedauction-card__status_favourite">
+              <span class="endedauction-card__status_favourite">
                 <div class="heart-btn" [class.active]="item.isLiked" (click)="toggleFavorite(item, $event)">
                   <svg viewBox="0 0 24 24" class="heart-icon">
                     <path
                       d="M12 21C12 21 4 16 4 10C4 7 6 5 8.5 5C10.3 5 11.4 6 12 7C12.6 6 13.7 5 15.5 5C18 5 20 7 20 10C20 16 12 21 12 21Z" />
                   </svg>
                 </div>
-              </span> -->
+              </span>
             </div>
             <div class="similar-card__body">
               <h3 class="similar-card__title" [tooltip]="item.title" container="body" placement="bottom"
@@ -518,7 +518,7 @@
                   <span class="similar-card__avatar">{{
                     getOwnerInitials(item.owner)
                     }}</span>
-                    <span class="owner-name">{{ item.owner }}</span>
+                  {{ item.owner }}
                 </div>
                 <button class="similar-card__btn" (click)="navToDetail(item.id)">
                   Chi tiết &rarr;
