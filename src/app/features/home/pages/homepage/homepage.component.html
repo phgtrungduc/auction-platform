@@ -139,14 +139,14 @@
             }">
               {{getNoticeStatusLabel(item.status)}}
             </span>
-            <span class="endedauction-card__status_favourite">
+            <!-- <span class="endedauction-card__status_favourite">
               <div class="heart-btn" [class.active]="item.isLiked" (click)="toggleFavorite(item, $event)">
                 <svg viewBox="0 0 24 24" class="heart-icon">
                   <path
                     d="M12 21C12 21 4 16 4 10C4 7 6 5 8.5 5C10.3 5 11.4 6 12 7C12.6 6 13.7 5 15.5 5C18 5 20 7 20 10C20 16 12 21 12 21Z" />
                 </svg>
               </div>
-            </span>
+            </span> -->
             <span class="auction-card__illustration-badge">Ảnh minh hoạ</span>
           </div>
           <!-- <img class="ended-auction__image" [src]="item.image">
@@ -190,7 +190,7 @@
 
               <div class="auction-card__owner">
                 <span class="avatar">{{getOwnerInitials(item.owner)}}</span>
-                {{item.owner}}
+                <span class="owner-name">{{ item.owner }}</span>
               </div>
 
               <button class="auction-card__btn" (click)="navToDetail(item.id)">
@@ -354,14 +354,14 @@
             }">
               {{getNoticeStatusLabel(item.status)}}
             </span>
-            <span class="endedauction-card__status_favourite">
+            <!-- <span class="endedauction-card__status_favourite">
               <div class="heart-btn" [class.active]="item.isLiked" (click)="toggleFavorite(item, $event)">
                 <svg viewBox="0 0 24 24" class="heart-icon">
                   <path
                     d="M12 21C12 21 4 16 4 10C4 7 6 5 8.5 5C10.3 5 11.4 6 12 7C12.6 6 13.7 5 15.5 5C18 5 20 7 20 10C20 16 12 21 12 21Z" />
                 </svg>
               </div>
-            </span>
+            </span> -->
             <span class="auction-card__illustration-badge">Ảnh minh hoạ</span>
           </div>
           <div class="ended-auction__body">
@@ -420,7 +420,7 @@
 
               <div class="auction-card__owner">
                 <span class="avatar">{{getOwnerInitials(item.company)}}</span>
-                {{item.company}}
+                <span class="owner-name">{{ item.company }}</span>
               </div>
 
               <button class="auction-card__btn" (click)="navToDetail(item.id)">

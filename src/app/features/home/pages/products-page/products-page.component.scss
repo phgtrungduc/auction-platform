@@ -1566,3 +1566,12 @@ $time-filter-dates-min: 324px;
     margin: 0;
   }
 }
+
+.card__org-name{
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+}
