@@ -1,8 +1,17 @@
 <app-loading-overlay [loading]="!product">
   <div class="page" *ngIf="product">
     <div class="back-link" (click)="goBack()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
       </svg>
@@ -14,29 +23,60 @@
         <!-- Asset List (Tất cả gộp chung 1 card, có scroll) -->
         <div class="card detail-section assets-container">
           <div class="assets-container__title">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
               <g clip-path="url(#clip0_5028_1447)">
-              <path d="M12.4391 5.52465L12.6844 5.27932C12.9124 5.05065 13.0271 4.93665 13.0957 4.81798C13.1873 4.65973 13.2355 4.48014 13.2355 4.29732C13.2355 4.1145 13.1873 3.93491 13.0957 3.77665C13.0271 3.65798 12.9124 3.54332 12.6844 3.31532C12.4564 3.08732 12.3417 2.97265 12.2231 2.90465C12.0648 2.81312 11.8852 2.76493 11.7024 2.76493C11.5196 2.76493 11.34 2.81312 11.1817 2.90465C11.0631 2.97265 10.9484 3.08732 10.7204 3.31532L10.4751 3.56065M7.52908 10.434L3.84708 14.1167C3.61842 14.3453 3.50442 14.4593 3.38575 14.528C3.22749 14.6195 3.0479 14.6677 2.86508 14.6677C2.68226 14.6677 2.50267 14.6195 2.34442 14.528C2.22508 14.4593 2.11108 14.3453 1.88308 14.1167C1.65442 13.8887 1.54042 13.774 1.47175 13.6553C1.38022 13.4971 1.33203 13.3175 1.33203 13.1347C1.33203 12.9518 1.38022 12.7722 1.47175 12.614C1.54042 12.4953 1.65442 12.3807 1.88308 12.1527L5.56508 8.47065M5.07442 7.97932L8.02042 10.926C9.17708 12.0827 9.75575 12.6613 10.4751 12.6613C11.1944 12.6613 11.7724 12.0826 12.9297 10.9253C14.0871 9.76798 14.6657 9.18932 14.6657 8.47065C14.6657 7.75132 14.0871 7.17265 12.9297 6.01598L9.98375 3.06932C8.82708 1.91332 8.24842 1.33398 7.52908 1.33398C6.80975 1.33398 6.23175 1.91265 5.07442 3.06998C3.91708 4.22732 3.33842 4.80598 3.33842 5.52465C3.33842 6.24398 3.91708 6.82265 5.07442 7.97932Z" stroke="#367639"/>
+                <path
+                  d="M12.4391 5.52465L12.6844 5.27932C12.9124 5.05065 13.0271 4.93665 13.0957 4.81798C13.1873 4.65973 13.2355 4.48014 13.2355 4.29732C13.2355 4.1145 13.1873 3.93491 13.0957 3.77665C13.0271 3.65798 12.9124 3.54332 12.6844 3.31532C12.4564 3.08732 12.3417 2.97265 12.2231 2.90465C12.0648 2.81312 11.8852 2.76493 11.7024 2.76493C11.5196 2.76493 11.34 2.81312 11.1817 2.90465C11.0631 2.97265 10.9484 3.08732 10.7204 3.31532L10.4751 3.56065M7.52908 10.434L3.84708 14.1167C3.61842 14.3453 3.50442 14.4593 3.38575 14.528C3.22749 14.6195 3.0479 14.6677 2.86508 14.6677C2.68226 14.6677 2.50267 14.6195 2.34442 14.528C2.22508 14.4593 2.11108 14.3453 1.88308 14.1167C1.65442 13.8887 1.54042 13.774 1.47175 13.6553C1.38022 13.4971 1.33203 13.3175 1.33203 13.1347C1.33203 12.9518 1.38022 12.7722 1.47175 12.614C1.54042 12.4953 1.65442 12.3807 1.88308 12.1527L5.56508 8.47065M5.07442 7.97932L8.02042 10.926C9.17708 12.0827 9.75575 12.6613 10.4751 12.6613C11.1944 12.6613 11.7724 12.0826 12.9297 10.9253C14.0871 9.76798 14.6657 9.18932 14.6657 8.47065C14.6657 7.75132 14.0871 7.17265 12.9297 6.01598L9.98375 3.06932C8.82708 1.91332 8.24842 1.33398 7.52908 1.33398C6.80975 1.33398 6.23175 1.91265 5.07442 3.06998C3.91708 4.22732 3.33842 4.80598 3.33842 5.52465C3.33842 6.24398 3.91708 6.82265 5.07442 7.97932Z"
+                  stroke="#367639"
+                />
               </g>
               <defs>
-              <clipPath id="clip0_5028_1447">
-              <rect width="16" height="16" fill="white"/>
-              </clipPath>
+                <clipPath id="clip0_5028_1447">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
               </defs>
-              </svg>
-              Thông tin việc đấu giá</div>
-          <div class="asset-item" *ngFor="let asset of product.assets; let i = index; let last = last">
+            </svg>
+            Thông tin việc đấu giá
+          </div>
+          <div
+            class="asset-item"
+            *ngFor="let asset of product.assets; let i = index; let last = last"
+          >
             <div class="asset-header" (click)="toggleAsset(i)">
               <h3 class="section-title">{{ asset.title || product.title }}</h3>
 
-              <svg *ngIf="expandedAssets[i]" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
+              <svg
+                *ngIf="expandedAssets[i]"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <polyline points="18 15 12 9 6 15"></polyline>
               </svg>
-              <svg *ngIf="!expandedAssets[i]" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
+              <svg
+                *ngIf="!expandedAssets[i]"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </div>
@@ -45,21 +85,58 @@
               {{ asset.description || "Chưa có mô tả" }}
             </div>
 
-            <div class="asset-details-wrapper" [class.expanded]="expandedAssets[i]">
+            <div
+              class="asset-details-wrapper"
+              [class.expanded]="expandedAssets[i]"
+            >
               <div class="asset-details">
                 <div class="meta-row">
                   <div class="meta-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect
+                        x="2"
+                        y="7"
+                        width="20"
+                        height="14"
+                        rx="2"
+                        ry="2"
+                      ></rect>
+                      <path
+                        d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"
+                      ></path>
                     </svg>
                     Số lượng: <strong>1</strong>
                   </div>
                   <div class="meta-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect
+                        x="3"
+                        y="3"
+                        width="18"
+                        height="18"
+                        rx="2"
+                        ry="2"
+                      ></rect>
                       <line x1="3" y1="9" x2="21" y2="9"></line>
                       <line x1="9" y1="21" x2="9" y2="9"></line>
                     </svg>
@@ -77,10 +154,6 @@
 
                 <div class="price-boxes">
                   <div class="price-box">
-                    <div class="p-label">Hồ sơ</div>
-                    <div class="p-val text-green">-</div>
-                  </div>
-                  <div class="price-box">
                     <div class="p-label">Khởi điểm</div>
                     <div class="p-val text-green">
                       {{ formatCurrency(asset.startingPrice) }}
@@ -90,390 +163,628 @@
                     <div class="p-label">Đặt trước</div>
                     <div class="p-val text-green">
                       {{
-                      asset.depositValue < 100 ? asset.depositValue + "%" : formatCurrency(asset.depositValue) }} </div>
-                    </div>
-                    <div class="price-box">
-                      <div class="p-label">Bước giá</div>
-                      <div class="p-val text-green">
-                        {{ formatCurrency(asset.priceStep) }}
-                      </div>
-                    </div>
-                    <div class="price-box">
-                      <div class="p-label">Giá trúng</div>
-                      <div class="p-val text-green">
-                        {{ formatCurrency(asset.winningPrice) }}
-                      </div>
+                        asset.depositValue < 100
+                          ? asset.depositValue + "%"
+                          : formatCurrency(asset.depositValue)
+                      }}
                     </div>
                   </div>
-                </div>
-              </div>
-
-              <hr class="asset-separator" *ngIf="!last" />
-            </div>
-          </div>
-
-          <!-- Đơn vị tổ chức đấu giá -->
-          <div class="card detail-section mt-4">
-            <h3 class="section-title">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-              </svg>
-              Đơn vị tổ chức đấu giá
-            </h3>
-            <div class="auction-org">
-              <div class="auction-org__header">
-                <div class="auction-org__logo">
-                  <img src="assets/images/logo-cty-default.png" alt="Auction org logo" />
-                </div>
-
-                <div class="auction-org__main">
-                  <div class="auction-org__name">
-                    {{ product.auctionOrgName || "Đơn vị đấu giá" }} {{product.auctionLocation ? " - " +
-                    product.auctionLocation : "" }}
+                  <div class="price-box">
+                    <div class="p-label">Hồ sơ</div>
+                    <div class="p-val text-green">-</div>
                   </div>
 
-                  <div class="auction-org__stats">
-                    <div class="auction-org__stat">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <g clip-path="url(#clip0_4800_8416)">
-                          <path
-                            d="M1.33398 8.00065C1.33398 4.85798 1.33398 3.28665 2.30998 2.30998C3.28732 1.33398 4.85798 1.33398 8.00065 1.33398C11.1433 1.33398 12.7147 1.33398 13.6907 2.30998C14.6673 3.28732 14.6673 4.85798 14.6673 8.00065C14.6673 11.1433 14.6673 12.7147 13.6907 13.6907C12.7153 14.6673 11.1433 14.6673 8.00065 14.6673C4.85798 14.6673 3.28665 14.6673 2.30998 13.6907C1.33398 12.7153 1.33398 11.1433 1.33398 8.00065Z"
-                            stroke="#367639" />
-                          <path d="M4.66797 12V6M8.0013 12V4M11.3346 12V8.66667" stroke="#367639"
-                            stroke-linecap="round" />
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_4800_8416">
-                            <rect width="16" height="16" fill="white" />
-                          </clipPath>
-                        </defs>
-                      </svg>
-                      <span class="auction-org__stat-value">{{ auctionSessionCount }}</span>
-                      <span class="auction-org__stat-label">phiên đấu giá</span>
+                  <div class="price-box">
+                    <div class="p-label">Bước giá</div>
+                    <div class="p-val text-green">
+                      {{ formatCurrency(asset.priceStep) }}
                     </div>
-                    <div class="auction-org__stat">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path
-                          d="M12 5.33398L12.6327 5.54465C13.2927 5.76465 13.6227 5.87465 13.8113 6.13665C14 6.39865 14 6.74665 14 7.44198V11.22C14 12.08 14 12.5107 13.7733 12.7873C13.6967 12.8807 13.6033 12.9607 13.498 13.0207C13.188 13.1987 12.7633 13.1273 11.9147 12.9867C11.0773 12.8467 10.6587 12.7773 10.2433 12.812C10.0971 12.824 9.95267 12.8455 9.81 12.8767C9.40333 12.966 9.02 13.1573 8.254 13.5407C7.254 14.0407 6.754 14.2907 6.222 14.3673C6.062 14.3904 5.90067 14.402 5.738 14.402C5.2 14.4007 4.67467 14.2253 3.62333 13.8753L3.36733 13.79C2.70733 13.57 2.37733 13.46 2.18867 13.198C2 12.936 2 12.5873 2 11.8927V8.60598C2 7.49998 2 6.94732 2.32533 6.64998C2.38234 6.59779 2.4452 6.55237 2.51267 6.51465C2.898 6.29998 3.42267 6.47465 4.47133 6.82465"
-                          stroke="#367639" />
-                        <path
-                          d="M4 5.13398C4 3.03532 5.79067 1.33398 8 1.33398C10.2093 1.33398 12 3.03532 12 5.13398C12 7.21665 10.7233 9.64665 8.73133 10.5153C8.50048 10.6153 8.25158 10.6669 8 10.6669C7.74842 10.6669 7.49952 10.6153 7.26867 10.5153C5.27667 9.64732 4 7.21665 4 5.13398Z"
-                          stroke="#367639" />
-                        <path
-                          d="M7.99935 6.66667C8.73573 6.66667 9.33268 6.06971 9.33268 5.33333C9.33268 4.59695 8.73573 4 7.99935 4C7.26297 4 6.66602 4.59695 6.66602 5.33333C6.66602 6.06971 7.26297 6.66667 7.99935 6.66667Z"
-                          stroke="#367639" />
-                      </svg>
-                      <span>{{ product.auctionLocation || "Đang cập nhật" }}</span>
+                  </div>
+                  <div class="price-box">
+                    <div class="p-label">Giá trúng</div>
+                    <div class="p-val text-green">
+                      {{ formatCurrency(asset.winningPrice) }}
                     </div>
                   </div>
                 </div>
               </div>
-
-              <div class="auction-org__contact">
-                Thông tin liên hệ:
-                <span class="auction-org__contact-value">
-                  {{ product.contactPhone || "Đang cập nhật" }} -
-                  {{ product.contactEmail || "Đang cập nhật" }}
-                </span>
-              </div>
-
-              <div class="auction-org__actions">
-                <button type="button" class="auction-org__btn auction-org__btn--outline">
-                  Lịch sử đấu giá
-                </button>
-                <button type="button" class="auction-org__btn auction-org__btn--primary"
-                  (click)="goToAuctionOrgProfile()">
-                  Hồ sơ đơn vị &rarr;
-                </button>
-              </div>
             </div>
-          </div>
 
-          <!-- Lịch sử đấu giá -->
-          <div class="card detail-section mt-4">
-            <div class="auction-history">
-              <div class="auction-history__head">
-                <h3 class="section-title">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 3v18h18"></path>
-                    <path d="M7 15l3-3 3 2 4-5"></path>
-                  </svg>
-                  Lịch sử đấu giá
-                </h3>
-
-                <div class="auction-history__periods">
-                  <button type="button" class="auction-history__period-btn"
-                    *ngFor="let period of auctionHistoryPeriods"
-                    [class.auction-history__period-btn--active]="period === selectedAuctionHistoryPeriod"
-                    (click)="onAuctionHistoryPeriodChange(period)">
-                    {{ period }} tháng
-                  </button>
-                </div>
-              </div>
-
-              <p class="auction-history__desc">
-                Dữ liệu từ 6 phiên đấu giá tài sản ~120 - 180m² trong khu vực, {{ selectedAuctionHistoryPeriod }} tháng gần nhất
-              </p>
-              <p class="auction-history__desc">
-                Diện tích tài sản: 214m² -> đối chiếu với nhóm >120m²
-              </p>
-
-              <ng-container *ngIf="{ isLoggedIn: (isLoggedIn$ | async) ?? false } as authState">
-                <div class="auction-history__chart-shell"
-                  [class.auction-history__chart-shell--masked]="!authState.isLoggedIn || (authState.isLoggedIn && !isAuctionHistoryUnlocked)">
-                  <app-auction-history-chart [points]="auctionHistoryChartPoints"></app-auction-history-chart>
-                </div>
-
-                <div class="auction-history__cta-wrap" *ngIf="!authState.isLoggedIn">
-                  <button type="button" class="auction-history__cta" (click)="authPopup.openPopup()">
-                    Đăng nhập để xem phân tích giá
-                  </button>
-                </div>
-
-                <div class="auction-history__unlock" *ngIf="authState.isLoggedIn && !isAuctionHistoryUnlocked">
-                  <svg style="margin: auto;" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                    <path d="M2.66602 15.9993C2.66602 9.71401 2.66602 6.57135 4.61802 4.61802C6.57268 2.66602 9.71401 2.66602 15.9993 2.66602C22.2847 2.66602 25.4273 2.66602 27.3793 4.61802C29.3327 6.57268 29.3327 9.71401 29.3327 15.9993C29.3327 22.2847 29.3327 25.4273 27.3793 27.3793C25.4287 29.3327 22.2847 29.3327 15.9993 29.3327C9.71401 29.3327 6.57135 29.3327 4.61802 27.3793C2.66602 25.4287 2.66602 22.2847 2.66602 15.9993Z" stroke="#367639" stroke-width="1.5"/>
-                    <path d="M9.33203 18.6654L12.3894 15.608C12.6394 15.3581 12.9785 15.2176 13.332 15.2176C13.6856 15.2176 14.0247 15.3581 14.2747 15.608L16.3894 17.7227C16.6394 17.9727 16.9785 18.1131 17.332 18.1131C17.6856 18.1131 18.0247 17.9727 18.2747 17.7227L22.6654 13.332M22.6654 13.332V16.6654M22.6654 13.332H19.332" stroke="#367639" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  <div class="auction-history__unlock-title">Giá khu vực ổn định trong vài tháng gần đây</div>
-                  <button type="button" class="auction-history__cta" (click)="unlockAuctionHistory()">
-                    Mở khoá để xem vị trí giá & cơ hội
-                  </button>
-                </div>
-
-                <div class="auction-history__insight" *ngIf="authState.isLoggedIn && isAuctionHistoryUnlocked">
-                  <div class="auction-history__insight-title">Giá khu vực ổn định trong vài tháng gần đây</div>
-                  <ul>
-                    <li>Nhóm >120m²: giá trúng đi lên trong 3 tháng gần đây <strong>(+5,0%)</strong></li>
-                    <li>Nhóm >120m²: mức biến động khá cao - giá tăng giữa các phiên đấu giá</li>
-                  </ul>
-                </div>
-              </ng-container>
-            </div>
-          </div>
-
-          <!-- Lịch trình đấu giá -->
-          <div class="card detail-section mt-4">
-            <h3 class="section-title">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              Lịch trình đấu giá
-            </h3>
-
-            <div class="timeline">
-              <div class="timeline-item">
-                <div class="t-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                  </svg>
-                </div>
-                <div class="t-content">
-                  <div class="t-title">Thời gian bán hồ sơ</div>
-                  <div class="t-time">
-                    {{ product.docSaleStart | date: "HH:mm dd/MM/yyyy" }} →
-                    {{ product.docSaleEnd | date: "HH:mm dd/MM/yyyy" }}
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="t-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </div>
-                <div class="t-content">
-                  <div class="t-title">Thời gian xem tài sản</div>
-                  <div class="t-time">
-                    {{
-                    product.viewingStart
-                    ? (product.viewingStart | date: "HH:mm dd/MM/yyyy")
-                    : ".........."
-                    }}
-                    →
-                    {{
-                    product.viewingEnd
-                    ? (product.viewingEnd | date: "HH:mm dd/MM/yyyy")
-                    : ".........."
-                    }}
-                  </div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="t-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2">
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                  </svg>
-                </div>
-                <div class="t-content">
-                  <div class="t-title">Thời gian đấu giá</div>
-                  <div class="t-time">
-                    {{ product.auctionDatetime | date: "HH:mm dd/MM/yyyy" }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- File đính kèm -->
-          <div class="card detail-section mt-4 mb-4" *ngIf="product.attachments.length">
-            <h3 class="section-title">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path
-                  d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48">
-                </path>
-              </svg>
-              File đính kèm
-            </h3>
-
-            <div class="attachment-list">
-              <div class="attachment-item" *ngFor="let file of product.attachments">
-                <div class="file-info">
-                  <span class="file-icon pdf">PDF</span>
-                  <span class="file-name">{{ file.fileName }}</span>
-                </div>
-                <a [href]="file.fileUrl" target="_blank" class="file-action">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Quan tâm tài sản -->
-          <button type="button" class="favorite-asset-btn" [class.favorite-asset-btn--active]="isProductFavorited"
-            (click)="toggleProductFavorite()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" viewBox="0 0 18 16" fill="none"
-              class="favorite-asset-btn__icon" aria-hidden="true">
-              <path
-                d="M9 2.53545L8.54791 2.97999C8.60648 3.04204 8.6767 3.0914 8.75438 3.12511C8.83206 3.15883 8.9156 3.1762 9 3.1762C9.0844 3.1762 9.16794 3.15883 9.24562 3.12511C9.3233 3.0914 9.39352 3.04204 9.45209 2.97999L9 2.53545ZM6.84502 13.4969C5.57581 12.4753 4.18856 11.4776 3.08763 10.2124C2.0093 8.97107 1.25581 7.52374 1.25581 5.64469H0C0 7.92383 0.929302 9.66268 2.14912 11.0639C3.34633 12.4402 4.87339 13.543 6.06726 14.5039L6.84502 13.4969ZM1.25581 5.64469C1.25581 3.80667 2.27302 2.26444 3.66195 1.61558C5.01153 0.985525 6.82493 1.15223 8.54791 2.97999L9.45209 2.09176C7.4093 -0.0771057 5.03498 -0.435306 3.13953 0.449508C1.28595 1.31551 0 3.32622 0 5.64469H1.25581ZM6.06726 14.5039C6.49674 14.8493 6.95721 15.2169 7.42353 15.4956C7.88986 15.7743 8.42233 16 9 16V14.7177C8.74047 14.7177 8.43572 14.6151 8.0573 14.3885C7.67805 14.1628 7.2854 13.8517 6.84502 13.4969L6.06726 14.5039ZM11.9327 14.5039C13.1266 13.5422 14.6537 12.4411 15.8509 11.0639C17.0707 9.66183 18 7.92383 18 5.64469H16.7442C16.7442 7.52374 15.9907 8.97107 14.9124 10.2124C13.8114 11.4776 12.4242 12.4753 11.155 13.4969L11.9327 14.5039ZM18 5.64469C18 3.32622 16.7149 1.31551 14.8605 0.449508C12.965 -0.435306 10.5924 -0.0771057 8.54791 2.0909L9.45209 2.97999C11.1751 1.15308 12.9885 0.985525 14.338 1.61558C15.727 2.26444 16.7442 3.80582 16.7442 5.64469H18ZM11.155 13.4969C10.7146 13.8517 10.322 14.1628 9.9427 14.3885C9.56344 14.6142 9.25953 14.7177 9 14.7177V16C9.57767 16 10.1101 15.7735 10.5765 15.4956C11.0436 15.2169 11.5033 14.8493 11.9327 14.5039L11.155 13.4969Z"
-                [attr.fill]="isProductFavorited ? '#e53935' : '#151515'" />
-            </svg>
-            <span class="favorite-asset-btn__label">
-              {{ isProductFavorited ? "Đã quan tâm" : "Quan tâm tài sản" }}
-            </span>
-          </button>
-
-          <!-- Nguồn -->
-          <div class="source">
-            Nguồn:
-            <a [href]="product.sourceUrl" target="_blank">{{
-              product.sourceUrl
-              }}</a>
+            <hr class="asset-separator" *ngIf="!last" />
           </div>
         </div>
 
-        <!-- Right Sidebar -->
-        <div class="layout__sidebar">
-          <div class="summary-card">
-            <div class="badges">
-              <span class="badge {{ getNoticeStatusClass(product.status) }}">{{
-                getNoticeStatusLabel(product.status)
-                }}</span>
-              <span class="badge badge--gray" *ngFor="let cat of uniqueAssetCategories">{{ cat }}</span>
-              <span class="badge badge--gray" *ngFor="let legal of uniqueLegalCategories">{{ legal }}</span>
+        <!-- Đơn vị tổ chức đấu giá -->
+        <div class="card detail-section mt-4">
+          <h3 class="section-title">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Đơn vị tổ chức đấu giá
+          </h3>
+          <div class="auction-org">
+            <div class="auction-org__header">
+              <div class="auction-org__logo">
+                <img
+                  src="assets/images/logo-cty-default.png"
+                  alt="Auction org logo"
+                />
+              </div>
+
+              <div class="auction-org__main">
+                <div class="auction-org__name">
+                  {{ product.auctionOrgName || "Đơn vị đấu giá" }}
+                  {{
+                    product.auctionLocation
+                      ? " - " + product.auctionLocation
+                      : ""
+                  }}
+                </div>
+
+                <div class="auction-org__stats">
+                  <div class="auction-org__stat">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                    >
+                      <g clip-path="url(#clip0_4800_8416)">
+                        <path
+                          d="M1.33398 8.00065C1.33398 4.85798 1.33398 3.28665 2.30998 2.30998C3.28732 1.33398 4.85798 1.33398 8.00065 1.33398C11.1433 1.33398 12.7147 1.33398 13.6907 2.30998C14.6673 3.28732 14.6673 4.85798 14.6673 8.00065C14.6673 11.1433 14.6673 12.7147 13.6907 13.6907C12.7153 14.6673 11.1433 14.6673 8.00065 14.6673C4.85798 14.6673 3.28665 14.6673 2.30998 13.6907C1.33398 12.7153 1.33398 11.1433 1.33398 8.00065Z"
+                          stroke="#367639"
+                        />
+                        <path
+                          d="M4.66797 12V6M8.0013 12V4M11.3346 12V8.66667"
+                          stroke="#367639"
+                          stroke-linecap="round"
+                        />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_4800_8416">
+                          <rect width="16" height="16" fill="white" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <span class="auction-org__stat-value">{{
+                      auctionSessionCount
+                    }}</span>
+                    <span class="auction-org__stat-label">phiên đấu giá</span>
+                  </div>
+                  <div class="auction-org__stat">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                    >
+                      <path
+                        d="M12 5.33398L12.6327 5.54465C13.2927 5.76465 13.6227 5.87465 13.8113 6.13665C14 6.39865 14 6.74665 14 7.44198V11.22C14 12.08 14 12.5107 13.7733 12.7873C13.6967 12.8807 13.6033 12.9607 13.498 13.0207C13.188 13.1987 12.7633 13.1273 11.9147 12.9867C11.0773 12.8467 10.6587 12.7773 10.2433 12.812C10.0971 12.824 9.95267 12.8455 9.81 12.8767C9.40333 12.966 9.02 13.1573 8.254 13.5407C7.254 14.0407 6.754 14.2907 6.222 14.3673C6.062 14.3904 5.90067 14.402 5.738 14.402C5.2 14.4007 4.67467 14.2253 3.62333 13.8753L3.36733 13.79C2.70733 13.57 2.37733 13.46 2.18867 13.198C2 12.936 2 12.5873 2 11.8927V8.60598C2 7.49998 2 6.94732 2.32533 6.64998C2.38234 6.59779 2.4452 6.55237 2.51267 6.51465C2.898 6.29998 3.42267 6.47465 4.47133 6.82465"
+                        stroke="#367639"
+                      />
+                      <path
+                        d="M4 5.13398C4 3.03532 5.79067 1.33398 8 1.33398C10.2093 1.33398 12 3.03532 12 5.13398C12 7.21665 10.7233 9.64665 8.73133 10.5153C8.50048 10.6153 8.25158 10.6669 8 10.6669C7.74842 10.6669 7.49952 10.6153 7.26867 10.5153C5.27667 9.64732 4 7.21665 4 5.13398Z"
+                        stroke="#367639"
+                      />
+                      <path
+                        d="M7.99935 6.66667C8.73573 6.66667 9.33268 6.06971 9.33268 5.33333C9.33268 4.59695 8.73573 4 7.99935 4C7.26297 4 6.66602 4.59695 6.66602 5.33333C6.66602 6.06971 7.26297 6.66667 7.99935 6.66667Z"
+                        stroke="#367639"
+                      />
+                    </svg>
+                    <span>{{
+                      product.auctionLocation || "Đang cập nhật"
+                    }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <h2 class="summary-title">{{ product.title }}</h2>
+            <div class="auction-org__contact">
+              Thông tin liên hệ:
+              <span class="auction-org__contact-value">
+                {{ product.contactPhone || "Đang cập nhật" }} -
+                {{ product.contactEmail || "Đang cập nhật" }}
+              </span>
+            </div>
 
-            <div class="summary-owner-link">
-              <a role="button" tabindex="0" (click)="goToAssetOwnerProfile()">
-                Xem thêm
+            <div class="auction-org__actions">
+              <button
+                type="button"
+                class="auction-org__btn auction-org__btn--outline"
+              >
+                Lịch sử đấu giá
+              </button>
+              <button
+                type="button"
+                class="auction-org__btn auction-org__btn--primary"
+                (click)="goToAuctionOrgProfile()"
+              >
+                Hồ sơ đơn vị &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lịch sử đấu giá -->
+        <div class="card detail-section mt-4">
+          <div class="auction-history">
+            <div class="auction-history__head">
+              <h3 class="section-title">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 3v18h18"></path>
+                  <path d="M7 15l3-3 3 2 4-5"></path>
+                </svg>
+                Lịch sử đấu giá
+              </h3>
+
+              <div class="auction-history__periods">
+                <button
+                  type="button"
+                  class="auction-history__period-btn"
+                  *ngFor="let period of auctionHistoryPeriods"
+                  [class.auction-history__period-btn--active]="
+                    period === selectedAuctionHistoryPeriod
+                  "
+                  (click)="onAuctionHistoryPeriodChange(period)"
+                >
+                  {{ period }} tháng
+                </button>
+              </div>
+            </div>
+
+            <p class="auction-history__desc">
+              Dữ liệu từ 6 phiên đấu giá tài sản ~120 - 180m² trong khu vực,
+              {{ selectedAuctionHistoryPeriod }} tháng gần nhất
+            </p>
+            <p class="auction-history__desc">
+              Diện tích tài sản: 214m² -> đối chiếu với nhóm >120m²
+            </p>
+
+            <ng-container
+              *ngIf="{
+                isLoggedIn: (isLoggedIn$ | async) ?? false,
+              } as authState"
+            >
+              <div
+                class="auction-history__chart-shell"
+                [class.auction-history__chart-shell--masked]="
+                  !authState.isLoggedIn ||
+                  (authState.isLoggedIn && !isAuctionHistoryUnlocked)
+                "
+              >
+                <app-auction-history-chart
+                  [points]="auctionHistoryChartPoints"
+                ></app-auction-history-chart>
+              </div>
+
+              <div
+                class="auction-history__cta-wrap"
+                *ngIf="!authState.isLoggedIn"
+              >
+                <button
+                  type="button"
+                  class="auction-history__cta"
+                  (click)="authPopup.openPopup()"
+                >
+                  Đăng nhập để xem phân tích giá
+                </button>
+              </div>
+
+              <div
+                class="auction-history__unlock"
+                *ngIf="authState.isLoggedIn && !isAuctionHistoryUnlocked"
+              >
+                <svg
+                  style="margin: auto"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                >
+                  <path
+                    d="M2.66602 15.9993C2.66602 9.71401 2.66602 6.57135 4.61802 4.61802C6.57268 2.66602 9.71401 2.66602 15.9993 2.66602C22.2847 2.66602 25.4273 2.66602 27.3793 4.61802C29.3327 6.57268 29.3327 9.71401 29.3327 15.9993C29.3327 22.2847 29.3327 25.4273 27.3793 27.3793C25.4287 29.3327 22.2847 29.3327 15.9993 29.3327C9.71401 29.3327 6.57135 29.3327 4.61802 27.3793C2.66602 25.4287 2.66602 22.2847 2.66602 15.9993Z"
+                    stroke="#367639"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M9.33203 18.6654L12.3894 15.608C12.6394 15.3581 12.9785 15.2176 13.332 15.2176C13.6856 15.2176 14.0247 15.3581 14.2747 15.608L16.3894 17.7227C16.6394 17.9727 16.9785 18.1131 17.332 18.1131C17.6856 18.1131 18.0247 17.9727 18.2747 17.7227L22.6654 13.332M22.6654 13.332V16.6654M22.6654 13.332H19.332"
+                    stroke="#367639"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <div class="auction-history__unlock-title">
+                  Giá khu vực ổn định trong vài tháng gần đây
+                </div>
+                <button
+                  type="button"
+                  class="auction-history__cta"
+                  (click)="unlockAuctionHistory()"
+                >
+                  Mở khoá để xem vị trí giá & cơ hội
+                </button>
+              </div>
+
+              <div
+                class="auction-history__insight"
+                *ngIf="authState.isLoggedIn && isAuctionHistoryUnlocked"
+              >
+                <div class="auction-history__insight-title">
+                  Giá khu vực ổn định trong vài tháng gần đây
+                </div>
+                <ul>
+                  <li>
+                    Nhóm >120m²: giá trúng đi lên trong 3 tháng gần đây
+                    <strong>(+5,0%)</strong>
+                  </li>
+                  <li>
+                    Nhóm >120m²: mức biến động khá cao - giá tăng giữa các phiên
+                    đấu giá
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- Lịch trình đấu giá -->
+        <div class="card detail-section mt-4">
+          <h3 class="section-title">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Lịch trình đấu giá
+          </h3>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="t-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                  ></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div class="t-content">
+                <div class="t-title">Thời gian bán hồ sơ</div>
+                <div class="t-time">
+                  {{ product.docSaleStart | date: "HH:mm dd/MM/yyyy" }} →
+                  {{ product.docSaleEnd | date: "HH:mm dd/MM/yyyy" }}
+                </div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="t-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </div>
+              <div class="t-content">
+                <div class="t-title">Thời gian xem tài sản</div>
+                <div class="t-time">
+                  {{
+                    product.viewingStart
+                      ? (product.viewingStart | date: "HH:mm dd/MM/yyyy")
+                      : ".........."
+                  }}
+                  →
+                  {{
+                    product.viewingEnd
+                      ? (product.viewingEnd | date: "HH:mm dd/MM/yyyy")
+                      : ".........."
+                  }}
+                </div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="t-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                  ></path>
+                </svg>
+              </div>
+              <div class="t-content">
+                <div class="t-title">Thời gian đấu giá</div>
+                <div class="t-time">
+                  {{ product.auctionDatetime | date: "HH:mm dd/MM/yyyy" }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- File đính kèm -->
+        <div
+          class="card detail-section mt-4 mb-4"
+          *ngIf="product.attachments.length"
+        >
+          <h3 class="section-title">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
+              ></path>
+            </svg>
+            File đính kèm
+          </h3>
+
+          <div class="attachment-list">
+            <div
+              class="attachment-item"
+              *ngFor="let file of product.attachments"
+            >
+              <div class="file-info">
+                <span class="file-icon pdf">PDF</span>
+                <span class="file-name">{{ file.fileName }}</span>
+              </div>
+              <a [href]="file.fileUrl" target="_blank" class="file-action">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
               </a>
             </div>
-            <div class="summary-owner">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-              {{ product.assetOwnerName }} - {{ product.assetOwnerAddress }}
-            </div>
-
-            <div class="summary-meta">
-              <span>{{ product.assets.length || 1 }} tài sản</span> &bull;
-              <span>Trả giá lên</span>&bull;
-              <span>{{ countView }} lượt xem</span>&bull;
-              <span>{{ countFavourite }} lượt quan tâm</span>
-            </div>
-
-            <div class="timer-box">
-              <div class="timer-title {{ isDocSaleExpired ? 'text-expired' : '' }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                {{ isDocSaleExpired ? "Đã hết hạn đăng ký" : "Thời hạn đăng ký" }}
-              </div>
-              <div class="timer-display">
-                <div class="t-block">
-                  <div class="t-val">{{ countdownDays }}</div>
-                  <div class="t-lbl">ngày</div>
-                </div>
-                <div class="t-sep">:</div>
-                <div class="t-block">
-                  <div class="t-val">{{ countdownHours }}</div>
-                  <div class="t-lbl">giờ</div>
-                </div>
-                <div class="t-sep">:</div>
-                <div class="t-block">
-                  <div class="t-val">{{ countdownMinutes }}</div>
-                  <div class="t-lbl">phút</div>
-                </div>
-                <div class="t-sep">:</div>
-                <div class="t-block">
-                  <div class="t-val">{{ countdownSeconds }}</div>
-                  <div class="t-lbl">giây</div>
-                </div>
-              </div>
-            </div>
-
-            <button class="btn btn--block btn--green" [disabled]="isDocSaleExpired"
-              [class.btn--disabled]="isDocSaleExpired" (click)="registerForAuction()">
-              Đăng ký tham gia &rarr;
-            </button>
           </div>
+        </div>
 
-          <div class="ad-banner">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-            <span>Quảng cáo</span>
-          </div>
+        <!-- Quan tâm tài sản -->
+        <button
+          type="button"
+          class="favorite-asset-btn"
+          [class.favorite-asset-btn--active]="isProductFavorited"
+          (click)="toggleProductFavorite()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="16"
+            viewBox="0 0 18 16"
+            fill="none"
+            class="favorite-asset-btn__icon"
+            aria-hidden="true"
+          >
+            <path
+              d="M9 2.53545L8.54791 2.97999C8.60648 3.04204 8.6767 3.0914 8.75438 3.12511C8.83206 3.15883 8.9156 3.1762 9 3.1762C9.0844 3.1762 9.16794 3.15883 9.24562 3.12511C9.3233 3.0914 9.39352 3.04204 9.45209 2.97999L9 2.53545ZM6.84502 13.4969C5.57581 12.4753 4.18856 11.4776 3.08763 10.2124C2.0093 8.97107 1.25581 7.52374 1.25581 5.64469H0C0 7.92383 0.929302 9.66268 2.14912 11.0639C3.34633 12.4402 4.87339 13.543 6.06726 14.5039L6.84502 13.4969ZM1.25581 5.64469C1.25581 3.80667 2.27302 2.26444 3.66195 1.61558C5.01153 0.985525 6.82493 1.15223 8.54791 2.97999L9.45209 2.09176C7.4093 -0.0771057 5.03498 -0.435306 3.13953 0.449508C1.28595 1.31551 0 3.32622 0 5.64469H1.25581ZM6.06726 14.5039C6.49674 14.8493 6.95721 15.2169 7.42353 15.4956C7.88986 15.7743 8.42233 16 9 16V14.7177C8.74047 14.7177 8.43572 14.6151 8.0573 14.3885C7.67805 14.1628 7.2854 13.8517 6.84502 13.4969L6.06726 14.5039ZM11.9327 14.5039C13.1266 13.5422 14.6537 12.4411 15.8509 11.0639C17.0707 9.66183 18 7.92383 18 5.64469H16.7442C16.7442 7.52374 15.9907 8.97107 14.9124 10.2124C13.8114 11.4776 12.4242 12.4753 11.155 13.4969L11.9327 14.5039ZM18 5.64469C18 3.32622 16.7149 1.31551 14.8605 0.449508C12.965 -0.435306 10.5924 -0.0771057 8.54791 2.0909L9.45209 2.97999C11.1751 1.15308 12.9885 0.985525 14.338 1.61558C15.727 2.26444 16.7442 3.80582 16.7442 5.64469H18ZM11.155 13.4969C10.7146 13.8517 10.322 14.1628 9.9427 14.3885C9.56344 14.6142 9.25953 14.7177 9 14.7177V16C9.57767 16 10.1101 15.7735 10.5765 15.4956C11.0436 15.2169 11.5033 14.8493 11.9327 14.5039L11.155 13.4969Z"
+              [attr.fill]="isProductFavorited ? '#e53935' : '#151515'"
+            />
+          </svg>
+          <span class="favorite-asset-btn__label">
+            {{ isProductFavorited ? "Đã quan tâm" : "Quan tâm tài sản" }}
+          </span>
+        </button>
+
+        <!-- Nguồn -->
+        <div class="source">
+          Nguồn:
+          <a [href]="product.sourceUrl" target="_blank">{{
+            product.sourceUrl
+          }}</a>
         </div>
       </div>
 
-      <!-- Similar Assets Section -->
-      <div class="similar-section">
-        <h2 class="similar-title">Tài sản tương tự</h2>
-        <div class="similar-grid" #similarScroll (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
-          (mouseup)="onMouseUp()" (mouseleave)="onMouseUp()">
-          <div class="similar-card" *ngFor="let item of similarProducts">
-            <div class="similar-card__image">
-              <img [src]="item.image" alt="Product Image" />
-              <span class="similar-card__badge" [ngClass]="getStatusClass(item.status)">{{
-                getNoticeStatusLabel(item.status) }}</span>
-              <!-- <span class="endedauction-card__status_favourite">
+      <!-- Right Sidebar -->
+      <div class="layout__sidebar">
+        <div class="summary-card">
+          <div class="badges">
+            <span class="badge {{ getNoticeStatusClass(product.status) }}">{{
+              getNoticeStatusLabel(product.status)
+            }}</span>
+            <span
+              class="badge badge--gray"
+              *ngFor="let cat of uniqueAssetCategories"
+              >{{ cat }}</span
+            >
+            <span
+              class="badge badge--gray"
+              *ngFor="let legal of uniqueLegalCategories"
+              >{{ legal }}</span
+            >
+          </div>
+
+          <h2 class="summary-title">{{ product.title }}</h2>
+
+          <div class="summary-owner-link">
+            <a role="button" tabindex="0" (click)="goToAssetOwnerProfile()">
+              Xem thêm
+            </a>
+          </div>
+          <div class="summary-owner">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            {{ product.assetOwnerName }} - {{ product.assetOwnerAddress }}
+          </div>
+
+          <div class="summary-meta">
+            <span>{{ product.assets.length || 1 }} tài sản</span> &bull;
+            <span>Trả giá lên</span>&bull;
+            <span>{{ countView }} lượt xem</span>&bull;
+            <span>{{ countFavourite }} lượt quan tâm</span>
+          </div>
+
+          <div class="timer-box">
+            <div
+              class="timer-title {{ isDocSaleExpired ? 'text-expired' : '' }}"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              {{ isDocSaleExpired ? "Đã hết hạn đăng ký" : "Thời hạn đăng ký" }}
+            </div>
+            <div class="timer-display">
+              <div class="t-block">
+                <div class="t-val">{{ countdownDays }}</div>
+                <div class="t-lbl">ngày</div>
+              </div>
+              <div class="t-sep">:</div>
+              <div class="t-block">
+                <div class="t-val">{{ countdownHours }}</div>
+                <div class="t-lbl">giờ</div>
+              </div>
+              <div class="t-sep">:</div>
+              <div class="t-block">
+                <div class="t-val">{{ countdownMinutes }}</div>
+                <div class="t-lbl">phút</div>
+              </div>
+              <div class="t-sep">:</div>
+              <div class="t-block">
+                <div class="t-val">{{ countdownSeconds }}</div>
+                <div class="t-lbl">giây</div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            class="btn btn--block btn--green"
+            [disabled]="isDocSaleExpired"
+            [class.btn--disabled]="isDocSaleExpired"
+            (click)="registerForAuction()"
+          >
+            Đăng ký tham gia &rarr;
+          </button>
+        </div>
+
+        <div class="ad-banner">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path
+              d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"
+            ></path>
+          </svg>
+          <span>Quảng cáo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Similar Assets Section -->
+    <div class="similar-section">
+      <h2 class="similar-title">Tài sản tương tự</h2>
+      <div
+        class="similar-grid"
+        #similarScroll
+        (mousedown)="onMouseDown($event)"
+        (mousemove)="onMouseMove($event)"
+        (mouseup)="onMouseUp()"
+        (mouseleave)="onMouseUp()"
+      >
+        <div class="similar-card" *ngFor="let item of similarProducts">
+          <div class="similar-card__image">
+            <img [src]="item.image" alt="Product Image" />
+            <span
+              class="similar-card__badge"
+              [ngClass]="getStatusClass(item.status)"
+              >{{ getNoticeStatusLabel(item.status) }}</span
+            >
+            <!-- <span class="endedauction-card__status_favourite">
                 <div class="heart-btn" [class.active]="item.isLiked" (click)="toggleFavorite(item, $event)">
                   <svg viewBox="0 0 24 24" class="heart-icon">
                     <path
@@ -481,54 +792,84 @@
                   </svg>
                 </div>
               </span> -->
+          </div>
+          <div class="similar-card__body">
+            <h3
+              class="similar-card__title"
+              [tooltip]="item.title"
+              container="body"
+              placement="bottom"
+              [adaptivePosition]="false"
+              tooltipClass="similar-title-tooltip"
+              tabindex="0"
+            >
+              <span class="similar-card__title-text">{{ item.title }}</span>
+            </h3>
+            <div class="auction-card__engagement">
+              <span class="auction-card__engagement-item" aria-label="Lượt xem">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                >
+                  <path
+                    d="M1.6375 7.648C1.2125 7.096 1 6.8195 1 6C1 5.18 1.2125 4.9045 1.6375 4.352C2.486 3.25 3.909 2 6 2C8.091 2 9.514 3.25 10.3625 4.352C10.7875 4.905 11 5.1805 11 6C11 6.82 10.7875 7.0955 10.3625 7.648C9.514 8.75 8.091 10 6 10C3.909 10 2.486 8.75 1.6375 7.648Z"
+                    stroke="#5F788B"
+                    stroke-width="0.75"
+                  />
+                  <path
+                    d="M7.5 6C7.5 6.39782 7.34196 6.77936 7.06066 7.06066C6.77936 7.34196 6.39782 7.5 6 7.5C5.60218 7.5 5.22064 7.34196 4.93934 7.06066C4.65804 6.77936 4.5 6.39782 4.5 6C4.5 5.60218 4.65804 5.22064 4.93934 4.93934C5.22064 4.65804 5.60218 4.5 6 4.5C6.39782 4.5 6.77936 4.65804 7.06066 4.93934C7.34196 5.22064 7.5 5.60218 7.5 6Z"
+                    stroke="#5F788B"
+                    stroke-width="0.75"
+                  />
+                </svg>
+                {{ item.viewCount }}
+              </span>
+              <span
+                class="auction-card__engagement-item"
+                aria-label="Lượt quan tâm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                >
+                  <path
+                    d="M6 2.75048L5.73 3.01048C5.76498 3.04677 5.80692 3.07564 5.85331 3.09536C5.8997 3.11508 5.94959 3.12524 6 3.12524C6.05041 3.12524 6.1003 3.11508 6.14669 3.09536C6.19308 3.07564 6.23502 3.04677 6.27 3.01048L6 2.75048ZM4.713 9.16148C3.955 8.56398 3.1265 7.98048 2.469 7.24048C1.825 6.51448 1.375 5.66798 1.375 4.56898H0.625C0.625 5.90198 1.18 6.91898 1.9085 7.73848C2.6235 8.54348 3.5355 9.18848 4.2485 9.75048L4.713 9.16148ZM1.375 4.56898C1.375 3.49398 1.9825 2.59198 2.812 2.21248C3.618 1.84398 4.701 1.94148 5.73 3.01048L6.27 2.49098C5.05 1.22248 3.632 1.01298 2.5 1.53048C1.393 2.03698 0.625 3.21298 0.625 4.56898H1.375ZM4.2485 9.75048C4.505 9.95248 4.78 10.1675 5.0585 10.3305C5.337 10.4935 5.655 10.6255 6 10.6255V9.87548C5.845 9.87548 5.663 9.81548 5.437 9.68298C5.2105 9.55098 4.976 9.36898 4.713 9.16148L4.2485 9.75048ZM7.7515 9.75048C8.4645 9.18798 9.3765 8.54398 10.0915 7.73848C10.82 6.91848 11.375 5.90198 11.375 4.56898H10.625C10.625 5.66798 10.175 6.51448 9.531 7.24048C8.8735 7.98048 8.045 8.56398 7.287 9.16148L7.7515 9.75048ZM11.375 4.56898C11.375 3.21298 10.6075 2.03698 9.5 1.53048C8.368 1.01298 6.951 1.22248 5.73 2.49048L6.27 3.01048C7.299 1.94198 8.382 1.84398 9.188 2.21248C10.0175 2.59198 10.625 3.49348 10.625 4.56898H11.375ZM7.287 9.16148C7.024 9.36898 6.7895 9.55098 6.563 9.68298C6.3365 9.81498 6.155 9.87548 6 9.87548V10.6255C6.345 10.6255 6.663 10.493 6.9415 10.3305C7.2205 10.1675 7.495 9.95248 7.7515 9.75048L7.287 9.16148Z"
+                    fill="#E24141"
+                  />
+                </svg>
+                {{ item.favoriteCount }}
+              </span>
             </div>
-            <div class="similar-card__body">
-              <h3 class="similar-card__title" [tooltip]="item.title" container="body" placement="bottom"
-                [adaptivePosition]="false" tooltipClass="similar-title-tooltip" tabindex="0">
-                <span class="similar-card__title-text">{{ item.title }}</span>
-              </h3>
-              <div class="auction-card__engagement">
-                <span class="auction-card__engagement-item" aria-label="Lượt xem">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path
-                      d="M1.6375 7.648C1.2125 7.096 1 6.8195 1 6C1 5.18 1.2125 4.9045 1.6375 4.352C2.486 3.25 3.909 2 6 2C8.091 2 9.514 3.25 10.3625 4.352C10.7875 4.905 11 5.1805 11 6C11 6.82 10.7875 7.0955 10.3625 7.648C9.514 8.75 8.091 10 6 10C3.909 10 2.486 8.75 1.6375 7.648Z"
-                      stroke="#5F788B" stroke-width="0.75" />
-                    <path
-                      d="M7.5 6C7.5 6.39782 7.34196 6.77936 7.06066 7.06066C6.77936 7.34196 6.39782 7.5 6 7.5C5.60218 7.5 5.22064 7.34196 4.93934 7.06066C4.65804 6.77936 4.5 6.39782 4.5 6C4.5 5.60218 4.65804 5.22064 4.93934 4.93934C5.22064 4.65804 5.60218 4.5 6 4.5C6.39782 4.5 6.77936 4.65804 7.06066 4.93934C7.34196 5.22064 7.5 5.60218 7.5 6Z"
-                      stroke="#5F788B" stroke-width="0.75" />
-                  </svg>
-                  {{ item.viewCount }}
-                </span>
-                <span class="auction-card__engagement-item" aria-label="Lượt quan tâm">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path
-                      d="M6 2.75048L5.73 3.01048C5.76498 3.04677 5.80692 3.07564 5.85331 3.09536C5.8997 3.11508 5.94959 3.12524 6 3.12524C6.05041 3.12524 6.1003 3.11508 6.14669 3.09536C6.19308 3.07564 6.23502 3.04677 6.27 3.01048L6 2.75048ZM4.713 9.16148C3.955 8.56398 3.1265 7.98048 2.469 7.24048C1.825 6.51448 1.375 5.66798 1.375 4.56898H0.625C0.625 5.90198 1.18 6.91898 1.9085 7.73848C2.6235 8.54348 3.5355 9.18848 4.2485 9.75048L4.713 9.16148ZM1.375 4.56898C1.375 3.49398 1.9825 2.59198 2.812 2.21248C3.618 1.84398 4.701 1.94148 5.73 3.01048L6.27 2.49098C5.05 1.22248 3.632 1.01298 2.5 1.53048C1.393 2.03698 0.625 3.21298 0.625 4.56898H1.375ZM4.2485 9.75048C4.505 9.95248 4.78 10.1675 5.0585 10.3305C5.337 10.4935 5.655 10.6255 6 10.6255V9.87548C5.845 9.87548 5.663 9.81548 5.437 9.68298C5.2105 9.55098 4.976 9.36898 4.713 9.16148L4.2485 9.75048ZM7.7515 9.75048C8.4645 9.18798 9.3765 8.54398 10.0915 7.73848C10.82 6.91848 11.375 5.90198 11.375 4.56898H10.625C10.625 5.66798 10.175 6.51448 9.531 7.24048C8.8735 7.98048 8.045 8.56398 7.287 9.16148L7.7515 9.75048ZM11.375 4.56898C11.375 3.21298 10.6075 2.03698 9.5 1.53048C8.368 1.01298 6.951 1.22248 5.73 2.49048L6.27 3.01048C7.299 1.94198 8.382 1.84398 9.188 2.21248C10.0175 2.59198 10.625 3.49348 10.625 4.56898H11.375ZM7.287 9.16148C7.024 9.36898 6.7895 9.55098 6.563 9.68298C6.3365 9.81498 6.155 9.87548 6 9.87548V10.6255C6.345 10.6255 6.663 10.493 6.9415 10.3305C7.2205 10.1675 7.495 9.95248 7.7515 9.75048L7.287 9.16148Z"
-                      fill="#E24141" />
-                  </svg>
-                  {{ item.favoriteCount }}
-                </span>
-              </div>
-              <p class="similar-card__meta">{{ item.desc }}</p>
-              <div class="similar-card__price" [ngClass]="getPriceClass(item.status)">
-                {{ item.price }}
-              </div>
+            <p class="similar-card__meta">{{ item.desc }}</p>
+            <div
+              class="similar-card__price"
+              [ngClass]="getPriceClass(item.status)"
+            >
+              {{ item.price }}
+            </div>
 
-              <div class="similar-card__footer">
-                <div class="similar-card__owner">
-                  <span class="similar-card__avatar">{{
-                    getOwnerInitials(item.owner)
-                    }}</span>
-                    <span class="owner-name">{{ item.owner }}</span>
-                </div>
-                <button class="similar-card__btn" (click)="navToDetail(item.id)">
-                  Chi tiết &rarr;
-                </button>
+            <div class="similar-card__footer">
+              <div class="similar-card__owner">
+                <span class="similar-card__avatar">{{
+                  getOwnerInitials(item.owner)
+                }}</span>
+                <span class="owner-name">{{ item.owner }}</span>
               </div>
+              <button class="similar-card__btn" (click)="navToDetail(item.id)">
+                Chi tiết &rarr;
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </app-loading-overlay>
 <!-- <div class="page" *ngIf="!product">
   <p>Đang tải thông tin sản phẩm...</p>

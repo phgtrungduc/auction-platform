@@ -23,6 +23,7 @@ import {
 import { AppStates } from '../../../store/app-state';
 import { ClearSessionAction, LoadBearerTokenAction } from '../../../store/session/session.action';
 import { ClearUserAction, SetUserAction } from '../../../store/user/user.action';
+import { LoggerService } from '../../../core/services/logger.service';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +41,7 @@ export class AuthService {
   constructor(
     private readonly http: HttpClient,
     private readonly store: Store<AppStates>,
+    private readonly logger: LoggerService,
   ) {}
 
   login(request: LoginRequest): Observable<RegisterResponse> {
@@ -106,6 +108,7 @@ export class AuthService {
   }
 
   logout(): void {
+    this.logger.success('Đăng xuất thành công!');
     localStorage.removeItem('BearerToken');
     localStorage.removeItem('User');
     this.store.dispatch(ClearSessionAction());

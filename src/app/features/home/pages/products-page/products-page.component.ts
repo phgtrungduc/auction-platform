@@ -8,7 +8,7 @@ import { DatePickerComponent } from '@shared/components/date-picker/date-picker.
 import { CategoryDropdownComponent } from '@shared/components/category-dropdown/category-dropdown.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CategoryStore } from '../../../../store/category/category.store';
 import { DvhcStore } from '../../../../store/dvhc/dvhc.store';
 import { Dvhc } from '../../../../core/models/dvhc.model';
@@ -20,6 +20,7 @@ import { Store } from '@ngrx/store';
 import { selectIsLoggedIn } from '../../../../store/app-state';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { formatNoticeTitle as formatNoticeTitleUtil } from '@core/utils/format-notice-title.util';
+import { AuthPopupComponent } from '../../../auth/pages/auth-popup/auth-popup.component';
 
 type NoticeStatusCode = 'UPCOMING' | 'ONGOING' | 'COMPLETED' | 'CANCELLED';
 
@@ -28,7 +29,7 @@ type StartPricePreset = 'all' | 'lt1b' | '1_5' | '5_10' | 'gt10' | 'custom';
 @Component({
   selector: 'app-products-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomSelectComponent, DatePickerComponent, CategoryDropdownComponent, PaginationComponent],
+  imports: [CommonModule, FormsModule, CustomSelectComponent, DatePickerComponent, CategoryDropdownComponent, PaginationComponent, TooltipModule, AuthPopupComponent],
   templateUrl: './products-page.component.html',
   styleUrl: './products-page.component.scss'
 })
@@ -83,6 +84,7 @@ export class ProductsPageComponent implements OnInit {
   private store = inject(Store);
 
   @ViewChild('priceSliderTrack') priceSliderTrackRef?: ElementRef<HTMLElement>;
+  @ViewChild('advFilterBody') advFilterBodyRef?: ElementRef<HTMLElement>;
 
   isFilterLoading = false;
 
@@ -183,7 +185,7 @@ export class ProductsPageComponent implements OnInit {
   selectedStatusValues = new Set<NoticeStatusCode>();
 
   /** Sort value trực tiếp từ option (ví dụ: 'newest', 'price_asc') */
-  selectedOrderValue: string | null = null;
+  selectedOrderValue: string | null = 'auction_soon';
 
   selectedToDate: Date | null = null;
 
@@ -201,7 +203,16 @@ export class ProductsPageComponent implements OnInit {
   hasLoggedIn = true;
 
   toggleAdvancedFilter() {
-    this.isAdvancedFilterOpen = !this.isAdvancedFilterOpen;
+    const nextOpenState = !this.isAdvancedFilterOpen;
+    this.isAdvancedFilterOpen = nextOpenState;
+    if (nextOpenState) {
+      requestAnimationFrame(() => {
+        const panelBody = this.advFilterBodyRef?.nativeElement;
+        if (panelBody) {
+          panelBody.scrollTop = 0;
+        }
+      });
+    }
   }
 
   closeAdvancedFilter() {
@@ -251,7 +262,7 @@ export class ProductsPageComponent implements OnInit {
         break;
       case 'lt1b':
         this.priceMinVnd = 0;
-        this.priceMaxVnd = 1_000_000_000;
+        this.priceMaxVnd = 999_999_999;
         break;
       case '1_5':
         this.priceMinVnd = 1_000_000_000;
@@ -611,6 +622,12 @@ export class ProductsPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.store.select(selectIsLoggedIn)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((isLoggedIn) => {
+        this.hasLoggedIn = isLoggedIn;
+      });
+
     this.categoryStore.list$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((categories) => {

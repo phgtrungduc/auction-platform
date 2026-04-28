@@ -156,6 +156,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-height: 45px;
   }
 
   &__meta-row {

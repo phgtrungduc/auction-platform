@@ -111,7 +111,8 @@
             </div>
 
             <div class="card__body" (click)="navToDetail(item.noticeId)">
-              <h4 class="card__title">{{ formatNoticeTitle(item.title) }}</h4>
+              <h4 class="card__title" [tooltip]="item.title" container="body" placement="bottom"
+              [adaptivePosition]="false" tooltipClass="similar-title-tooltip" tabindex="0">{{ formatNoticeTitle(item.title) }}</h4>
 
               <div class="card__engagement">
                 <span class="card__engagement-item" aria-label="Lượt xem">
@@ -164,7 +165,7 @@
           </div>
         </div>
 
-        <app-pagination [(page)]="currentPage" (pageChange)="onPageChange($event)" [totalPages]="totalPages">
+        <app-pagination *ngIf="hasLoggedIn" [(page)]="currentPage" (pageChange)="onPageChange($event)" [totalPages]="totalPages">
         </app-pagination>
       </ng-container>
 
@@ -187,7 +188,7 @@
         <line x1="10" y1="16" x2="14" y2="16"></line>
       </svg>
       <div class="recommend-login__text">Đăng ký/đăng nhập để tiếp tục xem</div>
-      <button class="recommend-login__btn">
+      <button type="button" class="recommend-login__btn" (click)="authPopup.openPopup()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
           <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
@@ -199,6 +200,8 @@
     </section>
   </section>
 </div>
+
+<app-auth-popup #authPopup />
 
 <!-- Advanced Filter Offcanvas/Modal -->
 <div class="adv-filter-overlay" *ngIf="isAdvancedFilterOpen" (click)="closeAdvancedFilter()"></div>
@@ -215,7 +218,7 @@
     </button>
   </div>
 
-  <div class="adv-filter-body">
+  <div #advFilterBody class="adv-filter-body">
     <!-- Loại tài sản -->
     <div class="filter-group">
       <h4 class="filter-title">Loại tài sản</h4>
@@ -467,6 +470,11 @@
   </div>
 
   <div class="adv-filter-footer">
+    <button class="btn-apply-filter" [class.loading]="isFilterLoading" [disabled]="isFilterLoading"
+      (click)="applyAdvancedFilters()">
+      <span *ngIf="!isFilterLoading">Áp dụng</span>
+      <span *ngIf="isFilterLoading" class="btn-apply-filter__spinner"></span>
+    </button>
     <button class="btn-clear-filter" (click)="clearAdvancedFilters()">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -475,11 +483,6 @@
         <line x1="9" y1="9" x2="15" y2="15"></line>
       </svg>
       Xóa bộ lọc
-    </button>
-    <button class="btn-apply-filter" [class.loading]="isFilterLoading" [disabled]="isFilterLoading"
-      (click)="applyAdvancedFilters()">
-      <span *ngIf="!isFilterLoading">Áp dụng</span>
-      <span *ngIf="isFilterLoading" class="btn-apply-filter__spinner"></span>
     </button>
   </div>
 </div>
