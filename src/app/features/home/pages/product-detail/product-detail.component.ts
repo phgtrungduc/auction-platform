@@ -249,7 +249,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     return {
       id: String(item.noticeId),
       title: item.title,
-      desc: `${item.provinceName || 'Không xác định'} · ${item.assetCount ?? 0} tài sản`,
+      desc: `${item.firstAssetCategoryName + ' · ' || ''} ${item.provinceName || 'Không xác định'} · ${item.assetCount ?? 0} tài sản`,
       price: this.formatStartingPriceRange(item.minStartingPrice, item.maxStartingPrice),
       status: item.status,
       owner: item.auctionOrgName,
@@ -258,6 +258,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       favoriteId: item.favoriteId,
       viewCount: this.resolveViewCount(item.viewCount),
       favoriteCount: this.resolveFavoriteCount(item.favoriteCount),
+      assetCategoryName: item.firstAssetCategoryName || 'Không xác định',
     };
   }
 
@@ -560,6 +561,7 @@ interface SimilarProductItem {
   favoriteId?: number;
   viewCount: number;
   favoriteCount: number;
+  assetCategoryName: string;
 }
 
 type AuctionHistoryPeriod = 3 | 6 | 12;

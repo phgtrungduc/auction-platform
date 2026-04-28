@@ -133,6 +133,7 @@
               <div class="card__meta-row">
                 <!-- <span>Trả giá lên</span>
                 <span class="card__meta-dot" aria-hidden="true"></span> -->
+                <span *ngIf="!!item.firstAssetCategoryName">{{ item.firstAssetCategoryName || '' }}</span><span *ngIf="!!item.firstAssetCategoryName" class="card__meta-dot" aria-hidden="true"></span>
                 <span>{{ item.provinceName || 'Không xác định' }}</span>
                 <ng-container *ngIf="item.assetCount > 1">
                   <span class="card__meta-dot" aria-hidden="true"></span>

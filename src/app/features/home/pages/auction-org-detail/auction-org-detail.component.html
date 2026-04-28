@@ -280,9 +280,10 @@
                     <h4 class="card__title" [tooltip]="item.title" container="body" placement="bottom"
                     [adaptivePosition]="false" tooltipClass="similar-title-tooltip" tabindex="0">{{ formatNoticeTitle(item.title) }}</h4>
                     <div class="card__meta-row">
+                      <span *ngIf="!!item.firstAssetCategoryName">{{ item.firstAssetCategoryName || '' }}</span><span *ngIf="!!item.firstAssetCategoryName" class="card__meta-dot" aria-hidden="true"></span>
                       <span>{{ item.provinceName || 'Không xác định' }}</span>
-                      <span class="card__meta-dot" aria-hidden="true"></span>
-                      <span>{{ item.assetCount }} tài sản</span>
+                      <span *ngIf="item.assetCount > 1" class="card__meta-dot" aria-hidden="true"></span>
+                      <span *ngIf="item.assetCount > 1">{{ item.assetCount }} tài sản</span>
                     </div>
                     <p class="card__price">{{ formatNoticePriceLine(item) }}</p>
                     <div class="card__divider" role="presentation"></div>
