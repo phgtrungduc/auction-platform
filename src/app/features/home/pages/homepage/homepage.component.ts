@@ -238,6 +238,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       favoriteId: item.favoriteId ?? undefined,
       viewCount: this.resolveViewCount(item.viewCount),
       favoriteCount: this.resolveFavoriteCount(item.favoriteCount),
+      assetCategoryName: item.firstAssetCategoryName || 'Không xác định',
     };
   }
 
@@ -257,6 +258,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       favoriteId: item.favoriteId ?? undefined,
       viewCount: this.resolveViewCount(item.viewCount),
       favoriteCount: this.resolveFavoriteCount(item.favoriteCount),
+      assetCategoryName: item.firstAssetCategoryName || 'Không xác định',
     };
   }
 
@@ -607,6 +609,7 @@ interface AuctionItem {
   favoriteId?: number;
   viewCount: number;
   favoriteCount: number;
+  assetCategoryName: string;
 }
 
 interface EndedAuctionItem {
@@ -624,4 +627,5 @@ interface EndedAuctionItem {
   favoriteId?: number;
   viewCount: number;
   favoriteCount: number;
+  assetCategoryName: string;
 }

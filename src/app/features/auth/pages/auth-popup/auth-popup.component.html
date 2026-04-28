@@ -8,6 +8,7 @@
         >
           <app-loading-overlay [loading]="isSubmitting">
             <app-auth-email-content
+              [initialEmail]="submittedEmail"
               (continueRequested)="handleEmailContinue($event)"
             />
           </app-loading-overlay>

@@ -114,7 +114,7 @@
       <div class="homepage-section__subheader">
 
         <p class="homepage-section__desc">
-          CÁC BẤT ĐỘNG SẢN ĐANG MỞ ĐĂNG KÝ VỚI GIÁ TỐT NHẤT
+          Các bất động sản đang mở đăng ký với giá tốt nhất
         </p>
 
         <button class="homepage-section__link" (click)="navToListings('UPCOMING')">
@@ -178,12 +178,11 @@
             </div>
 
             <div class="auction-card__meta">
-               {{item.location}} <span *ngIf="item.assetCount > 1"> · {{item.assetCount}} tài sản</span>
+              {{item.assetCategoryName}} · {{item.location}} <span *ngIf="item.assetCount > 1"> · {{item.assetCount}} tài sản</span>
             </div>
 
             <div class="auction-card__price">
               <span class="price">{{ item.startingPriceDisplay }}</span>
-              <span class="label">khởi điểm</span>
             </div>
 
             <div class="auction-card__footer">
@@ -272,7 +271,7 @@
 
     <h2 class="section-title">CÔNG TY ĐẤU GIÁ TIÊU BIỂU</h2>
     <p class="section-subtitle">
-      TỔNG HỢP TỪ CÁC ĐƠN VỊ UY TÍN NHẤT
+      Tổng hợp từ các đơn vị uy tín nhất
     </p>
 
     <div class="company-grid">
@@ -390,7 +389,7 @@
               </span>
             </div>
             <div class="ended-auction__location">
-              {{item.location}} <span *ngIf="item.assetCount > 1"> · {{item.assetCount}} tài sản</span>
+              {{item.assetCategoryName}} · {{item.location}} <span *ngIf="item.assetCount > 1"> · {{item.assetCount}} tài sản</span>
             </div>
             <div class="ended-auction__price">
               <!-- Dòng 1 -->
