@@ -8,6 +8,8 @@ import { AdvancedSearchRequest, NoticeSearchDocument } from '../../../../core/mo
 import { AssetStore } from '../../../../store/asset/asset.store';
 import { AuctionOrgDetailResponse } from '../../../../core/services/asset.service';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { CustomSelectComponent, SelectOption } from '@shared/components/custom-select/custom-select.component';
+import { FormsModule } from '@angular/forms';
 
 type AuctionOrgNavState = {
   auctionOrgName?: string;
@@ -20,7 +22,7 @@ type AuctionOrgNavState = {
 @Component({
   selector: 'app-auction-org-detail',
   standalone: true,
-  imports: [CommonModule, PaginationComponent, TooltipModule],
+  imports: [CommonModule, PaginationComponent, TooltipModule, CustomSelectComponent, FormsModule],
   templateUrl: './auction-org-detail.component.html',
   styleUrls: ['./auction-org-detail.component.scss']
 })
@@ -43,11 +45,12 @@ export class AuctionOrgDetailComponent implements OnInit {
 
   // Fake stats (reasonable random)
   totalAuctions = 0;
-  totalAuctioneers = this.randomInt(3, 50);
+  totalAuctioneers = 0;
   successRatePct = 0;
-  totalAssets = this.randomInt(1, 25);
+  totalAssets = 0;
   successfulAuctions = 0;
   orgDetailLoading = false;
+  orgId : number | undefined = undefined;
 
   // Listing "phiên đấu giá" (reuse notice cards)
   isListingLoading = false;
@@ -55,6 +58,20 @@ export class AuctionOrgDetailComponent implements OnInit {
   currentPage = 1;
   totalPages = 1;
   readonly pageSize = 12;
+  searchKeyword = '';
+  readonly statusOptions: SelectOption[] = [
+    { label: 'Tất cả trạng thái', value: null },
+    { label: 'Mở đăng ký', value: 'UPCOMING' },
+    { label: 'Đang diễn ra', value: 'ONGOING' },
+    { label: 'Đã kết thúc', value: 'COMPLETED' }
+  ];
+  readonly sortOptions: SelectOption[] = [
+    { label: 'Mới nhất', value: 'newest' },
+    { label: 'Giá tăng dần', value: 'price_asc' },
+    { label: 'Giá giảm dần', value: 'price_desc' }
+  ];
+  selectedStatus: string | null = null;
+  selectedSort: string | null = 'newest';
 
   // Similar orgs (from store)
   similarOrgs$ = this.assetStore.auctionOrgs$;
@@ -202,13 +219,13 @@ export class AuctionOrgDetailComponent implements OnInit {
     this.websiteUrl = 'Đang cập nhật';
     this.legalRepresentative = this.contactPhone && this.contactPhone !== 'Đang cập nhật' ? this.contactPhone : 'Đang cập nhật';
     this.practicingCertificateNumber = this.contactPhone && this.contactPhone !== 'Đang cập nhật' ? this.contactPhone : 'Đang cập nhật';
-
     // derive successful count from rate and total auctions
     //this.successfulAuctions = Math.max(0, Math.round((this.totalAuctions * this.successRatePct) / 100));
   }
 
   private loadOrgById(id: number): void {
     this.orgDetailLoading = true;
+    this.orgId = id;
     this.assetService.getAuctionOrgDetail(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -238,6 +255,8 @@ export class AuctionOrgDetailComponent implements OnInit {
     this.contactEmail = (res.email ?? '').trim() || 'Đang cập nhật';
     this.fax = (res.fax ?? '').trim() || 'Đang cập nhật';
     this.websiteUrl = (res.websiteUrl ?? '').trim() || 'Đang cập nhật';
+    this.totalAssets = res.totalAssets ?? 0;
+    this.totalAuctions = res.totalNotices ?? 0;
     this.legalRepresentative = (res.legalRepresentative ?? '').trim() || 'Đang cập nhật';
     this.practicingCertificateNumber = (res.practicingCertificateNumber ?? '').trim() || 'Đang cập nhật';
 
@@ -256,8 +275,10 @@ export class AuctionOrgDetailComponent implements OnInit {
     const req: AdvancedSearchRequest = {
       page: this.currentPage,
       pageSize: this.pageSize,
-      query: this.orgName,
-      sortBy: 'newest',
+      query: this.orgId ? this.searchKeyword : this.orgName,
+      sortBy: this.selectedSort ?? 'newest',
+      statuses: this.selectedStatus ? [this.selectedStatus] : undefined,
+      orgAuctionId: this.orgId ? this.orgId : undefined,
     };
 
     this.isListingLoading = true;
@@ -268,7 +289,6 @@ export class AuctionOrgDetailComponent implements OnInit {
           this.notices = res.items ?? [];
           this.totalPages = res.totalPages ?? 1;
           this.isListingLoading = false;
-          this.totalAuctions = res.totalCount;
           this.successfulAuctions = res.totalCount > 0 ? this.randomInt(res.totalCount / 2, res.totalCount) : 0;
           this.successRatePct = res.totalCount > 0 && this.successfulAuctions > 0 ? Math.floor(this.successfulAuctions/res.totalCount*100) : 0; 
         },
@@ -278,6 +298,23 @@ export class AuctionOrgDetailComponent implements OnInit {
           this.isListingLoading = false;
         }
       });
+  }
+
+  onSearch(): void {
+    this.currentPage = 1;
+    this.fetchOrgAuctions();
+  }
+
+  onStatusChange(value: string | null): void {
+    this.selectedStatus = value;
+    this.currentPage = 1;
+    this.fetchOrgAuctions();
+  }
+
+  onSortChange(value: string | null): void {
+    this.selectedSort = value;
+    this.currentPage = 1;
+    this.fetchOrgAuctions();
   }
 
   private randomInt(min: number, max: number): number {

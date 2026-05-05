@@ -259,7 +259,7 @@
                       </defs>
                     </svg>
                     <span class="auction-org__stat-value">{{
-                      auctionSessionCount
+                      product.auctionOrganization?.totalNotices || 'Đang cập nhật'
                     }}</span>
                     <span class="auction-org__stat-label">phiên đấu giá</span>
                   </div>
@@ -285,7 +285,7 @@
                       />
                     </svg>
                     <span>{{
-                      product.auctionLocation || "Đang cập nhật"
+                      product.auctionOrganization?.address || "Đang cập nhật"
                     }}</span>
                   </div>
                 </div>
@@ -295,8 +295,8 @@
             <div class="auction-org__contact">
               Thông tin liên hệ:
               <span class="auction-org__contact-value">
-                {{ product.contactPhone || "Đang cập nhật" }} -
-                {{ product.contactEmail || "Đang cập nhật" }}
+                {{ product.auctionOrganization?.phone || "Đang cập nhật" }} -
+                {{ product.auctionOrganization?.email || "Đang cập nhật" }}
               </span>
             </div>
 

@@ -58,6 +58,8 @@ export type AuctionOrgDetailResponse = {
   categorySlug?: string | null;
   createdAt?: string;
   updatedAt?: string;
+  totalAssets?: number;
+  totalNotices?: number;
 };
 
 @Injectable({
