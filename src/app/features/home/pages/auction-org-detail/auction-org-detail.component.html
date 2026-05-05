@@ -208,7 +208,7 @@
                 d="M18.6606 8.286L19.0286 7.918C19.3706 7.575 19.5426 7.404 19.6456 7.226C19.7829 6.98861 19.8552 6.71923 19.8552 6.445C19.8552 6.17077 19.7829 5.90139 19.6456 5.664C19.5426 5.486 19.3706 5.314 19.0286 4.972C18.6866 4.63 18.5146 4.458 18.3366 4.356C18.0992 4.21871 17.8298 4.14642 17.5556 4.14642C17.2813 4.14642 17.012 4.21871 16.7746 4.356C16.5966 4.458 16.4246 4.63 16.0826 4.972L15.7146 5.34M11.2956 15.65L5.77258 21.174C5.42958 21.517 5.25858 21.688 5.08058 21.791C4.84319 21.9283 4.57381 22.0006 4.29958 22.0006C4.02535 22.0006 3.75597 21.9283 3.51858 21.791C3.33958 21.688 3.16858 21.517 2.82658 21.174C2.48358 20.832 2.31258 20.66 2.20958 20.482C2.07229 20.2446 2 19.9752 2 19.701C2 19.4268 2.07229 19.1574 2.20958 18.92C2.31258 18.742 2.48358 18.57 2.82658 18.228L8.34958 12.705M7.61358 11.968L12.0326 16.388C13.7676 18.123 14.6356 18.991 15.7146 18.991C16.7936 18.991 17.6606 18.123 19.3966 16.387C21.1326 14.651 22.0006 13.783 22.0006 12.705C22.0006 11.626 21.1326 10.758 19.3966 9.023L14.9776 4.603C13.2426 2.869 12.3746 2 11.2956 2C10.2166 2 9.34958 2.868 7.61358 4.604C5.87758 6.34 5.00958 7.208 5.00958 8.286C5.00958 9.365 5.87758 10.233 7.61358 11.968Z"
                 stroke="#367639" stroke-width="1.5" />
             </svg></div>
-          <div class="org-stat-val">{{ totalAuctions }}</div>
+          <div class="org-stat-val">{{ totalAssets }}</div>
           <div class="org-stat-lbl">Tổng tài sản</div>
         </div>
         <div class="org-stat-card">
@@ -252,6 +252,29 @@
             <h3 class="section__title">Phiên đấu giá</h3>
           </div>
 
+          <div class="toolbar">
+            <div class="search-wrapper">
+              <input
+                type="text"
+                placeholder="Nhập từ khoá cần tìm..."
+                [(ngModel)]="searchKeyword"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+            <app-custom-select
+              [options]="statusOptions"
+              [value]="selectedStatus"
+              [placeholder]="'Trạng thái'"
+              (valueChange)="onStatusChange($event)"
+            ></app-custom-select>
+            <app-custom-select
+              [options]="sortOptions"
+              [value]="selectedSort"
+              [placeholder]="'Mới nhất'"
+              (valueChange)="onSortChange($event)"
+            ></app-custom-select>
+          </div>
+          
           <div class="section__body">
             <div class="grid" *ngIf="isListingLoading">
               <div class="card card--skeleton" *ngFor="let _ of [1,2,3,4,5,6,7,8]">
