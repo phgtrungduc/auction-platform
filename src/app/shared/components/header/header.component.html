@@ -76,44 +76,77 @@
     </a>
 
     <div class="header-actions">
-      @if (isLoggedIn$ | async) {
-      @if (username$ | async; as username) {
-      <div class="user-menu">
-        <button type="button" (click)="redirectToFavourites()">
-          <i class="fa fa-heart user-favorite-icon"></i>
-        </button>
-        <div class="user-bubble">
-          <button type="button" class="user-trigger">
-            <!-- <i class="fa fa-heart user-favorite-icon"></i> -->
-            <span class="username">{{ username }}</span>
-            <span class="user-avatar">
-              <i class="fa fa-user"></i>
-            </span>
-            <i class="fa fa-chevron-down"></i>
-          </button>
+      @if (headerUserVm$ | async; as vm) {
+        @if (vm.type === 'user') {
+          <div class="header-logged-in">
+            <button type="button" class="btn-credit-promo">
+              <i class="fa-solid fa-gift" aria-hidden="true"></i>
+              <span>Nhận ngay 168 Credit</span>
+            </button>
 
-          <div class="user-dropdown">
-            <button type="button" class="user-dropdown-item" (click)="redirectToProfile()">
-              <i class="fa fa-user-o"></i>
-              Hồ sơ cá nhân
-            </button>
-            <button type="button" class="user-dropdown-item" (click)="redirectToFavourites()">
-              <i class="fa fa-heart-o"></i>
-              Quan tâm
-            </button>
-            <button type="button" class="user-dropdown-item logout-item" (click)="logout()">
-              <i class="fa fa-sign-out"></i>
-              Đăng xuất
-            </button>
+            <div class="credit-balance-pill" role="status">
+              <i class="fa-solid fa-coins" aria-hidden="true"></i>
+              <span>{{ creditBalance }} Credit</span>
+            </div>
+
+            <div class="user-bubble">
+              <button type="button" class="user-profile-trigger" aria-haspopup="true" aria-expanded="false">
+                <span class="user-avatar-ring">
+                  <span class="user-avatar-initial">{{ vm.displayName | slice:0:1 | uppercase }}</span>
+                </span>
+                <i class="fa-solid fa-chevron-down user-profile-chevron" aria-hidden="true"></i>
+              </button>
+
+              <div class="user-dropdown" role="menu">
+                <div class="user-dropdown-header">
+                  <span class="user-dropdown-avatar">
+                    <span class="user-avatar-initial user-avatar-initial--lg">{{ vm.displayName | slice:0:1 | uppercase }}</span>
+                  </span>
+                  <div class="user-dropdown-ident">
+                    <div class="user-dropdown-name">{{ vm.displayName }}</div>
+                    <div class="user-dropdown-email">{{ vm.email }}</div>
+                  </div>
+                </div>
+
+                <div class="user-dropdown-section user-dropdown-credit-row">
+                  <span class="user-dropdown-credit-label">Credit của tôi</span>
+                  <span class="user-dropdown-credit-badge">
+                    <i class="fa-solid fa-coins" aria-hidden="true"></i>
+                    {{ creditBalance }} Credit
+                  </span>
+                </div>
+
+                <div class="user-dropdown-section user-dropdown-links">
+                  <button type="button" class="user-dropdown-item" role="menuitem" (click)="redirectToProfile()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M7.9987 6.66732C9.47146 6.66732 10.6654 5.47341 10.6654 4.00065C10.6654 2.52789 9.47146 1.33398 7.9987 1.33398C6.52594 1.33398 5.33203 2.52789 5.33203 4.00065C5.33203 5.47341 6.52594 6.66732 7.9987 6.66732Z" stroke="#151515"/>
+                      <path d="M13.3327 11.668C13.3327 13.3246 13.3327 14.668 7.99935 14.668C2.66602 14.668 2.66602 13.3246 2.66602 11.668C2.66602 10.0113 5.05402 8.66797 7.99935 8.66797C10.9447 8.66797 13.3327 10.0113 13.3327 11.668Z" stroke="#151515"/>
+                    </svg>
+                    Hồ sơ cá nhân
+                  </button>
+                  <button type="button" class="user-dropdown-item" role="menuitem" (click)="redirectToFavourites()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M8.00065 3.66666L7.64065 4.01332C7.68729 4.06172 7.74321 4.10021 7.80507 4.1265C7.86692 4.15279 7.93344 4.16634 8.00065 4.16634C8.06786 4.16634 8.13438 4.15279 8.19624 4.1265C8.25809 4.10021 8.31401 4.06172 8.36065 4.01332L8.00065 3.66666ZM6.28465 12.2147C5.27398 11.418 4.16932 10.64 3.29265 9.65332C2.43398 8.68532 1.83398 7.55666 1.83398 6.09132H0.833984C0.833984 7.86866 1.57398 9.22466 2.54532 10.3173C3.49865 11.3907 4.71465 12.2507 5.66532 13L6.28465 12.2147ZM1.83398 6.09132C1.83398 4.65799 2.64398 3.45532 3.74998 2.94932C4.82465 2.45799 6.26865 2.58799 7.64065 4.01332L8.36065 3.32066C6.73398 1.62932 4.84332 1.34999 3.33398 2.03999C1.85798 2.71532 0.833984 4.28332 0.833984 6.09132H1.83398ZM5.66532 13C6.00732 13.2693 6.37398 13.556 6.74532 13.7733C7.11665 13.9907 7.54065 14.1667 8.00065 14.1667V13.1667C7.79398 13.1667 7.55132 13.0867 7.24998 12.91C6.94798 12.734 6.63532 12.4913 6.28465 12.2147L5.66532 13ZM10.336 13C11.2867 12.25 12.5027 11.3913 13.456 10.3173C14.4273 9.22399 15.1673 7.86866 15.1673 6.09132H14.1673C14.1673 7.55666 13.5673 8.68532 12.7087 9.65332C11.832 10.64 10.7273 11.418 9.71665 12.2147L10.336 13ZM15.1673 6.09132C15.1673 4.28332 14.144 2.71532 12.6673 2.03999C11.158 1.34999 9.26865 1.62932 7.64065 3.31999L8.36065 4.01332C9.73265 2.58866 11.1767 2.45799 12.2513 2.94932C13.3573 3.45532 14.1673 4.65732 14.1673 6.09132H15.1673ZM9.71665 12.2147C9.36598 12.4913 9.05332 12.734 8.75132 12.91C8.44932 13.086 8.20732 13.1667 8.00065 13.1667V14.1667C8.46065 14.1667 8.88465 13.99 9.25598 13.7733C9.62798 13.556 9.99398 13.2693 10.336 13L9.71665 12.2147Z" fill="#151515"/>
+                    </svg>
+                    Quan tâm
+                  </button>
+                </div>
+
+                <div class="user-dropdown-section user-dropdown-footer">
+                  <button type="button" class="user-dropdown-item logout-item" role="menuitem" (click)="logout()">
+                    <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+                    Đăng xuất
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      }
-      } @else {
-      <button type="button" class="btn-login" (click)="authPopup.openPopup()">
-        <i class="fa fa-sign-in"></i>
-        Đăng nhập
-      </button>
+        } @else {
+          <button type="button" class="btn-login" (click)="authPopup.openPopup()">
+            <i class="fa fa-sign-in"></i>
+            Đăng nhập
+          </button>
+        }
       }
     </div>
   </div>

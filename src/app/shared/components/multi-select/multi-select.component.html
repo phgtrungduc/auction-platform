@@ -1,0 +1,72 @@
+<div class="multi-select" [class.has-value]="selectedLabels.length > 0" [class.is-disabled]="disabled">
+  <button type="button" class="multi-select__trigger" [class.is-disabled]="disabled" (click)="toggleDropdown($event)">
+    <span
+      *ngIf="selectedLabels.length === 0; else selectedTpl"
+      class="multi-select__placeholder"
+    >
+      {{ placeholder }}
+    </span>
+    <ng-template #selectedTpl>
+      <span
+        #valueContainer
+        class="multi-select__selected"
+        [class.multi-select__selected--overflow]="isOverflowing"
+      >
+        @for (item of visibleSelectedItems; track item.value) {
+          <span class="multi-select__chip-inline" [title]="item.label">
+            {{ item.label }}
+            <span
+              class="multi-select__chip-remove"
+              (click)="removeOption(item.value, $event)"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </span>
+          </span>
+        }
+        <span *ngIf="hiddenSelectedCount > 0" class="multi-select__more-chip">
+          +{{ hiddenSelectedCount }}
+        </span>
+      </span>
+    </ng-template>
+    <span class="multi-select__actions">
+      <span
+        *ngIf="selectedLabels.length > 0"
+        class="multi-select__clear"
+        (click)="clearAll($event)"
+      >
+        <i class="fa-regular fa-circle-xmark"></i>
+      </span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </span>
+  </button>
+
+  <div class="multi-select__note" *ngIf="selectedLabels.length > 0">
+    {{ selectionCountText }}
+  </div>
+
+  <div class="multi-select__dropdown" *ngIf="isOpen && !disabled">
+    <div class="multi-select__search" *ngIf="searchable" (click)="$event.stopPropagation()">
+      <i class="fa-solid fa-magnifying-glass multi-select__search-icon"></i>
+      <input
+        class="multi-select__search-input"
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Tìm kiếm..."
+        autofocus
+      />
+      <button type="button" *ngIf="searchQuery" class="multi-select__search-clear" (click)="searchQuery = ''">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    @for (item of filteredOptions; track item.value) {
+      <label class="multi-select__option">
+        <input type="checkbox" [checked]="isSelected(item.value)" (change)="toggleOption(item.value)" />
+        <span>{{ item.label }}</span>
+      </label>
+    }
+    <div class="multi-select__empty" *ngIf="filteredOptions.length === 0">
+      Không tìm thấy kết quả
+    </div>
+  </div>
+</div>
