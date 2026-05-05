@@ -194,6 +194,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   }
 
   goToAuctionOrgProfile(): void {
+    if(this.product?.auctionOrgId){
+      this.router.navigate(['/auction-org-detail', this.product?.auctionOrgId]);
+      return;
+    }
     const auctionOrgName = this.product?.auctionOrgName || '';
     const auctionLocation = this.product?.auctionLocation || this.product?.auctionOrgAddress || '';
     const contactPhone = this.product?.contactPhone || '';

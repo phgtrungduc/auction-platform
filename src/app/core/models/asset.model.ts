@@ -75,6 +75,7 @@ export interface AdvancedSearchRequest {
   sortBy?: string;
   page?: number;
   pageSize?: number;
+  orgAuctionId?: number;
 }
 
 export interface NoticeSearchDocument {
@@ -156,8 +157,9 @@ export interface MarketplaceNoticeDetail {
   sourceUrl: string;
   title: string;
   description: string | null;
-  auctionOrgName: string;
-  auctionOrgAddress: string | null;
+  auctionOrgId?: number;
+  auctionOrgName?: string;
+  auctionOrgAddress?: string | null;
   assetOwnerName: string;
   assetOwnerAddress: string | null;
   docSaleStart: string;
@@ -177,4 +179,15 @@ export interface MarketplaceNoticeDetail {
   isFavorite?: boolean;
   favoriteId?: number;
   created: string;
+  auctionOrganization: AuctionOrganization;
+}
+
+export interface AuctionOrganization {
+  id: number;
+  fullName: string;
+  address: string;
+  phone: string;
+  email: string;
+  totalAssets?: number;
+  totalNotices?: number;
 }
