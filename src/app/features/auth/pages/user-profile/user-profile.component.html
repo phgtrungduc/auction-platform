@@ -2,49 +2,266 @@
   <h2 class="profile-page__title">Hồ sơ cá nhân</h2>
 
   <app-loading-overlay [loading]="isLoading">
-    <div class="profile-content" *ngIf="!isLoading; else loadingState">
-      <ng-container *ngIf="!loadError">
-        <form [formGroup]="profileForm" class="profile-form" autocomplete="off">
-          <div class="profile-block">
-            <div class="profile-header">
-              <div class="profile-header__avatar">
-                <i class="fa fa-user"></i>
-              </div>
+    <ng-container *ngIf="!loadError; else errorState">
+      <div class="profile-layout" *ngIf="!isLoading; else loadingState">
+        <aside class="profile-sidebar">
+          <div class="sidebar-user-card card">
+            <div class="user-row">
+              <span class="avatar"><i class="fa fa-user"></i></span>
               <div>
-                <p class="profile-header__name">
+                <p class="name">
                   {{ userProfile?.displayName || userProfile?.email }}
                 </p>
-                <p class="profile-header__email">
-                  <!-- <i class="fa fa-at"></i> -->
-                  {{ userProfile?.email || "" }}
-                </p>
+                <p class="email">{{ userProfile?.email || "" }}</p>
               </div>
             </div>
+            <div class="credit-row">
+              <span>Số dư</span>
+              <span class="credit-pill"
+                ><i class="fa-solid fa-coins"></i>
+                {{ creditBalance }} Credit</span
+              >
+            </div>
+          </div>
 
-            <div class="name-row">
-              <label class="input-name">
-                <input
-                  id="displayName"
-                  type="text"
-                  formControlName="displayName"
-                  placeholder="Nhập tên hiển thị"
-                />
-              </label>
+          <nav class="sidebar-nav card">
+            <button
+              type="button"
+              class="nav-item"
+              [class.active]="activeTab === 'profile'"
+              (click)="setActiveTab('profile')"
+            >
+              <i class="fa-regular fa-user"></i> Hồ sơ cá nhân
+            </button>
+            <button
+              type="button"
+              class="nav-item"
+              [class.active]="activeTab === 'notification'"
+              (click)="setActiveTab('notification')"
+            >
+              <i class="fa-regular fa-bell"></i> Thông báo
+            </button>
+            <button
+              type="button"
+              class="nav-item"
+              [class.active]="activeTab === 'credit'"
+              (click)="setActiveTab('credit')"
+            >
+              <i class="fa-regular fa-credit-card"></i> Credit
+            </button>
+            <button
+              type="button"
+              class="nav-item"
+              [class.active]="activeTab === 'password'"
+              (click)="setActiveTab('password')"
+            >
+              <i class="fa-solid fa-key"></i> Đổi mật khẩu
+            </button>
+          </nav>
 
-              <app-loading-overlay [loading]="isSaving">
+          <button type="button" class="btn-logout" (click)="logout()">
+            <i class="fa fa-sign-out"></i>
+            Đăng xuất
+          </button>
+        </aside>
+
+        <form [formGroup]="profileForm" class="profile-main" autocomplete="off">
+          @if (activeTab === "profile") {
+            <section class="card section-profile-head">
+              <span class="avatar avatar-lg"><i class="fa fa-user"></i></span>
+              <div>
+                <p class="headline">
+                  {{ userProfile?.displayName || userProfile?.email }}
+                </p>
+                <p class="caption">{{ userProfile?.email || "" }}</p>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="section-head">
+                <h3>Thông tin cơ bản</h3>
+                <p>Giúp việc cập nhật tài khoản & cá nhân hóa trải nghiệm.</p>
+              </div>
+              <span class="reward-pill">
+                <i class="fa-solid fa-coins"></i>
+                +59 sau khi hoàn thành
+              </span>
+
+              <div class="grid-2">
+                <label class="field">
+                  <span>Họ tên</span>
+                  <input
+                    id="displayName"
+                    type="text"
+                    formControlName="displayName"
+                    placeholder="Nhập đầy đủ họ và tên"
+                  />
+                </label>
+                <label class="field field-phone">
+                  <span>Số điện thoại</span>
+                  <div class="phone-row">
+                    <input type="text" placeholder="Nhập số điện thoại" />
+                    <button type="button" class="btn-verify-phone">
+                      Xác thực
+                    </button>
+                  </div>
+                </label>
+                <label class="field">
+                  <span>Ngày sinh</span>
+                  <app-date-picker
+                    [value]="selectedBirthDate"
+                    [placeholder]="'Chọn ngày sinh'"
+                    (valueChange)="selectedBirthDate = $event"
+                  />
+                </label>
+                <label class="field">
+                  <span>Tỉnh/Thành phố</span>
+                  <app-custom-select
+                    [options]="optionsLocation"
+                    [value]="selectedProvinceCode"
+                    [placeholder]="'Chọn Tỉnh/Thành phố'"
+                    [searchable]="true"
+                    (valueChange)="selectedProvinceCode = $event"
+                  />
+                </label>
+                <label class="field">
+                  <span>Vai trò</span>
+                  <app-custom-select
+                    [options]="roleOptions"
+                    [value]="selectedRole"
+                    [placeholder]="'Chọn vai trò'"
+                    (valueChange)="selectedRole = $event"
+                  />
+                </label>
+                <label class="field">
+                  <span>Giới tính</span>
+                  <app-custom-select
+                    [options]="genderOptions"
+                    [value]="selectedGender"
+                    [placeholder]="'Chọn giới tính'"
+                    (valueChange)="selectedGender = $event"
+                  />
+                </label>
+              </div>
+              <p class="section-note">*Điền đầy đủ để mở khoá thưởng</p>
+
+              <div class="actions">
+                <app-loading-overlay [loading]="isSaving">
+                  <button
+                    type="button"
+                    class="btn-primary"
+                    (click)="onSaveProfile()"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                    >
+                      <g clip-path="url(#clip0_5088_6727)">
+                        <path
+                          d="M2.30998 13.6913C3.28732 14.6673 4.85798 14.6673 8.00065 14.6673C11.1433 14.6673 12.7147 14.6673 13.6907 13.6907C14.6673 12.7153 14.6673 11.1433 14.6673 8.00065C14.6673 7.77332 14.6673 7.65932 14.6573 7.54332C14.6081 6.99819 14.3939 6.481 14.0433 6.06065C13.9409 5.94402 13.8335 5.83191 13.7213 5.72465L10.2767 2.27998C10.1689 2.16835 10.0568 2.06093 9.94065 1.95798C9.52022 1.60766 9.00304 1.39372 8.45798 1.34465C8.34198 1.33398 8.22865 1.33398 8.00065 1.33398C4.85798 1.33398 3.28665 1.33398 2.30998 2.30998C1.33398 3.28732 1.33398 4.85798 1.33398 8.00065C1.33398 11.1433 1.33398 12.7153 2.30998 13.6913Z"
+                          stroke="#FBFEFF"
+                        />
+                        <path
+                          d="M11.3346 14.6673V14.0007C11.3346 12.7433 11.3346 12.1153 10.944 11.7247C10.5533 11.334 9.9253 11.334 8.66797 11.334H7.33464C6.0773 11.334 5.4493 11.334 5.05864 11.7247C4.66797 12.1153 4.66797 12.7433 4.66797 14.0007V14.6673"
+                          stroke="#FBFEFF"
+                        />
+                        <path
+                          d="M4.66797 5.33398H8.66797"
+                          stroke="#FBFEFF"
+                          stroke-linecap="round"
+                        />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_5088_6727">
+                          <rect width="16" height="16" fill="white" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    Lưu thông tin
+                  </button>
+                </app-loading-overlay>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="section-head">
+                <h3>Nhu cầu đấu giá</h3>
+                <p>Giúp chúng tôi gợi ý tài sản phù hợp với bạn.</p>
+              </div>
+              <span class="reward-pill">
+                <i class="fa-solid fa-coins"></i>
+                +108 sau khi hoàn thành
+              </span>
+              <span class="legal-title">Danh mục pháp lý</span>
+              <div class="legal-categories">
                 <button
+                  *ngFor="let item of legalCategories"
                   type="button"
-                  class="btn-save"
-                  (click)="onSaveProfile()"
+                  class="btn-pill"
+                  [class.active]="isLegalCategoryActive(item.id)"
+                  (click)="toggleLegalCategory(item.id)"
                 >
+                  {{ item.name }}
+                </button>
+              </div>
+              <div class="grid-2">
+                <div class="field">
+                  <span>Khu vực quan tâm</span>
+                  <app-multi-select
+                    [options]="optionsLocation"
+                    [value]="interestedProvinceCodes"
+                    [searchable]="true"
+                    [placeholder]="
+                      'Chọn Tỉnh/Thành phố (có thể chọn nhiều khu vực)'
+                    "
+                    [countNotePrefix]="'Đã chọn'"
+                    [countNoteSuffix]="'khu vực'"
+                    (valueChange)="interestedProvinceCodes = $event"
+                  />
+                </div>
+
+                <label class="field">
+                  <span>Ngân sách</span>
+                  <app-custom-select
+                    [options]="budgetOptions"
+                    [value]="selectedBudget"
+                    [placeholder]="'Chọn ngân sách'"
+                    (valueChange)="selectedBudget = $event"
+                  />
+                </label>
+                <label class="field">
+                  <span>Kinh nghiệm</span>
+                  <app-custom-select
+                    [options]="experienceOptions"
+                    [value]="selectedExperience"
+                    [placeholder]="'Chọn kinh nghiệm'"
+                    (valueChange)="selectedExperience = $event"
+                  />
+                </label>
+                <label class="field">
+                  <span>Mục tiêu</span>
+                  <app-custom-select
+                    [options]="goalOptions"
+                    [value]="selectedGoal"
+                    [placeholder]="'Chọn mục tiêu'"
+                    (valueChange)="selectedGoal = $event"
+                  />
+                </label>
+              </div>
+              <p class="section-note">*Điền đầy đủ để mở khoá thưởng</p>
+              <div class="actions">
+                <button type="button" class="btn-primary">
                   <svg
+                    xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
                     viewBox="0 0 16 16"
                     fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <g clip-path="url(#clip0_4712_4183)">
+                    <g clip-path="url(#clip0_5088_6727)">
                       <path
                         d="M2.30998 13.6913C3.28732 14.6673 4.85798 14.6673 8.00065 14.6673C11.1433 14.6673 12.7147 14.6673 13.6907 13.6907C14.6673 12.7153 14.6673 11.1433 14.6673 8.00065C14.6673 7.77332 14.6673 7.65932 14.6573 7.54332C14.6081 6.99819 14.3939 6.481 14.0433 6.06065C13.9409 5.94402 13.8335 5.83191 13.7213 5.72465L10.2767 2.27998C10.1689 2.16835 10.0568 2.06093 9.94065 1.95798C9.52022 1.60766 9.00304 1.39372 8.45798 1.34465C8.34198 1.33398 8.22865 1.33398 8.00065 1.33398C4.85798 1.33398 3.28665 1.33398 2.30998 2.30998C1.33398 3.28732 1.33398 4.85798 1.33398 8.00065C1.33398 11.1433 1.33398 12.7153 2.30998 13.6913Z"
                         stroke="#FBFEFF"
@@ -60,361 +277,537 @@
                       />
                     </g>
                     <defs>
-                      <clipPath id="clip0_4712_4183">
+                      <clipPath id="clip0_5088_6727">
                         <rect width="16" height="16" fill="white" />
                       </clipPath>
                     </defs>
                   </svg>
-
-                  Lưu
+                  Lưu thông tin
                 </button>
-              </app-loading-overlay>
-            </div>
-          </div>
+              </div>
+            </section>
+          }
 
-          <div class="profile-block section-notification">
-            <div>
-              <p class="section-title">Thông báo</p>
-              <p class="section-caption">
-                Nhận thông báo khi tài sản bạn quan tâm có cập nhật mới.
-              </p>
-            </div>
-            <label class="switch">
-              <input
-                type="checkbox"
-                formControlName="isNotificated"
-                (change)="onNotificationToggle($event)"
-                [attr.disabled]="isUpdatingNotification ? true : null"
-              />
-              <span class="slider"></span>
-            </label>
-          </div>
+          @if (activeTab === "notification") {
+            <section class="card-notification">
+              <div class="section-head">
+                <h3>Thông báo</h3>
+                <p>
+                  Nhận cập nhật về tài sản đang theo dõi và tài sản phù hợp với
+                  nhu cầu của bạn.
+                </p>
+              </div>
 
-          <div class="profile-block">
-            <p class="section-title">Đổi mật khẩu</p>
+              <div class="notify-block card">
+                <div class="notify-item">
+                  <div class="notify-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M18.7501 9.71V9.005C18.7501 5.136 15.7261 2 12.0001 2C8.27406 2 5.25006 5.136 5.25006 9.005V9.71C5.25127 10.5516 5.01111 11.3758 4.55806 12.085L3.45006 13.81C2.43906 15.385 3.21106 17.526 4.97006 18.024C9.56635 19.3257 14.4338 19.3257 19.0301 18.024C20.7891 17.526 21.5611 15.385 20.5501 13.811L19.4421 12.086C18.9887 11.3769 18.7482 10.5527 18.7491 9.711L18.7501 9.71Z"
+                        stroke="#367639"
+                        stroke-width="1.5"
+                      />
+                      <path
+                        d="M7.5 19C8.155 20.748 9.922 22 12 22C14.078 22 15.845 20.748 16.5 19"
+                        stroke="#367639"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="notify-title">Tài sản phù hợp</span>
+                    <p class="notify-note">
+                      Tự động thông báo khi có tài sản mới phù hợp với nhu cầu
+                      của bạn
+                    </p>
+                  </div>
+                </div>
+                <!-- <label class="switch">
+                  <input type="checkbox" formControlName="isNotificated" (change)="onNotificationToggle($event)" [attr.disabled]="isUpdatingNotification ? true : null" />
+                  <span class="slider"></span>
+                </label> -->
+                <button type="button" class="btn-secondary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                  >
+                    <path
+                      d="M12.5 6.47398V6.00398C12.5 3.42465 10.484 1.33398 8.00004 1.33398C5.51604 1.33398 3.50004 3.42465 3.50004 6.00398V6.47398C3.50084 7.03502 3.34074 7.58452 3.03871 8.05732L2.30004 9.20732C1.62604 10.2573 2.14071 11.6847 3.31337 12.0167C6.37757 12.8844 9.62252 12.8844 12.6867 12.0167C13.8594 11.6847 14.374 10.2573 13.7 9.20798L12.9614 8.05798C12.6591 7.58526 12.4988 7.03575 12.4994 6.47465L12.5 6.47398Z"
+                      stroke="#FBFEFF"
+                    />
+                    <path
+                      d="M5 12.668C5.43667 13.8333 6.61467 14.668 8 14.668C9.38533 14.668 10.5633 13.8333 11 12.668"
+                      stroke="#FBFEFF"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Khai báo nhu cầu
+                </button>
+              </div>
 
-            <label
-              class="input-wrap"
-              [class.has-error]="oldPasswordTouched && !oldPasswordValue"
-            >
-              <span class="icon">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 4H10C6.229 4 4.343 4 3.172 5.172C2.001 6.344 2 8.229 2 12C2 15.771 2 17.657 3.172 18.828C4.344 19.999 6.229 20 10 20H12M15 4C18.114 4.01 19.765 4.108 20.828 5.172C22 6.343 22 8.229 22 12C22 15.771 22 17.657 20.828 18.828C19.765 19.892 18.114 19.99 15 20"
-                    stroke="#367639"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M9 12C9 12.2652 8.89464 12.5196 8.70711 12.7071C8.51957 12.8946 8.26522 13 8 13C7.73478 13 7.48043 12.8946 7.29289 12.7071C7.10536 12.5196 7 12.2652 7 12C7 11.7348 7.10536 11.4804 7.29289 11.2929C7.48043 11.1054 7.73478 11 8 11C8.26522 11 8.51957 11.1054 8.70711 11.2929C8.89464 11.4804 9 11.7348 9 12ZM13 12C13 12.2652 12.8946 12.5196 12.7071 12.7071C12.5196 12.8946 12.2652 13 12 13C11.7348 13 11.4804 12.8946 11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12C11 11.7348 11.1054 11.4804 11.2929 11.2929C11.4804 11.1054 11.7348 11 12 11C12.2652 11 12.5196 11.1054 12.7071 11.2929C12.8946 11.4804 13 11.7348 13 12Z"
-                    fill="#367639"
-                  />
-                  <path
-                    d="M15 2V22"
-                    stroke="#367639"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
-              </span>
-              <input
-                type="text"
-                class="masked-input"
-                [class.is-masked]="!showOldPassword"
-                formControlName="oldPassword"
-                (blur)="oldPasswordTouched = true"
-                placeholder="Mật khẩu hiện tại"
-                autocomplete="off"
-                spellcheck="false"
-                autocapitalize="off"
-                autocorrect="off"
-                data-lpignore="true"
-                data-1p-ignore="true"
-                data-bwignore="true"
-                data-form-type="other"
-              />
-              <span class="eye" (click)="toggleOldPassword()">
-                <svg
-                  *ngIf="!showOldPassword"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="#667085"
-                >
-                  <path
-                    stroke-width="2"
-                    d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"
-                  />
-                  <circle cx="12" cy="12" r="3" stroke-width="2" />
-                </svg>
-                <svg
-                  *ngIf="showOldPassword"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="#667085"
-                >
-                  <path stroke-width="2" d="M3 3l18 18" />
-                  <path
-                    stroke-width="2"
-                    d="M10.58 10.58A3 3 0 0012 15a3 3 0 002.42-4.42"
-                  />
-                  <path
-                    stroke-width="2"
-                    d="M9.88 5.09A10.94 10.94 0 0112 5c6 0 10 7 10 7a17.73 17.73 0 01-5.06 5.94M6.1 6.1A17.73 17.73 0 002 12s4 7 10 7c1.61 0 3.09-.38 4.41-1.06"
-                  />
-                </svg>
-              </span>
-            </label>
-            <p
-              class="error-text"
-              *ngIf="oldPasswordTouched && !oldPasswordValue"
-            >
-              Vui lòng nhập mật khẩu hiện tại.
-            </p>
+              <div class="notify-block card">
+                <div class="notify-item">
+                  <div class="notify-icon danger">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M12 5.50096L11.46 6.02096C11.53 6.09355 11.6138 6.15129 11.7066 6.19072C11.7994 6.23016 11.8992 6.25048 12 6.25048C12.1008 6.25048 12.2006 6.23016 12.2934 6.19072C12.3862 6.15129 12.47 6.09355 12.54 6.02096L12 5.50096ZM9.426 18.323C7.91 17.128 6.253 15.961 4.938 14.481C3.65 13.029 2.75 11.336 2.75 9.13796H1.25C1.25 11.804 2.36 13.838 3.817 15.477C5.247 17.087 7.071 18.377 8.497 19.501L9.426 18.323ZM2.75 9.13796C2.75 6.98796 3.965 5.18396 5.624 4.42496C7.236 3.68796 9.402 3.88296 11.46 6.02096L12.54 4.98196C10.1 2.44496 7.264 2.02596 5 3.06096C2.786 4.07396 1.25 6.42596 1.25 9.13796H2.75ZM8.497 19.501C9.01 19.905 9.56 20.335 10.117 20.661C10.674 20.987 11.31 21.251 12 21.251V19.751C11.69 19.751 11.326 19.631 10.874 19.366C10.421 19.102 9.952 18.738 9.426 18.323L8.497 19.501ZM15.503 19.501C16.929 18.376 18.753 17.088 20.183 15.477C21.64 13.837 22.75 11.804 22.75 9.13796H21.25C21.25 11.336 20.35 13.029 19.062 14.481C17.747 15.961 16.09 17.128 14.574 18.323L15.503 19.501ZM22.75 9.13796C22.75 6.42596 21.215 4.07396 19 3.06096C16.736 2.02596 13.902 2.44496 11.46 4.98096L12.54 6.02096C14.598 3.88396 16.764 3.68796 18.376 4.42496C20.035 5.18396 21.25 6.98696 21.25 9.13796H22.75ZM14.574 18.323C14.048 18.738 13.579 19.102 13.126 19.366C12.673 19.63 12.31 19.751 12 19.751V21.251C12.69 21.251 13.326 20.986 13.883 20.661C14.441 20.335 14.99 19.905 15.503 19.501L14.574 18.323Z"
+                        fill="#E24141"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="notify-title">Tài sản đang quan tâm</p>
+                    <p class="notify-note">
+                      Nhận thông báo khi tài sản bạn theo dõi có cập nhật quan
+                      trọng
+                    </p>
+                  </div>
+                </div>
+                <button type="button" class="btn-secondary">
+                  Khám phá tài sản
+                </button>
+              </div>
+            </section>
+          }
 
-            <label
-              class="input-wrap"
-              [class.has-error]="
-                passwordTouched && passwordValue && !isPasswordValid()
-              "
-            >
-              <span class="icon"
-                ><svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 4H10C6.229 4 4.343 4 3.172 5.172C2.001 6.344 2 8.229 2 12C2 15.771 2 17.657 3.172 18.828C4.344 19.999 6.229 20 10 20H12M15 4C18.114 4.01 19.765 4.108 20.828 5.172C22 6.343 22 8.229 22 12C22 15.771 22 17.657 20.828 18.828C19.765 19.892 18.114 19.99 15 20"
-                    stroke="#367639"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M9 12C9 12.2652 8.89464 12.5196 8.70711 12.7071C8.51957 12.8946 8.26522 13 8 13C7.73478 13 7.48043 12.8946 7.29289 12.7071C7.10536 12.5196 7 12.2652 7 12C7 11.7348 7.10536 11.4804 7.29289 11.2929C7.48043 11.1054 7.73478 11 8 11C8.26522 11 8.51957 11.1054 8.70711 11.2929C8.89464 11.4804 9 11.7348 9 12ZM13 12C13 12.2652 12.8946 12.5196 12.7071 12.7071C12.5196 12.8946 12.2652 13 12 13C11.7348 13 11.4804 12.8946 11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12C11 11.7348 11.1054 11.4804 11.2929 11.2929C11.4804 11.1054 11.7348 11 12 11C12.2652 11 12.5196 11.1054 12.7071 11.2929C12.8946 11.4804 13 11.7348 13 12Z"
-                    fill="#367639"
-                  />
-                  <path
-                    d="M15 2V22"
-                    stroke="#367639"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
-              </span>
-              <input
-                type="text"
-                class="masked-input"
-                [class.is-masked]="!showPassword"
-                formControlName="password"
-                (input)="onPasswordChange()"
-                (blur)="passwordTouched = true"
-                placeholder="Mật khẩu mới"
-                autocomplete="off"
-                spellcheck="false"
-                autocapitalize="off"
-                autocorrect="off"
-                data-lpignore="true"
-                data-1p-ignore="true"
-                data-bwignore="true"
-                data-form-type="other"
-              />
-              <span class="eye" (click)="togglePassword()">
-                <svg
-                  *ngIf="!showPassword"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="#667085"
-                >
-                  <path
-                    stroke-width="2"
-                    d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"
-                  />
-                  <circle cx="12" cy="12" r="3" stroke-width="2" />
-                </svg>
+          @if (activeTab === "credit") {
+            <section class="card-credit">
+              <div class="section-head">
+                <h3>Mua thêm credit</h3>
+                <p>
+                  Mở khóa thông tin để hiểu rõ thị trường và đấu giá thông minh.
+                </p>
+              </div>
 
-                <svg
-                  *ngIf="showPassword"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="#667085"
-                >
-                  <path stroke-width="2" d="M3 3l18 18" />
-                  <path
-                    stroke-width="2"
-                    d="M10.58 10.58A3 3 0 0012 15a3 3 0 002.42-4.42"
-                  />
-                  <path
-                    stroke-width="2"
-                    d="M9.88 5.09A10.94 10.94 0 0112 5c6 0 10 7 10 7a17.73 17.73 0 01-5.06 5.94M6.1 6.1A17.73 17.73 0 002 12s4 7 10 7c1.61 0 3.09-.38 4.41-1.06"
-                  />
-                </svg>
-              </span>
-            </label>
-            <p
-              class="error-text"
-              *ngIf="passwordTouched && passwordValue && !isPasswordValid()"
-            >
-              Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường và số.
-            </p>
-
-            <div class="strength-wrap" *ngIf="passwordValue">
-              <span class="strength-label"
-                >Độ bảo mật:
-                <strong [style.color]="strengthColor">{{
-                  strengthLabel
-                }}</strong></span
-              >
-              <div class="bars">
-                @for (bar of [1, 2, 3, 4]; track bar) {
-                  <span
-                    class="bar"
-                    [class.active]="strengthScore >= bar"
-                    [style.background]="
-                      strengthScore >= bar ? strengthColor : '#bfd0e2'
-                    "
-                  ></span>
+              <div class="credit-grid">
+                @for (pack of creditPackages; track pack.name) {
+                  <article
+                    class="credit-card card"
+                    [class.popular]="pack.tone === 'popular'"
+                    [class.premium]="pack.tone === 'premium'"
+                  >
+                    @if (pack.featured) {
+                      <span class="tag">{{
+                        pack.tone === "premium" ? "Tiết kiệm" : "Phổ biến"
+                      }}</span>
+                    }
+                    <div class="coin-box">
+                      <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <h4>{{ pack.name }}</h4>
+                    <p class="price">{{ pack.price }}</p>
+                    <div class="credits-box">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                      >
+                        <path
+                          d="M10.3333 8.66667C12.7266 8.66667 14.6667 8.06971 14.6667 7.33333C14.6667 6.59695 12.7266 6 10.3333 6C7.9401 6 6 6.59695 6 7.33333C6 8.06971 7.9401 8.66667 10.3333 8.66667Z"
+                          stroke="#367639"
+                        />
+                        <path
+                          d="M14.6667 10.334C14.6667 11.0707 12.7267 11.6673 10.3333 11.6673C7.94 11.6673 6 11.0707 6 10.334"
+                          stroke="#367639"
+                        />
+                        <path
+                          d="M14.6667 7.33398V13.2007C14.6667 14.0107 12.7267 14.6673 10.3333 14.6673C7.94 14.6673 6 14.0107 6 13.2007V7.33398"
+                          stroke="#367639"
+                        />
+                        <path
+                          d="M5.66732 4.00065C8.06055 4.00065 10.0007 3.4037 10.0007 2.66732C10.0007 1.93094 8.06055 1.33398 5.66732 1.33398C3.27408 1.33398 1.33398 1.93094 1.33398 2.66732C1.33398 3.4037 3.27408 4.00065 5.66732 4.00065Z"
+                          stroke="#367639"
+                        />
+                        <path
+                          d="M4.00065 7.33333C2.73932 7.18 1.58065 6.78333 1.33398 6M4.00065 10.6667C2.73932 10.5133 1.58065 10.1167 1.33398 9.33333"
+                          stroke="#367639"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M4.00065 14.0013C2.73932 13.848 1.58065 13.4506 1.33398 12.668V2.66797M10.0007 4.0013V2.66797"
+                          stroke="#367639"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                      <span class="credits"> {{ pack.credits }} credit</span>
+                    </div>
+                    <p *ngIf="pack.bonus > 0" class="bonus">
+                      +{{ pack.bonus }} credit tặng thêm
+                    </p>
+                    <p *ngIf="pack.bonus == 0" class="bonus bonus-none">-</p>
+                    <button type="button" class="buy-btn">
+                      Mua ngay <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                  </article>
                 }
               </div>
+            </section>
+            <div class="text-payment">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M2 6.94532C2 4.81332 2 3.74732 2.252 3.38865C2.50333 3.03065 3.50533 2.68732 5.51 2.00132L5.892 1.87065C6.93667 1.51265 7.45867 1.33398 8 1.33398C8.54133 1.33398 9.06333 1.51265 10.108 1.87065L10.49 2.00132C12.4947 2.68732 13.4967 3.03065 13.748 3.38865C14 3.74732 14 4.81398 14 6.94532V7.99465C14 11.7533 11.174 13.578 9.40067 14.352C8.92 14.562 8.68 14.6673 8 14.6673C7.32 14.6673 7.08 14.562 6.59933 14.352C4.826 13.5773 2 11.754 2 7.99465V6.94532Z" stroke="#367639"/>
+                <path d="M6.33398 8.26797L7.28665 9.33464L9.66732 6.66797" stroke="#367639" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Thanh toán an toàn qua VNPay (mô phỏng)</span>
             </div>
+            <section class="card empty-transaction">
+              <span class="history-title">Lịch sử giao dịch</span>
+              <p class="history-note">Các giao dịch credit gần đây của bạn</p>
+              <div class="empty">
+                <div class="empty-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="40"
+                    viewBox="0 0 40 40"
+                    fill="none"
+                  >
+                    <path
+                      d="M27.925 3.33398H12.075C10.1433 3.33398 9.17833 3.33398 8.39833 3.60565C7.66322 3.86686 6.99809 4.29376 6.45445 4.85329C5.91081 5.41283 5.50325 6.08998 5.26333 6.83232C5 7.63565 5 8.62898 5 10.6173V33.9573C5 35.3873 6.64167 36.1473 7.68 35.1973C7.97131 34.9281 8.35337 34.7787 8.75 34.7787C9.14663 34.7787 9.52869 34.9281 9.82 35.1973L10.625 35.934C11.1353 36.4059 11.8049 36.668 12.5 36.668C13.1951 36.668 13.8647 36.4059 14.375 35.934C14.8853 35.462 15.5549 35.1999 16.25 35.1999C16.9451 35.1999 17.6147 35.462 18.125 35.934C18.6353 36.4059 19.3049 36.668 20 36.668C20.6951 36.668 21.3647 36.4059 21.875 35.934C22.3853 35.462 23.0549 35.1999 23.75 35.1999C24.4451 35.1999 25.1147 35.462 25.625 35.934C26.1353 36.4059 26.8049 36.668 27.5 36.668C28.1951 36.668 28.8647 36.4059 29.375 35.934L30.18 35.1973C30.4713 34.9281 30.8534 34.7787 31.25 34.7787C31.6466 34.7787 32.0287 34.9281 32.32 35.1973C33.3583 36.1473 35 35.3873 35 33.9573V10.6173C35 8.62898 35 7.63398 34.7367 6.83398C34.497 6.09134 34.0895 5.41385 33.5459 4.85402C33.0022 4.29418 32.337 3.86703 31.6017 3.60565C30.8217 3.33398 29.8567 3.33398 27.925 3.33398Z"
+                      stroke="#367639"
+                      stroke-width="2"
+                    />
+                    <path
+                      d="M20 28.3333V30M20 28.3333C22.7617 28.3333 25 26.4667 25 24.1667C25 21.8667 22.7617 20 20 20C17.2383 20 15 18.1333 15 15.8333C15 13.5333 17.2383 11.6667 20 11.6667M20 28.3333C17.2383 28.3333 15 26.4667 15 24.1667M20 10V11.6667M20 11.6667C22.7617 11.6667 25 13.5333 25 15.8333"
+                      stroke="#367639"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+                <span class="history-empty-title">Chưa có giao dịch nào</span>
+                <span class="history-empty-note"
+                  >Lịch sử mua và sử dụng credit của bạn sẽ hiển thị tại
+                  đây</span
+                >
+              </div>
+            </section>
+          }
 
-            <label
-              class="input-wrap"
-              [class.has-error]="
-                confirmTouched && confirmPasswordValue && !isConfirmMatch()
-              "
-            >
-              <span class="icon"
-                ><svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 4H10C6.229 4 4.343 4 3.172 5.172C2.001 6.344 2 8.229 2 12C2 15.771 2 17.657 3.172 18.828C4.344 19.999 6.229 20 10 20H12M15 4C18.114 4.01 19.765 4.108 20.828 5.172C22 6.343 22 8.229 22 12C22 15.771 22 17.657 20.828 18.828C19.765 19.892 18.114 19.99 15 20"
-                    stroke="#367639"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M9 12C9 12.2652 8.89464 12.5196 8.70711 12.7071C8.51957 12.8946 8.26522 13 8 13C7.73478 13 7.48043 12.8946 7.29289 12.7071C7.10536 12.5196 7 12.2652 7 12C7 11.7348 7.10536 11.4804 7.29289 11.2929C7.48043 11.1054 7.73478 11 8 11C8.26522 11 8.51957 11.1054 8.70711 11.2929C8.89464 11.4804 9 11.7348 9 12ZM13 12C13 12.2652 12.8946 12.5196 12.7071 12.7071C12.5196 12.8946 12.2652 13 12 13C11.7348 13 11.4804 12.8946 11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12C11 11.7348 11.1054 11.4804 11.2929 11.2929C11.4804 11.1054 11.7348 11 12 11C12.2652 11 12.5196 11.1054 12.7071 11.2929C12.8946 11.4804 13 11.7348 13 12Z"
-                    fill="#367639"
-                  />
-                  <path
-                    d="M15 2V22"
-                    stroke="#367639"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
-              </span>
-              <input
-                type="text"
-                class="masked-input"
-                [class.is-masked]="!showConfirmPassword"
-                formControlName="confirmPassword"
-                (blur)="confirmTouched = true"
-                placeholder="Xác nhận mật khẩu"
-                autocomplete="off"
-                spellcheck="false"
-                autocapitalize="off"
-                autocorrect="off"
-                data-lpignore="true"
-                data-1p-ignore="true"
-                data-bwignore="true"
-                data-form-type="other"
-              />
-              <span class="eye" (click)="toggleConfirmPassword()">
-                <svg
-                  *ngIf="!showConfirmPassword"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="#667085"
-                >
-                  <path
-                    stroke-width="2"
-                    d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"
-                  />
-                  <circle cx="12" cy="12" r="3" stroke-width="2" />
-                </svg>
+          @if (activeTab === "password") {
+            <section class="card-password">
+              <div class="section-head">
+                <h3>Đổi mật khẩu</h3>
+                <p>Cập nhật mật khẩu để bảo vệ tài khoản của bạn.</p>
+              </div>
 
-                <svg
-                  *ngIf="showConfirmPassword"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="#667085"
+              <div class="card">
+                <label
+                  class="input-wrap"
+                  [class.has-error]="oldPasswordTouched && !oldPasswordValue"
                 >
-                  <path stroke-width="2" d="M3 3l18 18" />
-                  <path
-                    stroke-width="2"
-                    d="M10.58 10.58A3 3 0 0012 15a3 3 0 002.42-4.42"
+                  <span class="icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M12 4H10C6.229 4 4.343 4 3.172 5.172C2.001 6.344 2 8.229 2 12C2 15.771 2 17.657 3.172 18.828C4.344 19.999 6.229 20 10 20H12M15 4C18.114 4.01 19.765 4.108 20.828 5.172C22 6.343 22 8.229 22 12C22 15.771 22 17.657 20.828 18.828C19.765 19.892 18.114 19.99 15 20"
+                        stroke="#367639"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                      <path
+                        d="M9 12C9 12.2652 8.89464 12.5196 8.70711 12.7071C8.51957 12.8946 8.26522 13 8 13C7.73478 13 7.48043 12.8946 7.29289 12.7071C7.10536 12.5196 7 12.2652 7 12C7 11.7348 7.10536 11.4804 7.29289 11.2929C7.48043 11.1054 7.73478 11 8 11C8.26522 11 8.51957 11.1054 8.70711 11.2929C8.89464 11.4804 9 11.7348 9 12ZM13 12C13 12.2652 12.8946 12.5196 12.7071 12.7071C12.5196 12.8946 12.2652 13 12 13C11.7348 13 11.4804 12.8946 11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12C11 11.7348 11.1054 11.4804 11.2929 11.2929C11.4804 11.1054 11.7348 11 12 11C12.2652 11 12.5196 11.1054 12.7071 11.2929C12.8946 11.4804 13 11.7348 13 12Z"
+                        fill="#367639"
+                      />
+                      <path
+                        d="M15 2V22"
+                        stroke="#367639"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    type="text"
+                    class="masked-input"
+                    [class.is-masked]="!showOldPassword"
+                    formControlName="oldPassword"
+                    (blur)="oldPasswordTouched = true"
+                    placeholder="Mật khẩu hiện tại"
+                    autocomplete="off"
                   />
-                  <path
-                    stroke-width="2"
-                    d="M9.88 5.09A10.94 10.94 0 0112 5c6 0 10 7 10 7a17.73 17.73 0 01-5.06 5.94M6.1 6.1A17.73 17.73 0 002 12s4 7 10 7c1.61 0 3.09-.38 4.41-1.06"
+                  <span class="eye" (click)="toggleOldPassword()">
+                    <svg
+                      *ngIf="!showOldPassword"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="#667085"
+                    >
+                      <path
+                        stroke-width="2"
+                        d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"
+                      />
+                      <circle cx="12" cy="12" r="3" stroke-width="2" />
+                    </svg>
+
+                    <svg
+                      *ngIf="showOldPassword"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="#667085"
+                    >
+                      <path stroke-width="2" d="M3 3l18 18" />
+                      <path
+                        stroke-width="2"
+                        d="M10.58 10.58A3 3 0 0012 15a3 3 0 002.42-4.42"
+                      />
+                      <path
+                        stroke-width="2"
+                        d="M9.88 5.09A10.94 10.94 0 0112 5c6 0 10 7 10 7a17.73 17.73 0 01-5.06 5.94M6.1 6.1A17.73 17.73 0 002 12s4 7 10 7c1.61 0 3.09-.38 4.41-1.06"
+                      />
+                    </svg>
+                  </span>
+                </label>
+                <p
+                  class="error-text"
+                  *ngIf="oldPasswordTouched && !oldPasswordValue"
+                >
+                  Vui lòng nhập mật khẩu hiện tại.
+                </p>
+
+                <label
+                  class="input-wrap"
+                  [class.has-error]="
+                    passwordTouched && passwordValue && !isPasswordValid()
+                  "
+                >
+                  <span class="icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M12 4H10C6.229 4 4.343 4 3.172 5.172C2.001 6.344 2 8.229 2 12C2 15.771 2 17.657 3.172 18.828C4.344 19.999 6.229 20 10 20H12M15 4C18.114 4.01 19.765 4.108 20.828 5.172C22 6.343 22 8.229 22 12C22 15.771 22 17.657 20.828 18.828C19.765 19.892 18.114 19.99 15 20"
+                        stroke="#367639"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                      <path
+                        d="M9 12C9 12.2652 8.89464 12.5196 8.70711 12.7071C8.51957 12.8946 8.26522 13 8 13C7.73478 13 7.48043 12.8946 7.29289 12.7071C7.10536 12.5196 7 12.2652 7 12C7 11.7348 7.10536 11.4804 7.29289 11.2929C7.48043 11.1054 7.73478 11 8 11C8.26522 11 8.51957 11.1054 8.70711 11.2929C8.89464 11.4804 9 11.7348 9 12ZM13 12C13 12.2652 12.8946 12.5196 12.7071 12.7071C12.5196 12.8946 12.2652 13 12 13C11.7348 13 11.4804 12.8946 11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12C11 11.7348 11.1054 11.4804 11.2929 11.2929C11.4804 11.1054 11.7348 11 12 11C12.2652 11 12.5196 11.1054 12.7071 11.2929C12.8946 11.4804 13 11.7348 13 12Z"
+                        fill="#367639"
+                      />
+                      <path
+                        d="M15 2V22"
+                        stroke="#367639"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    type="text"
+                    class="masked-input"
+                    [class.is-masked]="!showPassword"
+                    formControlName="password"
+                    (input)="onPasswordChange()"
+                    (blur)="passwordTouched = true"
+                    placeholder="Mật khẩu mới"
+                    autocomplete="off"
                   />
-                </svg>
-              </span>
-            </label>
-            <p
-              class="error-text"
-              *ngIf="
-                confirmTouched && confirmPasswordValue && !isConfirmMatch()
-              "
-            >
-              Mật khẩu xác nhận không khớp.
-            </p>
-            <div class="btn-wrap">
-            <app-loading-overlay class="loading-btn" [loading]="isChangingPassword">
-              <button
-                type="button"
-                class="btn-primary"
-                (click)="onChangePassword()"
-                [disabled]="!isValidPasswordForm() || isChangingPassword"
-              >
-                Đổi mật khẩu
-              </button>
-            </app-loading-overlay>
-          </div>
-          </div>
+                  <span class="eye" (click)="togglePassword()">
+                    <svg
+                      *ngIf="!showPassword"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="#667085"
+                    >
+                      <path
+                        stroke-width="2"
+                        d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"
+                      />
+                      <circle cx="12" cy="12" r="3" stroke-width="2" />
+                    </svg>
+
+                    <svg
+                      *ngIf="showPassword"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="#667085"
+                    >
+                      <path stroke-width="2" d="M3 3l18 18" />
+                      <path
+                        stroke-width="2"
+                        d="M10.58 10.58A3 3 0 0012 15a3 3 0 002.42-4.42"
+                      />
+                      <path
+                        stroke-width="2"
+                        d="M9.88 5.09A10.94 10.94 0 0112 5c6 0 10 7 10 7a17.73 17.73 0 01-5.06 5.94M6.1 6.1A17.73 17.73 0 002 12s4 7 10 7c1.61 0 3.09-.38 4.41-1.06"
+                      />
+                    </svg>
+                  </span>
+                </label>
+                <p
+                  class="error-text"
+                  *ngIf="passwordTouched && passwordValue && !isPasswordValid()"
+                >
+                  Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường và
+                  số.
+                </p>
+
+                <div class="strength-wrap" *ngIf="passwordValue">
+                  <span class="strength-label">Độ bảo mật:</span>
+                  <div class="bars">
+                    @for (bar of [1, 2, 3, 4]; track bar) {
+                      <span
+                        class="bar"
+                        [style.background]="
+                          strengthScore >= bar ? strengthColor : '#dce6ef'
+                        "
+                      ></span>
+                    }
+                  </div>
+                </div>
+
+                <label
+                  class="input-wrap"
+                  [class.has-error]="
+                    confirmTouched && confirmPasswordValue && !isConfirmMatch()
+                  "
+                >
+                  <span class="icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M12 4H10C6.229 4 4.343 4 3.172 5.172C2.001 6.344 2 8.229 2 12C2 15.771 2 17.657 3.172 18.828C4.344 19.999 6.229 20 10 20H12M15 4C18.114 4.01 19.765 4.108 20.828 5.172C22 6.343 22 8.229 22 12C22 15.771 22 17.657 20.828 18.828C19.765 19.892 18.114 19.99 15 20"
+                        stroke="#367639"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                      <path
+                        d="M9 12C9 12.2652 8.89464 12.5196 8.70711 12.7071C8.51957 12.8946 8.26522 13 8 13C7.73478 13 7.48043 12.8946 7.29289 12.7071C7.10536 12.5196 7 12.2652 7 12C7 11.7348 7.10536 11.4804 7.29289 11.2929C7.48043 11.1054 7.73478 11 8 11C8.26522 11 8.51957 11.1054 8.70711 11.2929C8.89464 11.4804 9 11.7348 9 12ZM13 12C13 12.2652 12.8946 12.5196 12.7071 12.7071C12.5196 12.8946 12.2652 13 12 13C11.7348 13 11.4804 12.8946 11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12C11 11.7348 11.1054 11.4804 11.2929 11.2929C11.4804 11.1054 11.7348 11 12 11C12.2652 11 12.5196 11.1054 12.7071 11.2929C12.8946 11.4804 13 11.7348 13 12Z"
+                        fill="#367639"
+                      />
+                      <path
+                        d="M15 2V22"
+                        stroke="#367639"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    type="text"
+                    class="masked-input"
+                    [class.is-masked]="!showConfirmPassword"
+                    formControlName="confirmPassword"
+                    (blur)="confirmTouched = true"
+                    placeholder="Xác nhận mật khẩu"
+                    autocomplete="off"
+                  />
+                  <span class="eye" (click)="toggleConfirmPassword()">
+                    <svg
+                      *ngIf="!showConfirmPassword"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="#667085"
+                    >
+                      <path
+                        stroke-width="2"
+                        d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"
+                      />
+                      <circle cx="12" cy="12" r="3" stroke-width="2" />
+                    </svg>
+
+                    <svg
+                      *ngIf="showConfirmPassword"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="#667085"
+                    >
+                      <path stroke-width="2" d="M3 3l18 18" />
+                      <path
+                        stroke-width="2"
+                        d="M10.58 10.58A3 3 0 0012 15a3 3 0 002.42-4.42"
+                      />
+                      <path
+                        stroke-width="2"
+                        d="M9.88 5.09A10.94 10.94 0 0112 5c6 0 10 7 10 7a17.73 17.73 0 01-5.06 5.94M6.1 6.1A17.73 17.73 0 002 12s4 7 10 7c1.61 0 3.09-.38 4.41-1.06"
+                      />
+                    </svg>
+                  </span>
+                </label>
+                <p
+                  class="error-text"
+                  *ngIf="
+                    confirmTouched && confirmPasswordValue && !isConfirmMatch()
+                  "
+                >
+                  Mật khẩu xác nhận không khớp.
+                </p>
+
+                <app-loading-overlay [loading]="isChangingPassword">
+                  <button
+                    type="button"
+                    class="btn-primary"
+                    (click)="onChangePassword()"
+                    [disabled]="!isValidPasswordForm() || isChangingPassword"
+                  >
+                    Đổi mật khẩu
+                  </button>
+                </app-loading-overlay>
+              </div>
+            </section>
+          }
         </form>
-
-        <button type="button" class="btn-logout" (click)="logout()">
-          <i class="fa fa-sign-out"></i>
-          Đăng xuất
-        </button>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
   </app-loading-overlay>
 </section>
 
 <ng-template #loadingState>
-  <div class="profile-block profile-block--state">...</div>
+  <div class="card profile-block--state">Đang tải dữ liệu...</div>
+</ng-template>
+
+<ng-template #errorState>
+  <div class="card profile-block--state">
+    <p>{{ loadError }}</p>
+  </div>
 </ng-template>
