@@ -2,7 +2,8 @@ export const API_ENDPOINTS = {
     ASSET: {
         GET_LIST: '/marketplace/assets',
         GET_DETAIL: '/marketplace',
-        ADVANCED_SEARCH: '/marketplace/advanced-search'
+        ADVANCED_SEARCH: '/marketplace/advanced-search',
+        TOP_NOTICES_PROVINCES: '/marketplace/provinces/top-notices'
     },
     USER_FAVORITES: {
         GET_LIST: '/user-favorites',

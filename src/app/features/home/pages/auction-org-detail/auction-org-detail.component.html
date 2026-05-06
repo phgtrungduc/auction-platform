@@ -30,7 +30,7 @@
           </svg>Đơn vị tổ chức đấu giá</div>
         <div class="org-card__header">
           <div class="org-logo">
-            <img src="assets/images/logo-cty-default.png" alt="Logo" />
+            <img [src]="logo || 'assets/images/logo-cty-default.png'" alt="Logo" />
           </div>
 
           <div class="org-head">
@@ -357,12 +357,14 @@
           </div>
 
           <div class="sidebar-list">
-            <ng-container *ngIf="(similarOrgsLoading$ | async) === false; else sideLoadingTpl">
-              <ng-container *ngIf="(similarOrgs$ | async)?.length; else sideEmptyTpl">
-                <div class="org-sim-card" *ngFor="let o of (similarOrgs$ | async)">
+            <ng-container
+              *ngIf="(similarOrgsLoading$ | async) !== true && !(orgDetailLoading && orgId); else sideLoadingTpl">
+              <ng-container *ngIf="similarOrgs$ | async as similarOrgs">
+                <ng-container *ngIf="similarOrgs.length; else sideEmptyTpl">
+                <div class="org-sim-card" *ngFor="let o of similarOrgs">
                   <div class="org-sim-card__top">
                     <div class="org-sim-card__logo">
-                      <img src="assets/images/logo-cty-default.png" alt="logo" />
+                      <img [src]="o.logoUrl || 'assets/images/logo-cty-default.png'" alt="logo" />
                     </div>
                     <div class="org-sim-card__head">
                       <div class="org-sim-card__name">{{ o.fullName }}</div>
@@ -429,14 +431,29 @@
                     </button>
                   </div>
                 </div>
+                </ng-container>
               </ng-container>
             </ng-container>
 
             <ng-template #sideLoadingTpl>
-              <div class="org-sim-card org-sim-card--skeleton" *ngFor="let _ of [1,2,3,4]">
-                <div class="skeleton-line w80"></div>
-                <div class="skeleton-line w50"></div>
-                <div class="skeleton-line w40"></div>
+              <div class="org-sim-card org-sim-card--skeleton" *ngFor="let _ of [1,2,3,4]; let si = index"
+                [attr.data-skeleton-index]="si">
+                <div class="org-sim-skeleton__top">
+                  <div class="org-sim-skeleton__avatar" aria-hidden="true"></div>
+                  <div class="org-sim-skeleton__lines">
+                    <div class="org-sim-skeleton__bar org-sim-skeleton__bar--title"></div>
+                    <div class="org-sim-skeleton__bar org-sim-skeleton__bar--meta"></div>
+                  </div>
+                </div>
+                <div class="org-sim-skeleton__bar org-sim-skeleton__bar--row"></div>
+                <div class="org-sim-skeleton__rows" aria-hidden="true">
+                  <div class="org-sim-skeleton__bar org-sim-skeleton__bar--label-row"></div>
+                  <div class="org-sim-skeleton__bar org-sim-skeleton__bar--label-row short"></div>
+                </div>
+                <div class="org-sim-skeleton__actions" aria-hidden="true">
+                  <span class="org-sim-skeleton__btn"></span>
+                  <span class="org-sim-skeleton__btn org-sim-skeleton__btn--primary"></span>
+                </div>
               </div>
             </ng-template>
             <ng-template #sideEmptyTpl>
