@@ -21,12 +21,14 @@ import { UserFavoriteStore } from '../../../../store/user-favorite/user-favorite
 import { selectIsLoggedIn } from '../../../../store/app-state';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { formatNoticeTitle } from '@core/utils/format-notice-title.util';
+import { LoadingOverlayComponent } from '@shared/components/loading-overlay/loading-overlay.component';
+import { TopNoticeProvinceResponse } from '../../../../core/services/asset.service';
 
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomSelectComponent, CategoryDropdownComponent, TooltipModule],
+  imports: [CommonModule, FormsModule, CustomSelectComponent, CategoryDropdownComponent, TooltipModule, LoadingOverlayComponent],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss',
 })
@@ -121,6 +123,12 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       pageSize: 8,
       statuses: ['COMPLETED', 'CANCELLED']
     });
+    this.assetStore.getAuctionOrgs$({
+      limit: 3,
+      offset: 0,
+      isOrderDescNotices: true,
+    });
+    this.assetStore.getTopNoticeProvinces$();
   }
 
   override ngOnDestroy() {
@@ -167,6 +175,8 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   private dvhcStore = inject(DvhcStore);
   private assetStore = inject(AssetStore);
+  readonly auctionOrgs$ = this.assetStore.auctionOrgs$;
+  readonly auctionOrgsLoading$ = this.assetStore.auctionOrgsLoading$;
   private categoryStore = inject(CategoryStore);
   private userFavoriteStore = inject(UserFavoriteStore);
   private destroyRef = inject(DestroyRef);
@@ -221,6 +231,12 @@ export class HomepageComponent extends BaseComponent implements OnInit {
         if (!m) return;
         this.applyFavoriteMutationToLists(m.noticeId, m.isLiked, m.favoriteId);
       });
+
+    this.assetStore.topNoticeProvinces$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((items) => {
+        this.featuredAreas = (items ?? []).map((item) => this.mapTopProvinceToFeaturedArea(item));
+      });
   }
 
   private mapNoticeToAuctionItem(item: NoticeSearchDocument): AuctionItem {
@@ -262,6 +278,18 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     };
   }
 
+  private mapTopProvinceToFeaturedArea(
+    item: TopNoticeProvinceResponse['items'][number]
+  ): FeaturedAreaItem {
+    return {
+      provinceCode: item.provinceCode,
+      name: item.provinceName,
+      sessions: item.totalNotices ?? 0,
+      value: this.formatPrice(item.totalStartingPrice),
+      image: 'assets/images/khu-vuc-noi-bat.jpg'
+    };
+  }
+
   /** Random integer trong [min, max] (inclusive). */
   private randInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -294,6 +322,14 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     }
   }
 
+  navToListingsByProvince(provinceCode?: string) {
+    const queryParams: any = {};
+    if (provinceCode) {
+      queryParams.location = provinceCode;
+    }
+    this.router.navigate(['/products-listing'], { queryParams });
+  }
+
   navToListings(status?: string) {
     const queryParams: any = {};
     if (status) {
@@ -310,6 +346,12 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     this.router.navigate(['/products-listing'], { queryParams });
   }
 
+  navToOrgDetail(id: number | undefined): void {
+    if (id) {
+      this.router.navigate(['/auction-org-detail', id]);
+    }
+  }
+
   keyword = '';
   isDragging = false;
   startX = 0;
@@ -319,32 +361,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   endedAuctions: EndedAuctionItem[] = [];
 
-  featuredAreas = [
-    {
-      name: 'Hà Nội',
-      sessions: 45,
-      value: '1.250 tỷ',
-      image: 'assets/images/khu-vuc-noi-bat.jpg'
-    },
-    {
-      name: 'TP Hồ Chí Minh',
-      sessions: 30,
-      value: '980 tỷ',
-      image: 'assets/images/khu-vuc-noi-bat.jpg'
-    },
-    {
-      name: 'Đà Nẵng',
-      sessions: 18,
-      value: '520 tỷ',
-      image: 'assets/images/khu-vuc-noi-bat.jpg'
-    },
-    {
-      name: 'Bình Dương',
-      sessions: 22,
-      value: '610 tỷ',
-      image: 'assets/images/khu-vuc-noi-bat.jpg'
-    }
-  ];
+  featuredAreas: FeaturedAreaItem[] = [];
 
   categories: { categoryId: number; name: string; image: string; svgIcon: SafeHtml }[] = [
     {
@@ -500,7 +517,10 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   formatPrice(price: number | null | undefined): string {
     if (price == null) return 'Không xác định';
-    if (price < 100_000_000) {
+    if (price > 100_000_000_000){
+      return Math.round(price / 1_000_000_000) + ' tỷ';
+    }
+    else if (price < 100_000_000) {
       return (price / 1_000_000).toFixed(2) + ' triệu';
     }
     return (price / 1_000_000_000).toFixed(2) + ' tỷ';
@@ -628,4 +648,12 @@ interface EndedAuctionItem {
   viewCount: number;
   favoriteCount: number;
   assetCategoryName: string;
+}
+
+interface FeaturedAreaItem {
+  provinceCode: string;
+  name: string;
+  sessions: number;
+  value: string;
+  image: string;
 }
