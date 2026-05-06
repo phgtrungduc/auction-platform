@@ -210,8 +210,8 @@
     </p>
     <div class="area-grid">
       <div class="area-card" *ngFor="let area of featuredAreas">
-        <img [src]="area.image">
-        <div class="area-card__overlay">
+        <img [src]="area.image" (click)="navToListingsByProvince(area.provinceCode)">
+        <div class="area-card__overlay" (click)="navToListingsByProvince(area.provinceCode)">
           <div>
             <div class="area-name">{{area.name}}</div>
             <div class="area-session">{{area.sessions}} Phiên</div>
@@ -274,45 +274,23 @@
       Tổng hợp từ các đơn vị uy tín nhất
     </p>
 
-    <div class="company-grid">
-      <div class="company-card">
-        <img src="assets/images/cty-nalaf.png">
-        <div class="company-info">
-          <div class="company-name">
-            ĐẤU GIÁ SỐ 5 QUỐC GIA
+    <div class="company-featured-wrap">
+      <app-loading-overlay [loading]="!!(auctionOrgsLoading$ | async)">
+        <ng-container *ngIf="auctionOrgs$ | async as featuredOrgs">
+          <div class="company-grid" *ngIf="featuredOrgs.length">
+            <div class="company-card company-card--featured company-card--clickable" *ngFor="let org of featuredOrgs" role="link" tabindex="0"
+              (click)="navToOrgDetail(org.id)" (keydown.enter)="navToOrgDetail(org.id)">
+              <div class="company-card__logo-slot">
+                <img [src]="org.logoUrl || 'assets/images/logo-cty-default.png'" [alt]="org.fullName" />
+              </div>
+              <div class="company-info">
+                <div class="company-name">{{ org.fullName }}</div>
+                <div class="company-session">{{ org.totalNotices | number }} phiên</div>
+              </div>
+            </div>
           </div>
-          <div class="company-session">
-            1.234 phiên
-          </div>
-        </div>
-      </div>
-
-      <div class="company-card">
-        <img src="assets/images/dau-gia-lac-viet.png">
-
-        <div class="company-info">
-          <div class="company-name">
-            LẠC VIỆT AUCTION
-          </div>
-
-          <div class="company-session">
-            1.234 phiên
-          </div>
-        </div>
-      </div>
-
-      <div class="company-card">
-        <img src="assets/images/bao-phong.png">
-        <div class="company-info">
-          <div class="company-name">
-            BẢO PHONG AUCTION
-          </div>
-
-          <div class="company-session">
-            1.234 phiên
-          </div>
-        </div>
-      </div>
+        </ng-container>
+      </app-loading-overlay>
     </div>
   </section>
 
@@ -379,12 +357,9 @@
                 {{ item.viewCount }}
               </span>
               <span class="auction-card__engagement-item" aria-label="Lượt quan tâm">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path
-                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                  </path>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M6 2.75048L5.73 3.01048C5.76498 3.04677 5.80692 3.07564 5.85331 3.09536C5.8997 3.11508 5.94959 3.12524 6 3.12524C6.05041 3.12524 6.1003 3.11508 6.14669 3.09536C6.19308 3.07564 6.23502 3.04677 6.27 3.01048L6 2.75048ZM4.713 9.16148C3.955 8.56398 3.1265 7.98048 2.469 7.24048C1.825 6.51448 1.375 5.66798 1.375 4.56898H0.625C0.625 5.90198 1.18 6.91898 1.9085 7.73848C2.6235 8.54348 3.5355 9.18848 4.2485 9.75048L4.713 9.16148ZM1.375 4.56898C1.375 3.49398 1.9825 2.59198 2.812 2.21248C3.618 1.84398 4.701 1.94148 5.73 3.01048L6.27 2.49098C5.05 1.22248 3.632 1.01298 2.5 1.53048C1.393 2.03698 0.625 3.21298 0.625 4.56898H1.375ZM4.2485 9.75048C4.505 9.95248 4.78 10.1675 5.0585 10.3305C5.337 10.4935 5.655 10.6255 6 10.6255V9.87548C5.845 9.87548 5.663 9.81548 5.437 9.68298C5.2105 9.55098 4.976 9.36898 4.713 9.16148L4.2485 9.75048ZM7.7515 9.75048C8.4645 9.18798 9.3765 8.54398 10.0915 7.73848C10.82 6.91848 11.375 5.90198 11.375 4.56898H10.625C10.625 5.66798 10.175 6.51448 9.531 7.24048C8.8735 7.98048 8.045 8.56398 7.287 9.16148L7.7515 9.75048ZM11.375 4.56898C11.375 3.21298 10.6075 2.03698 9.5 1.53048C8.368 1.01298 6.951 1.22248 5.73 2.49048L6.27 3.01048C7.299 1.94198 8.382 1.84398 9.188 2.21248C10.0175 2.59198 10.625 3.49348 10.625 4.56898H11.375ZM7.287 9.16148C7.024 9.36898 6.7895 9.55098 6.563 9.68298C6.3365 9.81498 6.155 9.87548 6 9.87548V10.6255C6.345 10.6255 6.663 10.493 6.9415 10.3305C7.2205 10.1675 7.495 9.95248 7.7515 9.75048L7.287 9.16148Z" fill="#E24141"/>
+                  </svg>
                 {{ item.favoriteCount }}
               </span>
             </div>
@@ -455,9 +430,9 @@
 
           <p class="tool-card__content_desc">{{tool.desc}}</p>
 
-          <button class="btn-more">
+          <!-- <button class="btn-more">
             Tìm hiểu thêm →
-          </button>
+          </button> -->
 
         </div>
 

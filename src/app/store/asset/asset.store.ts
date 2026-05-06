@@ -12,7 +12,7 @@ import {
     MarketplaceNoticeDetail,
     NoticeSearchDocument
 } from "../../core/models/asset.model";
-import { AuctionOrgListResponse } from "../../core/services/asset.service";
+import { AuctionOrgListResponse, TopNoticeProvinceResponse } from "../../core/services/asset.service";
 
 export interface AssetState {
     loading: boolean;
@@ -31,6 +31,8 @@ export interface AssetState {
         offset: number;
         hasMore: boolean;
     };
+    topNoticeProvincesLoading: boolean;
+    topNoticeProvinces: TopNoticeProvinceResponse['items'];
     meta: {
         totalElements: number;
         pageSize: number;
@@ -72,6 +74,8 @@ const initialState: AssetState = {
         offset: 1,
         hasMore: false,
     },
+    topNoticeProvincesLoading: false,
+    topNoticeProvinces: [],
     meta: {
         totalElements: 0,
         pageSize: 10,
@@ -131,6 +135,8 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
     auctionOrgs$ = this.select((s) => s.auctionOrgs);
     auctionOrgsLoading$ = this.select((s) => s.auctionOrgsLoading);
     auctionOrgsMeta$ = this.select((s) => s.auctionOrgsMeta);
+    topNoticeProvinces$ = this.select((s) => s.topNoticeProvinces);
+    topNoticeProvincesLoading$ = this.select((s) => s.topNoticeProvincesLoading);
 
     readonly getListData$ = this.effect<AdvancedSearchRequest>(($) =>
         $.pipe(
@@ -277,7 +283,7 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
         )
     );
 
-    readonly getAuctionOrgs$ = this.effect<{ limit: number; offset: number }>(($) =>
+    readonly getAuctionOrgs$ = this.effect<{ limit: number; offset: number; orgTypeCode?: number; isOrderDescNotices?: boolean }>(($) =>
         $.pipe(
             tap(() => {
                 this.patchState({
@@ -298,12 +304,43 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
                                     limit: response.limit,
                                     offset: response.offset,
                                     hasMore: response.hasMore
-                                }
+                                },
                             });
                         },
                         (e: HttpErrorResponse) => {
                             this.patchState({
                                 auctionOrgsLoading: false,
+                                error: e.message
+                            });
+                            this.toastr.error(e.message || "Đã có lỗi xảy ra", "Lỗi");
+                        }
+                    )
+                );
+            })
+        )
+    );
+
+    readonly getTopNoticeProvinces$ = this.effect<void>(($) =>
+        $.pipe(
+            tap(() => {
+                this.patchState({
+                    topNoticeProvincesLoading: true,
+                    error: "",
+                    topNoticeProvinces: []
+                });
+            }),
+            switchMap(() => {
+                return this.service.getTopNoticeProvinces().pipe(
+                    tapResponse(
+                        (response: TopNoticeProvinceResponse) => {
+                            this.patchState({
+                                topNoticeProvincesLoading: false,
+                                topNoticeProvinces: response.items ?? []
+                            });
+                        },
+                        (e: HttpErrorResponse) => {
+                            this.patchState({
+                                topNoticeProvincesLoading: false,
                                 error: e.message
                             });
                             this.toastr.error(e.message || "Đã có lỗi xảy ra", "Lỗi");

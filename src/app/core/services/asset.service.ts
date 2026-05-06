@@ -24,11 +24,14 @@ export type AuctionOrgListResponse = {
     legalRepresentative: string;
     practicingCertificateNumber: string;
     totalAuctioneers: number;
+    totalNotices: number;
     orgTypeCode: number;
     categoryLabel: string;
     categorySlug: string;
     createdAt: string;
     updatedAt: string;
+    logoUrl?: string | null;
+
   }>;
   totalCount: number;
   limit: number;
@@ -60,6 +63,17 @@ export type AuctionOrgDetailResponse = {
   updatedAt?: string;
   totalAssets?: number;
   totalNotices?: number;
+  logoUrl?: string | null;
+};
+
+export type TopNoticeProvinceResponse = {
+  items: Array<{
+    provinceCode: string;
+    provinceName: string;
+    totalNotices: number;
+    totalStartingPrice: number;
+    totalWinningPrice: number;
+  }>;
 };
 
 @Injectable({
@@ -95,16 +109,32 @@ export class AssetService {
     return this.http.post<AdvancedSearchResponse>(url, request ?? {});
   }
 
-  getAuctionOrgs(params: { limit: number; offset: number }): Observable<AuctionOrgListResponse> {
+  getAuctionOrgs(params: {
+    limit: number;
+    offset: number;
+    orgTypeCode?: number;
+    isOrderDescNotices?: boolean;
+  }): Observable<AuctionOrgListResponse> {
     const url = `${this.API_URL}${API_ENDPOINTS.ORG.SEARCH}`;
-    const httpParams = new HttpParams()
+    let httpParams = new HttpParams()
       .set('Limit', String(params.limit))
       .set('Offset', String(params.offset));
+    if (params.orgTypeCode != null && Number.isFinite(params.orgTypeCode)) {
+      httpParams = httpParams.set('OrgTypeCode', String(params.orgTypeCode));
+    }
+    if (params.isOrderDescNotices === true) {
+      httpParams = httpParams.set('IsOrderDescNotices', 'true');
+    }
     return this.http.get<AuctionOrgListResponse>(url, { params: httpParams });
   }
 
   getAuctionOrgDetail(id: number | string): Observable<AuctionOrgDetailResponse> {
     const url = `${this.API_URL}${API_ENDPOINTS.ORG.SEARCH}/${id}`;
     return this.http.get<AuctionOrgDetailResponse>(url);
+  }
+
+  getTopNoticeProvinces(): Observable<TopNoticeProvinceResponse> {
+    const url = `${this.API_URL}${API_ENDPOINTS.ASSET.TOP_NOTICES_PROVINCES}`;
+    return this.http.get<TopNoticeProvinceResponse>(url);
   }
 }

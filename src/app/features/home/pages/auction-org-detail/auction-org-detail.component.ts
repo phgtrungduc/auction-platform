@@ -42,7 +42,8 @@ export class AuctionOrgDetailComponent implements OnInit {
   websiteUrl = 'Đang cập nhật';
   legalRepresentative = 'Đang cập nhật';
   practicingCertificateNumber = 'Đang cập nhật';
-
+  logo : string | undefined = undefined;
+  orgTypeCode : number | undefined = undefined;
   // Fake stats (reasonable random)
   totalAuctions = 0;
   totalAuctioneers = 0;
@@ -90,12 +91,13 @@ export class AuctionOrgDetailComponent implements OnInit {
         }
 
         // fallback: keep existing flow from product-detail (router state)
+        this.orgId = undefined;
+        this.orgTypeCode = undefined;
         this.hydrateFromNavState();
         this.currentPage = 1;
         this.fetchOrgAuctions();
+        this.fetchSimilarAuctionOrgs(false);
       });
-
-    this.assetStore.getAuctionOrgs$({ limit: 4, offset: this.randomInt(1, 5)});
   }
 
   goBack(): void {
@@ -235,14 +237,17 @@ export class AuctionOrgDetailComponent implements OnInit {
 
           this.currentPage = 1;
           this.fetchOrgAuctions();
+          this.fetchSimilarAuctionOrgs(true);
         },
         error: () => {
           // if API fails, keep whatever is currently shown (or fallback to state)
           this.orgDetailLoading = false;
           if (!this.orgName || this.orgName === 'Đơn vị đấu giá') {
+            this.orgTypeCode = undefined;
             this.hydrateFromNavState();
             this.currentPage = 1;
             this.fetchOrgAuctions();
+            this.fetchSimilarAuctionOrgs(false);
           }
         }
       });
@@ -253,6 +258,8 @@ export class AuctionOrgDetailComponent implements OnInit {
     this.orgAddress = (res.address ?? '').trim() || 'Đang cập nhật';
     this.contactPhone = (res.phone ?? '').trim() || 'Đang cập nhật';
     this.contactEmail = (res.email ?? '').trim() || 'Đang cập nhật';
+    this.logo = (res.logoUrl ?? '').trim() || undefined;
+    this.orgTypeCode = this.normalizeOrgTypeCode(res.orgTypeCode);
     this.fax = (res.fax ?? '').trim() || 'Đang cập nhật';
     this.websiteUrl = (res.websiteUrl ?? '').trim() || 'Đang cập nhật';
     this.totalAssets = res.totalAssets ?? 0;
@@ -263,6 +270,29 @@ export class AuctionOrgDetailComponent implements OnInit {
     if (typeof res.totalAuctioneers === 'number' && Number.isFinite(res.totalAuctioneers)) {
       this.totalAuctioneers = res.totalAuctioneers;
     }
+  }
+
+  private normalizeOrgTypeCode(value: unknown): number | undefined {
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return value;
+    }
+    if (typeof value === 'string' && value.trim() !== '') {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : undefined;
+    }
+    return undefined;
+  }
+
+  private fetchSimilarAuctionOrgs(useOrgTypeFromDetail: boolean): void {
+    const req: { limit: number; offset: number; orgTypeCode?: number } = { limit: 4, offset: 0 };
+    if (
+      useOrgTypeFromDetail &&
+      this.orgTypeCode != null &&
+      Number.isFinite(this.orgTypeCode)
+    ) {
+      req.orgTypeCode = this.orgTypeCode;
+    }
+    this.assetStore.getAuctionOrgs$(req);
   }
 
   private fetchOrgAuctions(): void {
