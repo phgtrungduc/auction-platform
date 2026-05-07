@@ -124,9 +124,10 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       statuses: ['COMPLETED', 'CANCELLED']
     });
     this.assetStore.getAuctionOrgs$({
-      limit: 3,
+      limit: 6,
       offset: 0,
       isOrderDescNotices: true,
+      isPrioritizeDvl: true,
     });
     this.assetStore.getTopNoticeProvinces$();
   }
