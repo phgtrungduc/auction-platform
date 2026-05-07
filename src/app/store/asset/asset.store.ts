@@ -283,7 +283,7 @@ export class AssetStore extends ImmerComponentStore<AssetState> {
         )
     );
 
-    readonly getAuctionOrgs$ = this.effect<{ limit: number; offset: number; orgTypeCode?: number; isOrderDescNotices?: boolean }>(($) =>
+    readonly getAuctionOrgs$ = this.effect<{ limit: number; offset: number; orgTypeCode?: number; isOrderDescNotices?: boolean; isPrioritizeDvl?: boolean }>(($) =>
         $.pipe(
             tap(() => {
                 this.patchState({

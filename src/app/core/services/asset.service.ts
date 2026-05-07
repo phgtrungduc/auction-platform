@@ -114,6 +114,7 @@ export class AssetService {
     offset: number;
     orgTypeCode?: number;
     isOrderDescNotices?: boolean;
+    isPrioritizeDvl?: boolean;
   }): Observable<AuctionOrgListResponse> {
     const url = `${this.API_URL}${API_ENDPOINTS.ORG.SEARCH}`;
     let httpParams = new HttpParams()
@@ -124,6 +125,9 @@ export class AssetService {
     }
     if (params.isOrderDescNotices === true) {
       httpParams = httpParams.set('IsOrderDescNotices', 'true');
+    }
+    if (params.isPrioritizeDvl === true) {
+      httpParams = httpParams.set('IsPrioritizeDvl', 'true');
     }
     return this.http.get<AuctionOrgListResponse>(url, { params: httpParams });
   }
