@@ -1000,11 +1000,34 @@
   width: 100%;
 }
 
+:host ::ng-deep .auction-upcoming-wrap .loading-container,
+:host ::ng-deep .area-featured-wrap .loading-container,
+:host ::ng-deep .auction-ended-wrap .loading-container,
 :host ::ng-deep .company-featured-wrap .loading-container {
   display: block;
   width: 100%;
-  min-height: 200px;
   box-sizing: border-box;
+}
+
+.auction-upcoming-wrap,
+.auction-ended-wrap {
+  min-height: 320px;
+  width: 100%;
+}
+
+.area-featured-wrap {
+  min-height: 220px;
+  width: 100%;
+}
+
+:host ::ng-deep .auction-upcoming-wrap .loading-container,
+:host ::ng-deep .auction-ended-wrap .loading-container,
+:host ::ng-deep .company-featured-wrap .loading-container {
+  min-height: 200px;
+}
+
+:host ::ng-deep .area-featured-wrap .loading-container {
+  min-height: 220px;
 }
 
 .company-card--clickable {

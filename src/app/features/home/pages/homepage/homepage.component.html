@@ -125,10 +125,12 @@
       </div>
     </div>
 
-    <div class="ended-auction__wrapper">
-      <div class="ended-auction__scroll" #auctionScroll (mousedown)="onMouseDown($event)"
-        (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()" (mouseleave)="onMouseUp()">
-        <div class="ended-auction__card" *ngFor="let item of auctionList">
+    <div class="auction-upcoming-wrap">
+      <app-loading-overlay [loading]="!!(auctionListLoading$ | async)">
+        <div class="ended-auction__wrapper">
+          <div class="ended-auction__scroll" #auctionScroll (mousedown)="onMouseDown($event)"
+            (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()" (mouseleave)="onMouseUp()">
+            <div class="ended-auction__card" *ngFor="let item of auctionList">
 
           <div class="auction-card__image">
             <img [src]="item.image" />
@@ -197,8 +199,10 @@
               </button>
             </div>
           </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </app-loading-overlay>
     </div>
   </section>
 
@@ -208,39 +212,43 @@
     <p class="section-subtitle">
       Top 4 tỉnh thành với tổng giá trị khởi điểm lớn nhất 30 ngày qua
     </p>
-    <div class="area-grid">
-      <div class="area-card" *ngFor="let area of featuredAreas">
-        <img [src]="area.image" (click)="navToListingsByProvince(area.provinceCode)">
-        <div class="area-card__overlay" (click)="navToListingsByProvince(area.provinceCode)">
-          <div>
-            <div class="area-name">{{area.name}}</div>
-            <div class="area-session">{{area.sessions}} Phiên</div>
-          </div>
-          <div class="area-value">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M20 13.111C20 20.222 13.956 22 10.933 22C8.29 22 3 20.222 3 13.111C3 10.329 4.461 8.46104 5.86 7.39504C6.638 6.80104 7.63 7.39204 7.73 8.36604L7.816 9.20404C7.921 10.224 8.849 11.061 9.709 10.502C11.394 9.40704 12 6.77504 12 5.33304V5.01004C12 3.58004 13.444 2.66004 14.602 3.49804C17.165 5.35004 20 8.58404 20 13.11V13.111Z"
-                stroke="url(#paint0_linear_4055_133)" stroke-width="1.5" />
-              <path
-                d="M8 18.4451C8 21.2891 10.489 22.0001 11.733 22.0001C12.823 22.0001 15 21.2891 15 18.4451C15 17.3431 14.41 16.6001 13.84 16.1711C13.442 15.8721 12.883 16.1411 12.746 16.6201C12.568 17.2441 11.923 17.6361 11.594 17.0761C11.294 16.5641 11.294 15.7961 11.294 15.3331C11.294 14.6971 10.654 14.2851 10.139 14.6591C9.106 15.4091 8 16.6801 8 18.4451Z"
-                stroke="url(#paint1_linear_4055_133)" stroke-width="1.5" />
-              <defs>
-                <linearGradient id="paint0_linear_4055_133" x1="11.5" y1="3.17896" x2="11.5" y2="22"
-                  gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#FFA640" />
-                  <stop offset="1" stop-color="#E24141" />
-                </linearGradient>
-                <linearGradient id="paint1_linear_4055_133" x1="11.5" y1="14.5168" x2="11.5" y2="22.0001"
-                  gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#FFA640" />
-                  <stop offset="1" stop-color="#E24141" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <span>{{area.value}}</span>
+    <div class="area-featured-wrap">
+      <app-loading-overlay [loading]="!!(featuredAreasLoading$ | async)">
+        <div class="area-grid">
+          <div class="area-card" *ngFor="let area of featuredAreas">
+            <img [src]="area.image" (click)="navToListingsByProvince(area.provinceCode)">
+            <div class="area-card__overlay" (click)="navToListingsByProvince(area.provinceCode)">
+              <div>
+                <div class="area-name">{{area.name}}</div>
+                <div class="area-session">{{area.sessions}} Phiên</div>
+              </div>
+              <div class="area-value">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M20 13.111C20 20.222 13.956 22 10.933 22C8.29 22 3 20.222 3 13.111C3 10.329 4.461 8.46104 5.86 7.39504C6.638 6.80104 7.63 7.39204 7.73 8.36604L7.816 9.20404C7.921 10.224 8.849 11.061 9.709 10.502C11.394 9.40704 12 6.77504 12 5.33304V5.01004C12 3.58004 13.444 2.66004 14.602 3.49804C17.165 5.35004 20 8.58404 20 13.11V13.111Z"
+                    stroke="url(#paint0_linear_4055_133)" stroke-width="1.5" />
+                  <path
+                    d="M8 18.4451C8 21.2891 10.489 22.0001 11.733 22.0001C12.823 22.0001 15 21.2891 15 18.4451C15 17.3431 14.41 16.6001 13.84 16.1711C13.442 15.8721 12.883 16.1411 12.746 16.6201C12.568 17.2441 11.923 17.6361 11.594 17.0761C11.294 16.5641 11.294 15.7961 11.294 15.3331C11.294 14.6971 10.654 14.2851 10.139 14.6591C9.106 15.4091 8 16.6801 8 18.4451Z"
+                    stroke="url(#paint1_linear_4055_133)" stroke-width="1.5" />
+                  <defs>
+                    <linearGradient id="paint0_linear_4055_133" x1="11.5" y1="3.17896" x2="11.5" y2="22"
+                      gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFA640" />
+                      <stop offset="1" stop-color="#E24141" />
+                    </linearGradient>
+                    <linearGradient id="paint1_linear_4055_133" x1="11.5" y1="14.5168" x2="11.5" y2="22.0001"
+                      gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFA640" />
+                      <stop offset="1" stop-color="#E24141" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <span>{{area.value}}</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </app-loading-overlay>
     </div>
   </section>
 
@@ -317,10 +325,12 @@
       </div>
     </div>
 
-    <div class="ended-auction__wrapper">
-      <div class="ended-auction__scroll" #auctionScroll (mousedown)="onMouseDown($event)"
-        (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()" (mouseleave)="onMouseUp()">
-        <div class="ended-auction__card" *ngFor="let item of endedAuctions">
+    <div class="auction-ended-wrap">
+      <app-loading-overlay [loading]="!!(endedAuctionListLoading$ | async)">
+        <div class="ended-auction__wrapper">
+          <div class="ended-auction__scroll" #auctionScroll (mousedown)="onMouseDown($event)"
+            (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()" (mouseleave)="onMouseUp()">
+            <div class="ended-auction__card" *ngFor="let item of endedAuctions">
 
           <div class="auction-card__image">
             <img [src]="item.image" />
@@ -402,8 +412,10 @@
               </button>
             </div>
           </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </app-loading-overlay>
     </div>
   </section>
 
