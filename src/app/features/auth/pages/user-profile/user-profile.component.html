@@ -3,7 +3,7 @@
 
   <app-loading-overlay [loading]="isLoading">
     <ng-container *ngIf="!loadError; else errorState">
-      <div class="profile-layout" *ngIf="!isLoading; else loadingState">
+      <div class="profile-layout">
         <aside class="profile-sidebar">
           <div class="sidebar-user-card card">
             <div class="user-row">
@@ -801,10 +801,6 @@
     </ng-container>
   </app-loading-overlay>
 </section>
-
-<ng-template #loadingState>
-  <div class="card profile-block--state">Đang tải dữ liệu...</div>
-</ng-template>
 
 <ng-template #errorState>
   <div class="card profile-block--state">

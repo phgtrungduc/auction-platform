@@ -175,6 +175,9 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   private dvhcStore = inject(DvhcStore);
   private assetStore = inject(AssetStore);
+  readonly auctionListLoading$ = this.assetStore.loading$;
+  readonly endedAuctionListLoading$ = this.assetStore.endedLoading$;
+  readonly featuredAreasLoading$ = this.assetStore.topNoticeProvincesLoading$;
   readonly auctionOrgs$ = this.assetStore.auctionOrgs$;
   readonly auctionOrgsLoading$ = this.assetStore.auctionOrgsLoading$;
   private categoryStore = inject(CategoryStore);
