@@ -190,4 +190,5 @@ export interface AuctionOrganization {
   email: string;
   totalAssets?: number;
   totalNotices?: number;
+  logoUrl?: string;
 }

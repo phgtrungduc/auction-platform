@@ -216,10 +216,11 @@
           <div class="auction-org">
             <div class="auction-org__header">
               <div class="auction-org__logo">
-                <img
+                <!-- <img
                   src="assets/images/logo-cty-default.png"
                   alt="Auction org logo"
-                />
+                /> -->
+                <img [src]="product.auctionOrganization?.logoUrl || 'assets/images/logo-cty-default.png'" alt="Auction org logo" />
               </div>
 
               <div class="auction-org__main">
@@ -259,7 +260,7 @@
                       </defs>
                     </svg>
                     <span class="auction-org__stat-value">{{
-                      product.auctionOrganization?.totalNotices || 'Đang cập nhật'
+                      product.auctionOrganization?.totalNotices || '-/-'
                     }}</span>
                     <span class="auction-org__stat-label">phiên đấu giá</span>
                   </div>
