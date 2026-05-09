@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://auction-project-poqw.onrender.com/api',
+  apiUrl: 'http://103.178.235.33:5000/api',
 };
