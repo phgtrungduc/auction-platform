@@ -23,7 +23,9 @@ import { LoggerService } from '../../../../core/services/logger.service';
 import { formatNoticeTitle } from '@core/utils/format-notice-title.util';
 import { LoadingOverlayComponent } from '@shared/components/loading-overlay/loading-overlay.component';
 import { PartnerCooperationPopupComponent } from '@shared/components/partner-cooperation-popup/partner-cooperation-popup.component';
-import { TopNoticeProvinceResponse } from '../../../../core/services/asset.service';
+import { AuctionOrgListResponse, TopNoticeProvinceResponse } from '../../../../core/services/asset.service';
+
+type FeaturedAuctionOrg = AuctionOrgListResponse['items'][number];
 
 
 @Component({
@@ -125,7 +127,7 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       statuses: ['COMPLETED', 'CANCELLED']
     });
     this.assetStore.getAuctionOrgs$({
-      limit: 6,
+      limit: this.companyCarouselFetchLimit,
       offset: 0,
       isOrderDescNotices: true,
       isPrioritizeDvl: true,
@@ -182,6 +184,20 @@ export class HomepageComponent extends BaseComponent implements OnInit {
   readonly featuredAreasLoading$ = this.assetStore.topNoticeProvincesLoading$;
   readonly auctionOrgs$ = this.assetStore.auctionOrgs$;
   readonly auctionOrgsLoading$ = this.assetStore.auctionOrgsLoading$;
+  readonly companyCarouselFetchLimit = 20;
+  readonly carouselLoopGroups = [0, 1];
+
+  getCompanyCarouselRow(orgs: FeaturedAuctionOrg[], row: 0 | 1): FeaturedAuctionOrg[] {
+    return orgs.filter((_, index) => index % 2 === row);
+  }
+
+  trackCompanyOrg(_index: number, org: FeaturedAuctionOrg): number {
+    return org.id;
+  }
+
+  trackLoopGroup(index: number): number {
+    return index;
+  }
   private categoryStore = inject(CategoryStore);
   private userFavoriteStore = inject(UserFavoriteStore);
   private destroyRef = inject(DestroyRef);

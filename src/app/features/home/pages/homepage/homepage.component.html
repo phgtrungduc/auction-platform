@@ -285,15 +285,58 @@
     <div class="company-featured-wrap">
       <app-loading-overlay [loading]="!!(auctionOrgsLoading$ | async)">
         <ng-container *ngIf="auctionOrgs$ | async as featuredOrgs">
-          <div class="company-grid" *ngIf="featuredOrgs.length">
-            <div class="company-card company-card--featured company-card--clickable" *ngFor="let org of featuredOrgs" role="link" tabindex="0"
-              (click)="navToOrgDetail(org.id)" (keydown.enter)="navToOrgDetail(org.id)">
-              <div class="company-card__logo-slot">
-                <img [src]="org.logoUrl || 'assets/images/logo-cty-default.png'" [alt]="org.fullName" />
+          <div class="company-carousel" *ngIf="featuredOrgs.length">
+            <div class="company-carousel__row company-carousel__row--right">
+              <div class="company-carousel__track">
+                <div
+                  class="company-carousel__group"
+                  *ngFor="let loop of carouselLoopGroups; trackBy: trackLoopGroup"
+                  [attr.aria-hidden]="loop === 1 ? true : null"
+                >
+                  <article
+                    class="company-card company-card--featured company-card--clickable"
+                    *ngFor="let org of getCompanyCarouselRow(featuredOrgs, 0); trackBy: trackCompanyOrg"
+                    role="link"
+                    tabindex="0"
+                    (click)="navToOrgDetail(org.id)"
+                    (keydown.enter)="navToOrgDetail(org.id)"
+                  >
+                    <div class="company-card__logo-slot">
+                      <img [src]="org.logoUrl || 'assets/images/logo-cty-default.png'" [alt]="org.fullName" />
+                    </div>
+                    <div class="company-info">
+                      <div class="company-name">{{ org.fullName }}</div>
+                      <div class="company-session">{{ org.totalNotices | number }} phiên</div>
+                    </div>
+                  </article>
+                </div>
               </div>
-              <div class="company-info">
-                <div class="company-name">{{ org.fullName }}</div>
-                <div class="company-session">{{ org.totalNotices | number }} phiên</div>
+            </div>
+
+            <div class="company-carousel__row company-carousel__row--left">
+              <div class="company-carousel__track">
+                <div
+                  class="company-carousel__group"
+                  *ngFor="let loop of carouselLoopGroups; trackBy: trackLoopGroup"
+                  [attr.aria-hidden]="loop === 1 ? true : null"
+                >
+                  <article
+                    class="company-card company-card--featured company-card--clickable"
+                    *ngFor="let org of getCompanyCarouselRow(featuredOrgs, 1); trackBy: trackCompanyOrg"
+                    role="link"
+                    tabindex="0"
+                    (click)="navToOrgDetail(org.id)"
+                    (keydown.enter)="navToOrgDetail(org.id)"
+                  >
+                    <div class="company-card__logo-slot">
+                      <img [src]="org.logoUrl || 'assets/images/logo-cty-default.png'" [alt]="org.fullName" />
+                    </div>
+                    <div class="company-info">
+                      <div class="company-name">{{ org.fullName }}</div>
+                      <div class="company-session">{{ org.totalNotices | number }} phiên</div>
+                    </div>
+                  </article>
+                </div>
               </div>
             </div>
           </div>

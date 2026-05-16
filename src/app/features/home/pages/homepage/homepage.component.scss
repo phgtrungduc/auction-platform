@@ -995,8 +995,95 @@
   align-items: stretch;
 }
 
+.company-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 4%,
+    #000 96%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+}
+
+.company-carousel__row {
+  overflow: hidden;
+  width: 100%;
+}
+
+.company-carousel__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.company-carousel__row--right .company-carousel__track {
+  animation: company-marquee-right 52s linear infinite;
+}
+
+.company-carousel__row--left .company-carousel__track {
+  animation: company-marquee-left 52s linear infinite;
+}
+
+.company-carousel__row:hover .company-carousel__track {
+  animation-play-state: paused;
+}
+
+.company-carousel__group {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--homepage-gap, 20px);
+  padding-right: var(--homepage-gap, 20px);
+}
+
+.company-carousel__group .company-card.company-card--featured {
+  flex: 0 0 280px;
+  width: 280px;
+  height: auto;
+}
+
+@keyframes company-marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes company-marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .company-carousel__track {
+    animation: none !important;
+  }
+
+  .company-carousel {
+    -webkit-mask-image: none;
+    mask-image: none;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .company-carousel__row {
+    overflow-x: auto;
+  }
+}
+
 .company-featured-wrap {
-  min-height: 200px;
+  min-height: 280px;
   width: 100%;
 }
 
@@ -1023,7 +1110,7 @@
 :host ::ng-deep .auction-upcoming-wrap .loading-container,
 :host ::ng-deep .auction-ended-wrap .loading-container,
 :host ::ng-deep .company-featured-wrap .loading-container {
-  min-height: 200px;
+  min-height: 280px;
 }
 
 :host ::ng-deep .area-featured-wrap .loading-container {
