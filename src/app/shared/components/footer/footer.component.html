@@ -110,13 +110,15 @@
         <h4>Về Chúng tôi</h4>
         <ul>
           <li>Giới thiệu</li>
-          <li>Liên hệ</li>
+          <li>
+            <button type="button" class="footer-link" (click)="openAboutContact()">Liên hệ</button>
+          </li>
           <li>Tuyển dụng</li>
         </ul>
       </div>
 
       <!-- COL 3 -->
-      <div class="footer-col">
+      <!-- <div class="footer-col">
         <h4>Dịch vụ</h4>
         <ul>
           <li>Đăng thông báo đấu giá</li>
@@ -124,16 +126,24 @@
           <li>Tư vấn pháp lý đấu giá</li>
           <li>Tra cứu phiên đấu giá</li>
         </ul>
-      </div>
+      </div> -->
 
       <!-- COL 4 -->
       <div class="footer-col">
         <h4>Chính sách</h4>
         <ul>
-          <li>Quy chế đấu giá</li>
-          <li>Chính sách bảo mật</li>
-          <li>Điều khoản sử dụng</li>
-          <li>Hướng dẫn tham gia đấu giá</li>
+          <!-- <li>Quy chế đấu giá</li> -->
+          <li>
+            <button type="button" class="footer-link" (click)="openExternalLink(privacyPolicyUrl)">
+              Chính sách bảo mật
+            </button>
+          </li>
+          <li>
+            <button type="button" class="footer-link" (click)="openExternalLink(termsOfUseUrl)">
+              Điều khoản sử dụng
+            </button>
+          </li>
+          <!-- <li>Hướng dẫn tham gia đấu giá</li> -->
         </ul>
       </div>
 
@@ -147,7 +157,7 @@
       </div>
 
       <div class="footer-contact">
-        <span>VP Kén Space, T6, CT18 Khu đô thị Việt Hưng, Quận Long Biên, Hà Nội</span>
+        <span>102T6 - CT18 Happy House Garden (Khu đô thị Việt Hưng - Long Biên - Hà Nội)</span>
         <span>0977590602</span>
         <p>contact&#64;taisandaugia.vn</p>
       </div>

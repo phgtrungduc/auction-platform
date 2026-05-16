@@ -94,6 +94,20 @@
   text-decoration:underline;
 }
 
+.footer-link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .footer-bottom{
   margin-top:20px;
   padding-top:12px;

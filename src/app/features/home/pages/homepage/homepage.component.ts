@@ -89,7 +89,19 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   currentBannerIndex = 0;
   private bannerInterval: ReturnType<typeof setInterval> | null = null;
+  private adBidCountdownInterval: ReturnType<typeof setInterval> | null = null;
   private readonly BANNER_INTERVAL_MS = 4000;
+  private readonly adBidEndsAt = (() => {
+    const end = new Date();
+    end.setDate(end.getDate() + 7);
+    end.setHours(23, 59, 59, 0);
+    return end;
+  })();
+
+  readonly adBidContactUrl = 'https://taisandaugia.lovable.app/gioi-thieu';
+  readonly adBidBidderCount = 6;
+  readonly adBidHighestPriceVnd = 20_000_000;
+  adBidCountdown = { days: '00', hours: '00', minutes: '00', seconds: '00' };
 
   private get maxBannerIndex() {
     return this.banners.length - this.bannersPerView;  // 6 - 4 = 2
@@ -133,10 +145,12 @@ export class HomepageComponent extends BaseComponent implements OnInit {
       isPrioritizeDvl: true,
     });
     this.assetStore.getTopNoticeProvinces$();
+    this.startAdBidCountdown();
   }
 
   override ngOnDestroy() {
     this.stopBannerAutoPlay();
+    this.stopAdBidCountdown();
     super.ngOnDestroy();
   }
 
@@ -536,6 +550,42 @@ export class HomepageComponent extends BaseComponent implements OnInit {
 
   openNewsLink(url: string): void {
     window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  openAdBidContact(): void {
+    window.open(this.adBidContactUrl, '_blank', 'noopener,noreferrer');
+  }
+
+  formatAdBidPrice(amount: number): string {
+    return new Intl.NumberFormat('vi-VN').format(amount) + ' đ';
+  }
+
+  private startAdBidCountdown(): void {
+    this.updateAdBidCountdown();
+    this.adBidCountdownInterval = setInterval(() => this.updateAdBidCountdown(), 1000);
+  }
+
+  private stopAdBidCountdown(): void {
+    if (this.adBidCountdownInterval !== null) {
+      clearInterval(this.adBidCountdownInterval);
+      this.adBidCountdownInterval = null;
+    }
+  }
+
+  private updateAdBidCountdown(): void {
+    const diffMs = Math.max(0, this.adBidEndsAt.getTime() - Date.now());
+    const totalSeconds = Math.floor(diffMs / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    this.adBidCountdown = {
+      days: String(days).padStart(2, '0'),
+      hours: String(hours).padStart(2, '0'),
+      minutes: String(minutes).padStart(2, '0'),
+      seconds: String(seconds).padStart(2, '0'),
+    };
   }
 
   onSearch() {

@@ -537,9 +537,79 @@
       </article>
 
       <!-- ADS -->
-      <div class="news-ads">
-        Quảng cáo
-      </div>
+      <aside class="news-ads ad-bid-card" aria-label="Đấu giá vị trí quảng cáo">
+        <span class="ad-bid-card__badge">
+          <span class="ad-bid-card__badge-dot" aria-hidden="true"></span>
+          Vị trí quảng cáo
+        </span>
+
+        <ul class="ad-bid-card__stats">
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M17 20C17 18.343 15.657 17 14 17H10C8.343 17 7 18.343 7 20M12 13C14.209 13 16 11.209 16 9C16 6.791 14.209 5 12 5C9.791 5 8 6.791 8 9C8 11.209 9.791 13 12 13Z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span>
+              Đã có <strong>{{ adBidBidderCount }} người</strong> trả giá để quảng cáo ở vị trí này
+            </span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M4 16L8 12L11 15L16 9L20 13"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path d="M20 7V13H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>
+              Mức giá hiện tại:
+              <strong class="ad-bid-card__price">{{ formatAdBidPrice(adBidHighestPriceVnd) }}</strong>
+            </span>
+          </li>
+        </ul>
+
+        <div class="ad-bid-card__countdown">
+          <p class="ad-bid-card__countdown-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" />
+              <path d="M12 7V12L15 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            Kết thúc sau
+          </p>
+          <div class="ad-bid-card__timer" role="timer" aria-live="polite">
+            <div class="ad-bid-card__time-unit">
+              <span class="ad-bid-card__time-value">{{ adBidCountdown.days }}</span>
+              <span class="ad-bid-card__time-label">Ngày</span>
+            </div>
+            <span class="ad-bid-card__time-sep" aria-hidden="true">:</span>
+            <div class="ad-bid-card__time-unit">
+              <span class="ad-bid-card__time-value">{{ adBidCountdown.hours }}</span>
+              <span class="ad-bid-card__time-label">Giờ</span>
+            </div>
+            <span class="ad-bid-card__time-sep" aria-hidden="true">:</span>
+            <div class="ad-bid-card__time-unit">
+              <span class="ad-bid-card__time-value">{{ adBidCountdown.minutes }}</span>
+              <span class="ad-bid-card__time-label">Phút</span>
+            </div>
+            <span class="ad-bid-card__time-sep" aria-hidden="true">:</span>
+            <div class="ad-bid-card__time-unit">
+              <span class="ad-bid-card__time-value">{{ adBidCountdown.seconds }}</span>
+              <span class="ad-bid-card__time-label">Giây</span>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="ad-bid-card__cta" (click)="openAdBidContact()">
+          Liên hệ để trả giá
+        </button>
+      </aside>
 
       <!-- BOTTOM LIST -->
       <div class="news-bottom">
