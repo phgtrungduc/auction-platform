@@ -464,26 +464,34 @@
 
       <!-- LEFT SIDE -->
       <div class="news-left">
-        <div class="news-item" *ngFor="let n of news.slice(0,2)">
-          <img [src]="n.image">
-          <div class="news-title">{{n.title}}</div>
-        </div>
+        <article
+          class="news-item news-item--clickable"
+          *ngFor="let n of newsLeftItems"
+          (click)="openNewsLink(n.url)"
+          (keydown.enter)="openNewsLink(n.url)"
+          tabindex="0"
+          role="link"
+        >
+          <img [src]="n.image" [alt]="n.title" />
+          <div class="news-title">{{ n.title }}</div>
+        </article>
       </div>
 
       <!-- MAIN -->
-      <div class="news-main">
-        <img src="assets/images/main-tin-tuc.jpg">
+      <article
+        class="news-main news-main--clickable"
+        (click)="openNewsLink(featuredNews.url)"
+        (keydown.enter)="openNewsLink(featuredNews.url)"
+        tabindex="0"
+        role="link"
+      >
+        <img [src]="featuredNews.image" [alt]="featuredNews.title" />
 
-        <h3>
-          Phiên đấu giá đất Thanh Oai lập kỷ lục chênh lệch giá 2.400%
-        </h3>
+        <h3>{{ featuredNews.title }}</h3>
 
-        <p class="news-desc">
-          Tin tức đấu giá thửa đất tại Thanh Oai ...
-        </p>
+        <p class="news-desc">{{ featuredNews.summary }}</p>
 
-        <button class="btn-read">Read More</button>
-      </div>
+      </article>
 
       <!-- ADS -->
       <div class="news-ads">
@@ -492,10 +500,17 @@
 
       <!-- BOTTOM LIST -->
       <div class="news-bottom">
-        <div class="news-item" *ngFor="let n of news.slice(2)">
-          <img [src]="n.image">
-          <div class="news-title">{{n.title}}</div>
-        </div>
+        <article
+          class="news-item news-item--clickable"
+          *ngFor="let n of newsBottomItems"
+          (click)="openNewsLink(n.url)"
+          (keydown.enter)="openNewsLink(n.url)"
+          tabindex="0"
+          role="link"
+        >
+          <img [src]="n.image" [alt]="n.title" />
+          <div class="news-title">{{ n.title }}</div>
+        </article>
       </div>
 
     </div>
@@ -542,8 +557,8 @@
           </div>
         </div>
 
-        <button class="partner-btn full">
-          Đăng ký trở thành đối tác →
+        <button type="button" class="partner-btn full" (click)="partnerPopup.open()">
+          Đăng ký hợp tác
         </button>
 
       </div>
@@ -551,4 +566,6 @@
     </div>
 
   </section>
+
+  <app-partner-cooperation-popup #partnerPopup />
 </div>

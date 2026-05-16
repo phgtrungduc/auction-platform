@@ -1502,8 +1502,27 @@
   grid-row: 2;
 
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+}
+
+.news-item--clickable,
+.news-main--clickable {
+  cursor: pointer;
+  transition: opacity 160ms ease;
+
+  &:hover {
+    opacity: 0.92;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #367639;
+    outline-offset: 2px;
+  }
+}
+
+.news-main--clickable .btn-read {
+  cursor: pointer;
 }
 
 .news-item img {

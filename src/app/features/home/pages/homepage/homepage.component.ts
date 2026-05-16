@@ -22,13 +22,14 @@ import { selectIsLoggedIn } from '../../../../store/app-state';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { formatNoticeTitle } from '@core/utils/format-notice-title.util';
 import { LoadingOverlayComponent } from '@shared/components/loading-overlay/loading-overlay.component';
+import { PartnerCooperationPopupComponent } from '@shared/components/partner-cooperation-popup/partner-cooperation-popup.component';
 import { TopNoticeProvinceResponse } from '../../../../core/services/asset.service';
 
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomSelectComponent, CategoryDropdownComponent, TooltipModule, LoadingOverlayComponent],
+  imports: [CommonModule, FormsModule, CustomSelectComponent, CategoryDropdownComponent, TooltipModule, LoadingOverlayComponent, PartnerCooperationPopupComponent],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss',
 })
@@ -460,32 +461,66 @@ export class HomepageComponent extends BaseComponent implements OnInit {
     }
   ];
 
-  news = [
+  readonly news: NewsItem[] = [
     {
-      title: 'Quy định mới về đấu giá tài sản có hiệu lực',
-      image: 'assets/images/tin1.jpg'
+      title: '8 lô đất Thủ Thiêm sắp đấu giá trở lại trong kế hoạch 50 khu đất của TPHCM',
+      summary:
+        'Theo kế hoạch, Trung tâm phát triển quỹ đất thành phố được giao tổ chức đấu giá 8 lô đất tại phường An Khánh thuộc khu đô thị mới Thủ Thiêm với tổng diện tích hơn 138.600m2. Các lô đất có chức năng đa dạng theo quy hoạch gồm đất dịch vụ, thương mại, đất hỗn hợp nhà ở, dịch vụ và đất ở.',
+      image: 'assets/images/tin1.jpg',
+      url: 'https://thesaigontimes.vn/8-lo-dat-thu-thiem-sap-dau-gia-tro-lai-trong-ke-hoach-50-khu-dat-cua-tphcm',
     },
     {
-      title: 'Quy định mới về đấu giá tài sản',
-      image: 'assets/images/tin2.jpg'
+      title: 'Hà Nội "bùng nổ" nguồn thu từ đấu giá đất năm 2026! Dự thu gần 60.000 tỷ',
+      summary:
+        'Hà Nội dự kiến đưa ra đấu giá hơn 300 dự án và khu đất trong năm 2026, tổng diện tích hàng trăm hecta. Đây được xem là kế hoạch đấu giá đất lớn nhất từ trước đến nay của thành phố.',
+      image: 'assets/images/tin2.jpg',
+      url: 'https://cafeland.vn/mxh/ha-noi-bung-no-nguon-thu-tu-dau-gia-dat-nam-2026-du-thu-gan-60000-ty-132512.html',
     },
     {
-      title: 'Quy định mới về đấu giá tài sản',
-      image: 'assets/images/tin3.jpg'
+      title: 'Loạt dự án chung cư Hà Nội giá 19,8 - 29 triệu/m2',
+      summary:
+        'Một số khu vực ven Hà Nội ghi nhận giá trúng đấu giá tăng đột biến, có nơi vượt 160 triệu đồng/m². Xu hướng này cho thấy dòng tiền đang quay lại bất động sản vùng ven và các khu có hạ tầng mở rộng.',
+      image: 'assets/images/tin3.jpg',
+      url: 'https://vietnamnet.vn/loat-du-an-chung-cu-ha-noi-gia-19-8-29-trieu-m2-dat-dau-gia-bat-ngo-tang-vot-2490878.html',
     },
     {
-      title: 'Quy định mới về đấu giá tài sản',
-      image: 'assets/images/tin4.jpg'
+      title: 'Điểm mặt những lô đất sắp đấu giá tại Hà Nội, rẻ nhất từ 5 triệu đồng',
+      summary:
+        'Hà Nội tiếp tục mở nhiều phiên đấu giá đất tại Mê Linh, Thường Tín… với giá khởi điểm khá thấp, phù hợp với nhà đầu tư vốn nhỏ hoặc người mua ở thực.',
+      image: 'assets/images/tin4.jpg',
+      url: 'https://congluan.vn/diem-mat-nhung-lo-dat-sap-dau-gia-tai-ha-noi-re-nhat-tu-5-trieu-dong-post326122.html',
     },
     {
-      title: 'Quy định mới về đấu giá tài sản',
-      image: 'assets/images/tin5.jpg'
+      title: 'Điểm tin ‘5 phút biết hết’ sáng 13-1: Sở Xây dựng Đồng Nai yêu cầu chấn chỉnh việc nộp hồ sơ mua, bán nhà ở xã hội',
+      summary:
+        'Đồng Nai dự kiến tổ chức đấu giá quyền khai thác cho 19 khu vực mỏ trong năm 2026. Đây là nhóm tài sản đấu giá đáng chú ý ngoài lĩnh vực bất động sản.',
+      image: 'assets/images/tin5.jpg',
+      url: 'https://baodongnai.com.vn/media/infographic/202601/diem-tin-5-phut-biet-het-sang-13-1-so-xay-dung-dong-nai-yeu-cau-chan-chinh-viec-nop-ho-so-mua-ban-nha-o-xa-hoi-7711426/',
     },
     {
-      title: 'Quy định mới về đấu giá tài sản',
-      image: 'assets/images/tin6.jpg'
-    }
+      title: 'Tỉnh lớn thứ 2 Việt Nam chuẩn bị đấu giá 36 dự án trong năm 2026, dự kiến thu gần 4.000 tỷ đồng',
+      summary:
+        'Tỉnh Gia Lai lên kế hoạch đấu giá hàng chục dự án đô thị, thương mại và du lịch với tổng thu dự kiến gần 4.000 tỷ đồng. Một số dự án đã bắt đầu nhận hồ sơ đấu giá.',
+      image: 'assets/images/tin6.jpg',
+      url: 'https://nguoiquansat.vn/tinh-lon-thu-2-viet-nam-chuan-bi-dau-gia-36-du-an-trong-nam-2026-du-kien-thu-gan-4-000-ty-dong-273602.html',
+    },
   ];
+
+  get featuredNews(): NewsItem {
+    return this.news[0];
+  }
+
+  get newsLeftItems(): NewsItem[] {
+    return this.news.slice(1, 3);
+  }
+
+  get newsBottomItems(): NewsItem[] {
+    return this.news.slice(3);
+  }
+
+  openNewsLink(url: string): void {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
 
   onSearch() {
     const queryParams: any = {};
@@ -660,4 +695,11 @@ interface FeaturedAreaItem {
   sessions: number;
   value: string;
   image: string;
+}
+
+interface NewsItem {
+  title: string;
+  summary: string;
+  image: string;
+  url: string;
 }

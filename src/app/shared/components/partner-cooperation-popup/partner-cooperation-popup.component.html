@@ -1,0 +1,182 @@
+<div class="partner-popup__backdrop" *ngIf="isOpen" (click)="close()">
+  <div
+    class="partner-popup__dialog"
+    [class.partner-popup__dialog--success]="isSuccess"
+    role="dialog"
+    [attr.aria-labelledby]="isSuccess ? 'partner-popup-success-title' : 'partner-popup-title'"
+    aria-modal="true"
+    (click)="$event.stopPropagation()"
+  >
+    <ng-container *ngIf="!isSuccess; else successView">
+      <header class="partner-popup__header">
+        <div class="partner-popup__header-main">
+          <div class="partner-popup__icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M7 11V8.5C7 6.567 8.567 5 10.5 5C11.328 5 12.096 5.296 12.707 5.793L14 7M17 11V8.5C17 6.567 15.433 5 13.5 5C12.672 5 11.904 5.296 11.293 5.793L10 7"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M4 12V14.5C4 17.433 6.567 20 9.5 20H10.5M20 12V14.5C20 17.433 18.433 20 15.5 20H14.5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+              <path
+                d="M9.5 12H14.5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <h2 id="partner-popup-title" class="partner-popup__title">Đăng ký hợp tác</h2>
+            <p class="partner-popup__subtitle">
+              Điền thông tin bên dưới để trở thành đối tác đấu giá tài sản của chúng tôi.
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="partner-popup__close"
+          (click)="close()"
+          [disabled]="isSubmitting"
+          aria-label="Đóng"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+        </button>
+      </header>
+
+      <form class="partner-popup__form" (ngSubmit)="onSubmit()" novalidate>
+        <label class="partner-popup__field partner-popup__field--full">
+          <span>Tên tổ chức đấu giá<span class="partner-popup__required" aria-hidden="true">*</span></span>
+          <input
+            type="text"
+            name="orgName"
+            [(ngModel)]="form.orgName"
+            placeholder="VD: Công ty đấu giá ABC"
+            [class.is-invalid]="isFieldInvalid('orgName')"
+          />
+        </label>
+
+        <div class="partner-popup__row">
+          <label class="partner-popup__field">
+            <span>Người liên hệ<span class="partner-popup__required" aria-hidden="true">*</span></span>
+            <input
+              type="text"
+              name="contactName"
+              [(ngModel)]="form.contactName"
+              placeholder="Họ và tên"
+              [class.is-invalid]="isFieldInvalid('contactName')"
+            />
+          </label>
+          <label class="partner-popup__field">
+            <span>Số điện thoại<span class="partner-popup__required" aria-hidden="true">*</span></span>
+            <input
+              type="tel"
+              name="phone"
+              [(ngModel)]="form.phone"
+              placeholder="0901 234 567"
+              [class.is-invalid]="isFieldInvalid('phone')"
+            />
+          </label>
+        </div>
+
+        <div class="partner-popup__row">
+          <label class="partner-popup__field">
+            <span>Email<span class="partner-popup__required" aria-hidden="true">*</span></span>
+            <input
+              type="email"
+              name="email"
+              [(ngModel)]="form.email"
+              placeholder="contact@company.vn"
+              [class.is-invalid]="isFieldInvalid('email')"
+            />
+          </label>
+          <label class="partner-popup__field">
+            <span>Tỉnh / Thành phố<span class="partner-popup__required" aria-hidden="true">*</span></span>
+            <input
+              type="text"
+              name="province"
+              [(ngModel)]="form.province"
+              placeholder="VD: Hà Nội"
+              [class.is-invalid]="isFieldInvalid('province')"
+            />
+          </label>
+        </div>
+
+        <label class="partner-popup__field partner-popup__field--full">
+          <span>Ghi chú thêm (tuỳ chọn)</span>
+          <textarea
+            name="notes"
+            [(ngModel)]="form.notes"
+            rows="4"
+            placeholder="Mô tả ngắn về tổ chức hoặc nhu cầu hợp tác..."
+          ></textarea>
+        </label>
+
+        <footer class="partner-popup__footer">
+          <button
+            type="button"
+            class="partner-popup__btn partner-popup__btn--ghost"
+            (click)="close()"
+            [disabled]="isSubmitting"
+          >
+            Huỷ
+          </button>
+          <button
+            type="submit"
+            class="partner-popup__btn partner-popup__btn--primary"
+            [disabled]="isSubmitting"
+          >
+            {{ isSubmitting ? 'Đang gửi...' : 'Gửi đăng ký' }}
+          </button>
+        </footer>
+      </form>
+    </ng-container>
+
+    <ng-template #successView>
+      <button
+        type="button"
+        class="partner-popup__close partner-popup__close--success"
+        (click)="close()"
+        aria-label="Đóng"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+      </button>
+
+      <div class="partner-popup__success">
+        <div class="partner-popup__success-icon" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M5 12.5L9.5 17L19 7"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        <h2 id="partner-popup-success-title" class="partner-popup__success-title">Đã nhận thông tin!</h2>
+        <p class="partner-popup__success-desc">
+          Cảm ơn bạn đã đăng ký hợp tác. Đội ngũ chúng tôi sẽ liên hệ trong vòng 1–2 ngày làm việc.
+        </p>
+        <button
+          type="button"
+          class="partner-popup__btn partner-popup__btn--primary partner-popup__btn--success"
+          (click)="close()"
+        >
+          Đóng
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>
